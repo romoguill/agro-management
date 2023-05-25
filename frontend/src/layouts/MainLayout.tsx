@@ -3,10 +3,13 @@ import Header from '../components/Header';
 
 function MainLayout() {
   return (
-    <div>
+    <>
       <Header />
-      <Outlet />
-    </div>
+      <aside></aside>
+      <main>
+        <Outlet />
+      </main>
+    </>
   );
 }
 
