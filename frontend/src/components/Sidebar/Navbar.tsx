@@ -5,7 +5,7 @@ function Navbar() {
   return (
     <ul className='px-8 mt-10'>
       {routesApp.map((route) => (
-        <li>
+        <li key={route.path}>
           <NavLinks {...route} />
         </li>
       ))}

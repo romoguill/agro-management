@@ -13,7 +13,7 @@ export interface RouteLink {
 export const routesApp: RouteLink[] = [
   {
     displayName: 'Dashboard',
-    path: '/dashobard',
+    path: '/dashboard',
     Icon: FaChalkboard,
   },
   {
