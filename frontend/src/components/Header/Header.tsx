@@ -1,5 +1,5 @@
 import Avatar from './Avatar';
-import sunflower from '../assets/sunflower.svg';
+import sunflower from '../../assets/sunflower.svg';
 import { Link } from 'react-router-dom';
 import { FaBars } from 'react-icons/fa';
 

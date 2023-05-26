@@ -1,5 +1,5 @@
 import { routesApp } from '../../utils/routes';
-import NavLinks from './NavLinks';
+import NavLinks from './SidebarLinks';
 
 function Navbar() {
   return (
