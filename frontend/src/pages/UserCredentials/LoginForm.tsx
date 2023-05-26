@@ -2,31 +2,25 @@ import { Link } from 'react-router-dom';
 
 function LoginForm() {
   return (
-    <form className='flex flex-col gap-6'>
+    <form className='flex flex-col gap-3 h-full'>
       <div>
-        <label className='block text-sm font-semibold mb-1' htmlFor=''>
+        <label className='credentials-label' htmlFor=''>
           Email
         </label>
-        <input
-          className='p-2 w-full border border-gray-300 rounded-md bg-transparent shadow-sm'
-          type='text'
-        />
+        <input className='credentials-input' type='text' />
       </div>
       <div>
-        <label className='block text-sm font-semibold mb-1' htmlFor=''>
+        <label className='credentials-label' htmlFor=''>
           Password
         </label>
-        <input
-          className='p-2 w-full border border-gray-300 rounded-md bg-transparent'
-          type='text'
-        />
+        <input className='credentials-input' type='password' />
       </div>
       <Link className='text-xs text-red-600 font-semibold' to='/password-reset'>
         Forgot password?
       </Link>
 
       <button
-        className='uppercase text-base font-semibold tracking-widest bg-teal-400 py-3'
+        className='uppercase text-base font-semibold tracking-widest bg-primary py-3 mt-auto rounded-md'
         type='submit'
       >
         Login
