@@ -1,10 +1,12 @@
-import { Link } from 'react-router-dom';
-import imageLogin from '../assets/images/loginImage.jpg';
+import imageLogin from '../../assets/images/loginImage.jpg';
+import * as Tabs from '@radix-ui/react-tabs';
+import LoginForm from './LoginForm';
+import SignUpForm from './SignUpForm';
 
 function Login() {
   return (
     <main className='flex justify-center items-center h-screen p-8 bg-gradient-to-r from-teal-200 to-lime-200'>
-      <div className='bg-gray-50/40 rounded-md flex items-center overflow-hidden'>
+      <div className='bg-gray-50/40 rounded-md flex overflow-hidden'>
         <aside className='basis-[40%]'>
           <img
             className='h-[500px] object-cover'
@@ -13,44 +15,30 @@ function Login() {
           />
         </aside>
 
-        <section className='p-5 grow self-stretch flex flex-col justify-between'>
-          <h1 className='text-3xl font-semibold text-center mb-16 text-cyan-500'>
-            Login
-          </h1>
-          <form className='flex flex-col gap-6'>
-            <div>
-              <label className='block text-sm font-semibold mb-1' htmlFor=''>
-                Email
-              </label>
-              <input
-                className='p-2 w-full border border-gray-300 rounded-md bg-transparent shadow-sm'
-                type='text'
-              />
-            </div>
-            <div>
-              <label className='block text-sm font-semibold mb-1' htmlFor=''>
-                Password
-              </label>
-              <input
-                className='p-2 w-full border border-gray-300 rounded-md bg-transparent'
-                type='text'
-              />
-            </div>
-            <Link
-              className='text-xs text-red-600 font-semibold'
-              to='/password-reset'
-            >
-              Forgot password?
-            </Link>
-
-            <button
-              className='uppercase text-base font-semibold tracking-widest bg-teal-400 py-3'
-              type='submit'
+        <Tabs.Root className='basis-[60%]'>
+          <Tabs.List className='flex justify-between'>
+            <Tabs.Trigger
+              value='tab1'
+              className='grow py-4 data-[state=inactive]:bg-teal-200/80'
             >
               Login
-            </button>
-          </form>
-        </section>
+            </Tabs.Trigger>
+            <Tabs.Trigger
+              value='tab2'
+              className='grow py-4 data-[state=inactive]:bg-gray-300'
+            >
+              SignUp
+            </Tabs.Trigger>
+          </Tabs.List>
+
+          <Tabs.Content value='tab1' className='p-5'>
+            <LoginForm />
+          </Tabs.Content>
+
+          <Tabs.Content value='tab2' className='p-5'>
+            <SignUpForm />
+          </Tabs.Content>
+        </Tabs.Root>
       </div>
     </main>
   );

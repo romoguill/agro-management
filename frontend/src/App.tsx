@@ -8,7 +8,7 @@ import Home from './pages/Home';
 import MainLayout from './layouts/MainLayout';
 import Dashboard from './pages/Dashboard';
 import Invoices from './pages/Invoices';
-import Login from './pages/Login';
+import Login from './pages/UserCredentials/Login';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
