@@ -1,9 +1,7 @@
 import 'dotenv/config';
 import env from './utils/validateEnv';
 import mongoose from 'mongoose';
-import express from 'express';
-
-const app = express();
+import app from './app';
 
 mongoose
   .connect(env.MONGO_CONNECTION_URI)
