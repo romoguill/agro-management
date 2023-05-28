@@ -2,6 +2,8 @@ import express, { Request, Response, NextFunction } from 'express';
 import createHttpError, { isHttpError } from 'http-errors';
 import morgan from 'morgan';
 
+import userRouter from './routes/userRoutes';
+
 const app = express();
 
 // MIDDLEWARES
@@ -9,7 +11,7 @@ app.use(express.json());
 app.use(morgan('dev'));
 
 // ROUTES
-app.get('/', (req, res) => res.send('working'));
+app.use('/api/users', userRouter);
 
 // DEFAULT ROUTE
 app.use((req, res, next) => next(createHttpError(404, 'Endpoint not found')));
