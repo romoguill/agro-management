@@ -16,6 +16,7 @@ app.use(morgan('dev'));
 app.use(
   session({
     secret: env.SESSION_SECRET,
+    name: 'agro-userId',
     resave: false,
     saveUninitialized: false,
     cookie: {

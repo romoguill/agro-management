@@ -62,22 +62,33 @@ export const login: RequestHandler<
   unknown,
   LoginBody,
   unknown
-> = async (req, res) => {
+> = async (req, res, next) => {
   const { email, password } = req.body;
 
-  if (email === undefined || password === undefined) {
-    throw createHttpError(400, 'Some fields are missing. Could not Login');
-  }
+  try {
+    if (email === undefined || password === undefined) {
+      throw createHttpError(400, 'Some fields are missing. Could not Login');
+    }
 
-  const existingUser = await UserModel.findOne({ email }).exec();
+    const existingUser = await UserModel.findOne({ email }).exec();
 
-  if (!existingUser) {
-    throw createHttpError(401, 'Invalid credentials');
-  }
+    if (!existingUser) {
+      throw createHttpError(401, 'Invalid credentials');
+    }
 
-  const passwordsMatch = bcrypt.compare(password, existingUser.password);
+    const passwordsMatch = await bcrypt.compare(
+      password,
+      existingUser.password
+    );
 
-  if (!passwordsMatch) {
-    throw createHttpError(401, 'Invalid credentials');
+    if (!passwordsMatch) {
+      throw createHttpError(401, 'Invalid credentials');
+    }
+
+    req.session.userId = existingUser._id;
+
+    res.status(200).send(existingUser);
+  } catch (error) {
+    next(error);
   }
 };
