@@ -1,6 +1,9 @@
 import express, { Request, Response, NextFunction } from 'express';
 import createHttpError, { isHttpError } from 'http-errors';
 import morgan from 'morgan';
+import session from 'express-session';
+import env from './utils/validateEnv';
+import MongoStore from 'connect-mongo';
 
 import userRouter from './routes/userRoutes';
 
@@ -9,6 +12,21 @@ const app = express();
 // MIDDLEWARES
 app.use(express.json());
 app.use(morgan('dev'));
+
+app.use(
+  session({
+    secret: env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      maxAge: 60 * 60 * 1000,
+    },
+    rolling: true,
+    store: MongoStore.create({
+      mongoUrl: env.MONGO_CONNECTION_URI,
+    }),
+  })
+);
 
 // ROUTES
 app.use('/api/users', userRouter);
