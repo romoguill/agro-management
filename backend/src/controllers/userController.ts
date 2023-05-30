@@ -15,7 +15,7 @@ export const signUp: RequestHandler<
   unknown,
   SignUpBody,
   unknown
-> = async (req, res, next) => {
+> = async (req, res, next): Promise<void> => {
   const { firstName, lastName, email, password } = req.body;
 
   try {
@@ -62,7 +62,7 @@ export const login: RequestHandler<
   unknown,
   LoginBody,
   unknown
-> = async (req, res, next) => {
+> = async (req, res, next): Promise<void> => {
   const { email, password } = req.body;
 
   try {
@@ -91,4 +91,14 @@ export const login: RequestHandler<
   } catch (error) {
     next(error);
   }
+};
+
+export const logout: RequestHandler = (req, res, next): void => {
+  req.session.destroy((error) => {
+    if (error) {
+      next(error);
+    }
+  });
+
+  res.sendStatus(200);
 };
