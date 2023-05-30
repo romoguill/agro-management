@@ -2,34 +2,54 @@ import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
 import { FaRegEye, FaRegEyeSlash } from 'react-icons/fa';
 import { useState } from 'react';
+import { LoginCredentials, login } from '../../apis/apiUsers';
 
 function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
 
-  type FormValues = {
-    email: string;
-    password: string;
-  };
-
   const {
     register,
     handleSubmit,
+    setError,
     formState: { errors, isSubmitting },
-  } = useForm<FormValues>({
+  } = useForm<LoginCredentials>({
     defaultValues: {
       email: '',
       password: '',
     },
   });
 
-  const onSubmit = (data: FormValues, e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const onSubmit = async (
+    data: LoginCredentials,
+    e: React.BaseSyntheticEvent | undefined
+  ) => {
+    e?.preventDefault();
 
     try {
-    } catch (error) {}
+      console.log(data);
+      const user = await login(data);
+      console.log(user);
+    } catch (error) {
+      if (error instanceof Error) {
+        console.error(error);
+        if (error.message === 'Invalid credentials') {
+          setError('root.invalidCredentials', {
+            type: '401',
+            message: 'Invalid credentails',
+          });
+        }
+      } else {
+        // Default error to show in UI
+        setError('root.serverError', {
+          message: 'An error ocurred, please try again later',
+        });
+      }
+    }
   };
 
-  const onError = (errors, e) => {};
+  const onError = (errors, e) => {
+    console.log(errors);
+  };
 
   return (
     <form
@@ -59,7 +79,7 @@ function LoginForm() {
             id='password'
             className='credentials-input'
             type={showPassword ? 'text' : 'password'}
-            {...register('email', {
+            {...register('password', {
               required: { value: true, message: 'Field required' },
             })}
           />
@@ -81,6 +101,10 @@ function LoginForm() {
       <Link className='text-xs text-red-600 font-semibold' to='/password-reset'>
         Forgot password?
       </Link>
+
+      {errors?.root?.invalidCredentials && (
+        <p>{errors.root.invalidCredentials.message}</p>
+      )}
 
       <button
         className='uppercase text-base font-semibold tracking-widest bg-primary py-3 mt-auto rounded-md'

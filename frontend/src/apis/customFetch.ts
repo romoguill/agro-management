@@ -10,5 +10,5 @@ export const callApi = async (
     throw Error(errorMessage);
   }
 
-  return response.json();
+  return response;
 };
