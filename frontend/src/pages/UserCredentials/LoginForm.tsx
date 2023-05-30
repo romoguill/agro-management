@@ -6,15 +6,36 @@ import { useState } from 'react';
 function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
 
-  const { register } = useForm({
+  type FormValues = {
+    email: string;
+    password: string;
+  };
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm<FormValues>({
     defaultValues: {
       email: '',
       password: '',
     },
   });
 
+  const onSubmit = (data: FormValues, e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    try {
+    } catch (error) {}
+  };
+
+  const onError = (errors, e) => {};
+
   return (
-    <form className='flex flex-col gap-3 h-full text-gray-700'>
+    <form
+      className='flex flex-col gap-3 h-full text-gray-700'
+      onSubmit={handleSubmit(onSubmit, onError)}
+    >
       <div className='form-control'>
         <label className='credentials-label' htmlFor='email'>
           Email
