@@ -1,7 +1,8 @@
-import { useForm } from 'react-hook-form';
-import { Link } from 'react-router-dom';
-import { FaRegEye, FaRegEyeSlash } from 'react-icons/fa';
 import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { FaRegEye, FaRegEyeSlash } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
+import { SpinnerCircularFixed } from 'spinners-react';
 import { LoginCredentials, login } from '../../apis/apiUsers';
 
 function LoginForm() {
@@ -26,9 +27,8 @@ function LoginForm() {
     e?.preventDefault();
 
     try {
-      console.log(data);
       const user = await login(data);
-      console.log(user);
+      // TODO: Store user logged in Redux
     } catch (error) {
       if (error instanceof Error) {
         console.error(error);
@@ -47,14 +47,10 @@ function LoginForm() {
     }
   };
 
-  const onError = (errors, e) => {
-    console.log(errors);
-  };
-
   return (
     <form
       className='flex flex-col gap-3 h-full text-gray-700'
-      onSubmit={handleSubmit(onSubmit, onError)}
+      onSubmit={handleSubmit(onSubmit)}
     >
       <div className='form-control'>
         <label className='credentials-label' htmlFor='email'>
@@ -96,24 +92,37 @@ function LoginForm() {
               onClick={() => setShowPassword(true)}
             />
           )}
-
-          {errors?.password && (
-            <p className='input-error'>{errors.password.message}</p>
-          )}
         </div>
+        {errors?.password && (
+          <p className='input-error'>{errors.password.message}</p>
+        )}
       </div>
 
-      <Link className='text-xs text-red-600 font-semibold' to='/password-reset'>
+      <Link
+        className='text-xs text-amber-700 font-semibold'
+        to='/password-reset'
+      >
         Forgot password?
       </Link>
 
       {errors?.root && <p className='form-error'>{errors.root.message}</p>}
 
       <button
-        className='uppercase text-base font-semibold tracking-widest bg-primary py-3 mt-auto rounded-md'
+        className='uppercase text-base font-semibold text-center tracking-widest bg-primary py-3 mt-auto rounded-md disabled:opacity-50'
         type='submit'
+        disabled={
+          errors.email || errors.password || isSubmitting ? true : false
+        }
       >
-        Login
+        {isSubmitting ? (
+          <SpinnerCircularFixed
+            size={20}
+            thickness={200}
+            style={{ color: '#d1d5db', textAlign: 'center', display: 'inline' }}
+          />
+        ) : (
+          'Login'
+        )}
       </button>
     </form>
   );
