@@ -19,3 +19,11 @@ body {
 .form-control {
   @apply flex flex-col;
 }
+
+.form-error {
+  @apply text-red-600 text-sm bg-red-100 py-1 text-center rounded-md;
+}
+
+.input-error {
+  @apply text-red-600 text-sm mt-1;
+}

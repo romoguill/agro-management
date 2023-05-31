@@ -33,14 +33,14 @@ function LoginForm() {
       if (error instanceof Error) {
         console.error(error);
         if (error.message === 'Invalid credentials') {
-          setError('root.invalidCredentials', {
+          setError('root', {
             type: '401',
             message: 'Invalid credentails',
           });
         }
       } else {
         // Default error to show in UI
-        setError('root.serverError', {
+        setError('root', {
           message: 'An error ocurred, please try again later',
         });
       }
@@ -68,6 +68,7 @@ function LoginForm() {
             required: { value: true, message: 'Field required' },
           })}
         />
+        {errors?.email && <p className='input-error'>{errors.email.message}</p>}
       </div>
 
       <div className='form-control'>
@@ -95,6 +96,10 @@ function LoginForm() {
               onClick={() => setShowPassword(true)}
             />
           )}
+
+          {errors?.password && (
+            <p className='input-error'>{errors.password.message}</p>
+          )}
         </div>
       </div>
 
@@ -102,9 +107,7 @@ function LoginForm() {
         Forgot password?
       </Link>
 
-      {errors?.root?.invalidCredentials && (
-        <p>{errors.root.invalidCredentials.message}</p>
-      )}
+      {errors?.root && <p className='form-error'>{errors.root.message}</p>}
 
       <button
         className='uppercase text-base font-semibold tracking-widest bg-primary py-3 mt-auto rounded-md'
