@@ -4,16 +4,16 @@ import {
   createBrowserRouter,
   createRoutesFromElements,
 } from 'react-router-dom';
-import Home from './pages/Home';
 import MainLayout from './layouts/MainLayout';
 import Dashboard from './pages/Dashboard';
+import Home from './pages/Home';
 import Invoices from './pages/Invoices';
-import Login from './pages/UserCredentials/Login';
+import Authenticate from './pages/UserCredentials/Authenticate';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
-      <Route path='/login' element={<Login />} />
+      <Route path='/authenticate' element={<Authenticate />} />
 
       <Route path='/' element={<MainLayout />}>
         <Route index element={<Home />} />

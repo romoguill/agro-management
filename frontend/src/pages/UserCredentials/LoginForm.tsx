@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import { FaRegEye, FaRegEyeSlash } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import { SpinnerCircularFixed } from 'spinners-react';
-import { LoginCredentials, login } from '../../apis/apiUsers';
+import { LoginBody, login } from '../../apis/apiUsers';
 
 function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
@@ -13,15 +13,16 @@ function LoginForm() {
     handleSubmit,
     setError,
     formState: { errors, isSubmitting },
-  } = useForm<LoginCredentials>({
+  } = useForm<LoginBody>({
     defaultValues: {
       email: '',
       password: '',
     },
+    mode: 'all',
   });
 
   const onSubmit = async (
-    data: LoginCredentials,
+    data: LoginBody,
     e: React.BaseSyntheticEvent | undefined
   ) => {
     e?.preventDefault();

@@ -8,6 +8,7 @@ interface SignUpBody {
   lastName?: string;
   email?: string;
   password?: string;
+  passwordConfirm?: string;
 }
 
 export const signUp: RequestHandler<
@@ -16,7 +17,7 @@ export const signUp: RequestHandler<
   SignUpBody,
   unknown
 > = async (req, res, next): Promise<void> => {
-  const { firstName, lastName, email, password } = req.body;
+  const { firstName, lastName, email, password, passwordConfirm } = req.body;
 
   try {
     if (
@@ -26,6 +27,10 @@ export const signUp: RequestHandler<
       password === undefined
     ) {
       throw createHttpError(400, 'Some fields are missing. Could not Sign Up');
+    }
+
+    if (password !== passwordConfirm) {
+      throw createHttpError(400, "Passwords don't match");
     }
 
     const existingEmail = await UserModel.findOne({ email }).exec();
