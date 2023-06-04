@@ -9,6 +9,7 @@ import Dashboard from './pages/Dashboard';
 import Home from './pages/Home';
 import Invoices from './pages/Invoices';
 import Authenticate from './pages/UserCredentials/Authenticate';
+import MasterData from './pages/MasterData';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -19,6 +20,7 @@ const router = createBrowserRouter(
         <Route index element={<Home />} />
         <Route path='dashboard' element={<Dashboard />} />
         <Route path='invoices' element={<Invoices />} />
+        <Route path='master-data' element={<MasterData />} />
       </Route>
     </>
   )

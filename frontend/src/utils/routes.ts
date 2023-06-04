@@ -2,6 +2,7 @@ import {
   FaChalkboard,
   FaFileInvoiceDollar,
   FaMapMarkedAlt,
+  FaDatabase,
 } from 'react-icons/fa';
 
 export interface RouteLink {
@@ -25,5 +26,10 @@ export const routesApp: RouteLink[] = [
     displayName: 'Map',
     path: '/map',
     Icon: FaMapMarkedAlt,
+  },
+  {
+    displayName: 'Master Data',
+    path: '/master-data',
+    Icon: FaDatabase,
   },
 ];
