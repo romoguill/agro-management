@@ -35,7 +35,7 @@ function MasterData() {
   ];
 
   return (
-    <section className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3'>
+    <section className='grid gap-4 auto-rows-[1fr] grid-cols-1 md:grid-cols-2 lg:grid-cols-3 px-6 mt-5'>
       {options.map((option) => (
         <MasterDataCard key={option.title} {...option} />
       ))}
