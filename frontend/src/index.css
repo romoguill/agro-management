@@ -27,3 +27,13 @@ body {
 .input-error {
   @apply text-red-600 text-xs font-semibold mt-1 text-right;
 }
+
+/* TABLES */
+.table {
+  @apply w-full;
+}
+
+.table th,
+.table td {
+  @apply border border-gray-800;
+}
