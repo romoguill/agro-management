@@ -1,6 +1,6 @@
 import MasterDataCard, {
   MasterDataCardProps,
-} from '../components/MasterDataCard';
+} from '../../components/MasterDataCard';
 
 function MasterData() {
   const options: MasterDataCardProps[] = [
