@@ -30,10 +30,10 @@ body {
 
 /* TABLES */
 .table {
-  @apply w-full;
+  @apply w-full bg-white my-2 mx-4;
 }
 
-.table th,
+/* .table th,
 .table td {
   @apply border border-gray-800;
-}
+} */

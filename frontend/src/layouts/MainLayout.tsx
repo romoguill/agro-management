@@ -14,7 +14,7 @@ function MainLayout() {
       />
       <div className='grow'>
         <Header setIsSidebarVisible={setIsSidebarVisible} />
-        <main>
+        <main className='p-6'>
           <Outlet />
         </main>
       </div>

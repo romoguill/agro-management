@@ -10,7 +10,7 @@ interface Props {
 function Header({ setIsSidebarVisible }: Props) {
   return (
     <header className='bg-gray-50 py-2 px-6 border-b border-gray-300'>
-      <div className='flex justify-between items-center max-w-7xl'>
+      <div className='flex justify-between items-center'>
         <div className='flex gap-4 items-center'>
           <FaBars
             className='xl:hidden cursor-pointer hover:bg-gray-200 h-10 w-10 p-2 rounded-xl'

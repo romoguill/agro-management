@@ -40,29 +40,28 @@ function Suppliers() {
   return (
     <div>
       <h1 className='text-4xl'>Suppliers</h1>
+      <table className='table'>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>YPF</td>
+            <td>Fertilizers and herbicides</td>
+            <td>Active</td>
+          </tr>
+          <tr>
+            <td>Monsanto</td>
+            <td>Seeds</td>
+            <td>Inactive</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   );
 }
 export default Suppliers;
-
-{
-  /* <table className='table'>
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Description</th>
-      <th>Status</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>YPF</td>
-      <td>Fertilizers and herbicides</td>
-    </tr>
-    <tr>
-      <td>Monsanto</td>
-      <td>Seeds</td>
-    </tr>
-  </tbody>
-</table> */
-}
