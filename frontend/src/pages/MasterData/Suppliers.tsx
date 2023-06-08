@@ -40,24 +40,33 @@ function Suppliers() {
   return (
     <div>
       <h1 className='text-4xl'>Suppliers</h1>
-      <table className='table'>
-        <thead>
+      <table className='table table-master-data text-left rounded-xl'>
+        <thead className='border-b-2 border-gray-400 text-lg'>
           <tr>
+            <th className='w-3'>
+              <input type='checkbox' />
+            </th>
             <th>Name</th>
             <th>Description</th>
-            <th>Status</th>
+            <th className='w-36'>Status</th>
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>YPF</td>
+          <tr className='border border-gray-200'>
+            <td>
+              <input type='checkbox' />
+            </td>
+            <td className='font-bold'>YPF</td>
             <td>Fertilizers and herbicides</td>
-            <td>Active</td>
+            <td className='text-emerald-600'>Active</td>
           </tr>
-          <tr>
-            <td>Monsanto</td>
+          <tr className='border border-gray-200'>
+            <td>
+              <input type='checkbox' />
+            </td>
+            <td className='font-bold'>Monsanto</td>
             <td>Seeds</td>
-            <td>Inactive</td>
+            <td className='text-red-500'>Inactive</td>
           </tr>
         </tbody>
       </table>

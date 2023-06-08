@@ -30,7 +30,12 @@ body {
 
 /* TABLES */
 .table {
-  @apply w-full bg-white my-2 mx-4;
+  @apply w-full bg-white text-gray-800 font-medium;
+}
+
+.table-master-data td,
+.table-master-data th {
+  @apply px-3 py-2;
 }
 
 /* .table th,
