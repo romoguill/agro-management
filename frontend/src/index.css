@@ -6,8 +6,12 @@ body {
   @apply bg-gray-200;
 }
 
-/* FORMS */
+/* INPUTS */
+input[type='checkbox'] {
+  cursor: pointer;
+}
 
+/* FORMS */
 .credentials-input {
   @apply p-2 w-full border border-gray-300 rounded-md bg-transparent shadow-sm;
 }
@@ -35,7 +39,7 @@ body {
 
 .table-master-data td,
 .table-master-data th {
-  @apply px-3 py-2;
+  @apply px-4 py-3;
 }
 
 /* .table th,

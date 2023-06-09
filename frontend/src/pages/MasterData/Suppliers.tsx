@@ -40,7 +40,7 @@ function Suppliers() {
   return (
     <div>
       <h1 className='text-4xl'>Suppliers</h1>
-      <table className='table table-master-data text-left rounded-xl'>
+      <table className='table table-master-data text-left rounded-xl mt-5 overflow-hidden'>
         <thead className='border-b-2 border-gray-400 text-lg'>
           <tr>
             <th className='w-3'>
@@ -52,7 +52,7 @@ function Suppliers() {
           </tr>
         </thead>
         <tbody>
-          <tr className='border border-gray-200'>
+          <tr className='border-t border-gray-200 hover:bg-gray-50'>
             <td>
               <input type='checkbox' />
             </td>
@@ -60,7 +60,7 @@ function Suppliers() {
             <td>Fertilizers and herbicides</td>
             <td className='text-emerald-600'>Active</td>
           </tr>
-          <tr className='border border-gray-200'>
+          <tr className='border-t border-gray-200 hover:bg-gray-50'>
             <td>
               <input type='checkbox' />
             </td>
