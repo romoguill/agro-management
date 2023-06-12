@@ -61,7 +61,7 @@ function Suppliers() {
       </div>
 
       {/* TABLE CONTROLS */}
-      <div className='flex justify-between'>
+      <div className='flex gap-6 items-center text-gray-700 font-medium'>
         <div className='rounded-lg bg-white flex justify-between items-center px-2 focus-within:outline focus-within:outline-primary-500/30'>
           <MdSearch className='text-gray-400 text-xl' />
           <input
@@ -70,6 +70,10 @@ function Suppliers() {
             className='outline-none px-2 py-1'
           />
         </div>
+        <label className=''>
+          <input type='checkbox' className='mr-2' />
+          Show inactive
+        </label>
       </div>
 
       <table className='table table-master-data text-left rounded-xl mt-5 overflow-hidden'>
