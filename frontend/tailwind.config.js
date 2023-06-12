@@ -20,6 +20,10 @@ export default {
         },
       },
     },
+    fontFamily: {
+      sans: ['Roboto', 'sans-serif'],
+      'section-title': ['Montserrat', 'sans-serif'],
+    },
   },
   plugins: [],
 };

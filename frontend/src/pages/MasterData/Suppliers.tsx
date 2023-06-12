@@ -1,8 +1,10 @@
+import { MdNoteAdd } from 'react-icons/md';
 import {
   createColumnHelper,
   getCoreRowModel,
   useReactTable,
 } from '@tanstack/react-table';
+import { Link } from 'react-router-dom';
 
 interface SupplierRow {
   name: string;
@@ -39,7 +41,24 @@ function Suppliers() {
 
   return (
     <div>
-      <h1 className='text-4xl'>Suppliers</h1>
+      <div className='flex justify-between items-baseline'>
+        <h1 className='text-2xl/none font-section-title font-bold text-gray-800'>
+          <span className='text-xl text-gray-600 pr-2'>
+            <Link to='/master-data' className='hover:text-primary pr-2'>
+              Master Data
+            </Link>
+            /
+          </span>
+          SUPPLIERS
+        </h1>
+        <div
+          className='flex gap-2 justify-between items-center text-primary rounded-xl 
+          bg-gray-100 px-3 py-2 font-semibold'
+        >
+          <MdNoteAdd className='text-3xl' />
+          <p className='text-xl'>Add New</p>
+        </div>
+      </div>
       <table className='table table-master-data text-left rounded-xl mt-5 overflow-hidden'>
         <thead className='border-b-2 border-gray-400 text-lg'>
           <tr>
