@@ -1,4 +1,4 @@
-import { MdNoteAdd } from 'react-icons/md';
+import { MdNoteAdd, MdSearch } from 'react-icons/md';
 import {
   createColumnHelper,
   getCoreRowModel,
@@ -41,7 +41,7 @@ function Suppliers() {
 
   return (
     <div>
-      <div className='flex justify-between items-baseline'>
+      <div className='flex justify-between items-center'>
         <h1 className='text-2xl/none font-section-title font-bold text-gray-800'>
           <span className='text-xl text-gray-600 pr-2'>
             <Link to='/master-data' className='hover:text-primary pr-2'>
@@ -55,10 +55,23 @@ function Suppliers() {
           className='flex gap-2 justify-between items-center text-primary rounded-xl 
           bg-gray-100 px-3 py-2 font-semibold'
         >
-          <MdNoteAdd className='text-3xl' />
+          <MdNoteAdd className='text-2xl' />
           <p className='text-xl'>Add New</p>
         </div>
       </div>
+
+      {/* TABLE CONTROLS */}
+      <div className='flex justify-between'>
+        <div className='rounded-lg bg-white flex justify-between items-center px-2 focus-within:outline focus-within:outline-primary-500/30'>
+          <MdSearch className='text-gray-400 text-xl' />
+          <input
+            type='text'
+            placeholder='Search...'
+            className='outline-none px-2 py-1'
+          />
+        </div>
+      </div>
+
       <table className='table table-master-data text-left rounded-xl mt-5 overflow-hidden'>
         <thead className='border-b-2 border-gray-400 text-lg'>
           <tr>
@@ -77,7 +90,7 @@ function Suppliers() {
             </td>
             <td className='font-bold'>YPF</td>
             <td>Fertilizers and herbicides</td>
-            <td className='text-emerald-600'>Active</td>
+            <td className='text-green-500'>Active</td>
           </tr>
           <tr className='border-t border-gray-200 hover:bg-gray-50'>
             <td>
