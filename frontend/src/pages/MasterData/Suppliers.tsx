@@ -6,13 +6,13 @@ import {
 } from '@tanstack/react-table';
 import { Link } from 'react-router-dom';
 
-interface SupplierRow {
+interface Supplier {
   name: string;
   description: string;
   status: 'Active' | 'Inactive';
 }
 
-const demoSupplier: SupplierRow[] = [
+const demoSupplier: Supplier[] = [
   {
     name: 'YPF',
     description: 'Fertilizers and herbicides',
@@ -26,9 +26,15 @@ const demoSupplier: SupplierRow[] = [
 ];
 
 function Suppliers() {
-  const columnHelper = createColumnHelper<SupplierRow>();
+  const columnHelper = createColumnHelper<Supplier>();
   const columns = [
     columnHelper.accessor('name', {
+      cell: (info) => info.getValue(),
+    }),
+    columnHelper.accessor('description', {
+      cell: (info) => info.getValue(),
+    }),
+    columnHelper.accessor('status', {
       cell: (info) => info.getValue(),
     }),
   ];
@@ -38,6 +44,11 @@ function Suppliers() {
     columns,
     getCoreRowModel: getCoreRowModel(),
   });
+
+  function toggleStatus() {
+    // TODO
+    return;
+  }
 
   return (
     <div>
@@ -76,7 +87,19 @@ function Suppliers() {
         </label>
       </div>
 
-      <table className='table table-master-data text-left rounded-xl mt-5 overflow-hidden'>
+      <table>
+        <thead>
+          {table.getHeaderGroups().map((headerGroup) => (
+            <tr key={headerGroup.id}>
+              {headerGroup.headers.map((header) => (
+                <th>{header.id}</th>
+              ))}
+            </tr>
+          ))}
+        </thead>
+      </table>
+
+      {/* <table className='table table-master-data text-left rounded-xl mt-5 overflow-hidden'>
         <thead className='border-b-2 border-gray-400 text-lg'>
           <tr>
             <th className='w-3'>
@@ -94,7 +117,9 @@ function Suppliers() {
             </td>
             <td className='font-bold'>YPF</td>
             <td>Fertilizers and herbicides</td>
-            <td className='text-green-500'>Active</td>
+            <td className='text-green-500' onClick={toggleStatus}>
+              Active
+            </td>
           </tr>
           <tr className='border-t border-gray-200 hover:bg-gray-50'>
             <td>
@@ -102,10 +127,12 @@ function Suppliers() {
             </td>
             <td className='font-bold'>Monsanto</td>
             <td>Seeds</td>
-            <td className='text-red-500'>Inactive</td>
+            <td className='text-red-500' onClick={toggleStatus}>
+              Inactive
+            </td>
           </tr>
         </tbody>
-      </table>
+      </table> */}
     </div>
   );
 }
