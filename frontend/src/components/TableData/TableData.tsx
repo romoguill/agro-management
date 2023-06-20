@@ -15,7 +15,7 @@ interface TableProps<T, K extends keyof T> {
 function Table<T, K extends keyof T>({ data, columns }: TableProps<T, K>) {
   return (
     <table>
-      <TableHeader />
+      <TableHeader columns={columns} />
       <TableRows />
     </table>
   );
