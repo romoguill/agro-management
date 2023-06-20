@@ -1,9 +1,4 @@
 import { MdNoteAdd, MdSearch } from 'react-icons/md';
-import {
-  createColumnHelper,
-  getCoreRowModel,
-  useReactTable,
-} from '@tanstack/react-table';
 import { Link } from 'react-router-dom';
 
 interface Supplier {
@@ -25,26 +20,14 @@ const demoSupplier: Supplier[] = [
   },
 ];
 
+const headers = [
+  { key: 'checkbox', label: <input type='checkbox' /> },
+  { key: 'name', label: 'Name' },
+  { key: 'description', label: 'Description' },
+  { key: 'status', label: 'Status' },
+];
+
 function Suppliers() {
-  const columnHelper = createColumnHelper<Supplier>();
-  const columns = [
-    columnHelper.accessor('name', {
-      cell: (info) => info.getValue(),
-    }),
-    columnHelper.accessor('description', {
-      cell: (info) => info.getValue(),
-    }),
-    columnHelper.accessor('status', {
-      cell: (info) => info.getValue(),
-    }),
-  ];
-
-  const table = useReactTable({
-    data: demoSupplier,
-    columns,
-    getCoreRowModel: getCoreRowModel(),
-  });
-
   function toggleStatus() {
     // TODO
     return;
@@ -89,14 +72,25 @@ function Suppliers() {
 
       <table>
         <thead>
-          {table.getHeaderGroups().map((headerGroup) => (
-            <tr key={headerGroup.id}>
-              {headerGroup.headers.map((header) => (
-                <th>{header.id}</th>
-              ))}
+          <tr>
+            {headers.map((header) => (
+              <td key={header.key}>{header.label}</td>
+            ))}
+          </tr>
+        </thead>
+
+        <tbody>
+          {demoSupplier.map((supplier) => (
+            <tr key={supplier.name}>
+              <td>
+                <input type='checkbox' />
+              </td>
+              <td>{supplier.name}</td>
+              <td>{supplier.description}</td>
+              <td>{supplier.status}</td>
             </tr>
           ))}
-        </thead>
+        </tbody>
       </table>
 
       {/* <table className='table table-master-data text-left rounded-xl mt-5 overflow-hidden'>
