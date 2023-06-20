@@ -1,11 +1,11 @@
-import { TableColumn } from './TableData';
+import { DataItem, TableColumn } from './TableData';
 
-interface TableRowsProps<T, K extends keyof T> {
+interface TableRowsProps<T extends DataItem, K extends keyof T> {
   data: Array<T>;
   columns: Array<TableColumn<T, K>>;
 }
 
-function TableRows<T, K extends keyof T>({
+function TableRows<T extends DataItem, K extends keyof T>({
   data,
   columns,
 }: TableRowsProps<T, K>) {
