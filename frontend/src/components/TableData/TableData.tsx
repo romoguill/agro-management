@@ -5,21 +5,18 @@ export interface DataItem {
   [key: string]: React.ReactNode;
 }
 
-export interface TableColumn<T extends DataItem, K extends keyof T> {
-  key: K;
+export interface TableColumn<T extends DataItem> {
+  key: keyof T;
   header: string;
   width?: number;
 }
 
-interface TableProps<T extends DataItem, K extends keyof T> {
+interface TableProps<T extends DataItem> {
   data: Array<T>;
-  columns: Array<TableColumn<T, K>>;
+  columns: Array<TableColumn<T>>;
 }
 
-function Table<T extends DataItem, K extends keyof T>({
-  data,
-  columns,
-}: TableProps<T, K>) {
+function Table<T extends DataItem>({ data, columns }: TableProps<T>) {
   return (
     <table>
       <TableHeader columns={columns} />

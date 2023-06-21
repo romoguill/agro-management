@@ -1,12 +1,10 @@
 import { DataItem, TableColumn } from './TableData';
 
-interface TableHeaderProps<T extends DataItem, K extends keyof T> {
-  columns: Array<TableColumn<T, K>>;
+interface TableHeaderProps<T extends DataItem> {
+  columns: Array<TableColumn<T>>;
 }
 
-function TableHeader<T extends DataItem, K extends keyof T>({
-  columns,
-}: TableHeaderProps<T, K>) {
+function TableHeader<T extends DataItem>({ columns }: TableHeaderProps<T>) {
   const headers = columns.map((column) => {
     return <th>{column.header}</th>;
   });

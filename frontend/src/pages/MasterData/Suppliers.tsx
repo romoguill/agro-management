@@ -1,30 +1,45 @@
 import { MdNoteAdd, MdSearch } from 'react-icons/md';
 import { Link } from 'react-router-dom';
+import Table, {
+  DataItem,
+  TableColumn,
+} from '../../components/TableData/TableData';
 
-interface Supplier {
+type Supplier = {
   name: string;
   description: string;
-  status: 'Active' | 'Inactive';
-}
+  isActive: boolean;
+};
 
 const demoSupplier: Supplier[] = [
   {
     name: 'YPF',
     description: 'Fertilizers and herbicides',
-    status: 'Active',
+    isActive: true,
   },
   {
     name: 'Monsanto',
     description: 'Seeds',
-    status: 'Inactive',
+    isActive: false,
   },
 ];
 
-const headers = [
-  { key: 'checkbox', label: <input type='checkbox' /> },
-  { key: 'name', label: 'Name' },
-  { key: 'description', label: 'Description' },
-  { key: 'status', label: 'Status' },
+const columns: TableColumn<Supplier>[] = [
+  {
+    key: 'name',
+    header: 'Name',
+    width: 300,
+  },
+  {
+    key: 'description',
+    header: 'Description',
+    width: 400,
+  },
+  {
+    key: 'isActive',
+    header: 'Status',
+    width: 100,
+  },
 ];
 
 function Suppliers() {
@@ -70,7 +85,9 @@ function Suppliers() {
         </label>
       </div>
 
-      <table>
+      <Table<Supplier> data={demoSupplier} columns={columns} />
+
+      {/* <table>
         <thead>
           <tr>
             {headers.map((header) => (
@@ -91,7 +108,7 @@ function Suppliers() {
             </tr>
           ))}
         </tbody>
-      </table>
+      </table> */}
 
       {/* <table className='table table-master-data text-left rounded-xl mt-5 overflow-hidden'>
         <thead className='border-b-2 border-gray-400 text-lg'>
