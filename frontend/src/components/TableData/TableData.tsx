@@ -19,8 +19,8 @@ interface TableProps<T extends DataItem> {
 function Table<T extends DataItem>({ data, columns }: TableProps<T>) {
   return (
     <table>
-      <TableHeader columns={columns} />
-      <TableRows data={data} columns={columns} />
+      <TableHeader<T> columns={columns} />
+      <TableRows<T> data={data} columns={columns} />
     </table>
   );
 }
