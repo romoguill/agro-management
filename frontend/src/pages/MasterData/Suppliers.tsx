@@ -85,7 +85,11 @@ function Suppliers() {
         </label>
       </div>
 
-      <Table<Supplier> data={demoSupplier} columns={columns} />
+      <Table<Supplier>
+        data={demoSupplier}
+        columns={columns}
+        className='table-master-data text-left rounded-xl mt-5 overflow-hidden'
+      />
 
       {/* <table>
         <thead>

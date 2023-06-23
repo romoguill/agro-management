@@ -14,11 +14,16 @@ export interface TableColumn<T extends DataItem> {
 interface TableProps<T extends DataItem> {
   data: Array<T>;
   columns: Array<TableColumn<T>>;
+  className?: string;
 }
 
-function Table<T extends DataItem>({ data, columns }: TableProps<T>) {
+function Table<T extends DataItem>({
+  data,
+  columns,
+  className,
+}: TableProps<T>) {
   return (
-    <table>
+    <table className={`table ${className}`}>
       <TableHeader<T> columns={columns} />
       <TableRows<T> data={data} columns={columns} />
     </table>

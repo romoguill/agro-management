@@ -8,7 +8,7 @@ interface TableRowsProps<T extends DataItem> {
 function TableRows<T extends DataItem>({ data, columns }: TableRowsProps<T>) {
   const rows = data.map((row) => {
     return (
-      <tr>
+      <tr className='border-t border-gray-200 hover:bg-gray-50'>
         {columns.map((column) => {
           return <td>{row[column.key]}</td>;
         })}
