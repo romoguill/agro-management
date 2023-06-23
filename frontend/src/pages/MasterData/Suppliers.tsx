@@ -29,16 +29,19 @@ const columns: TableColumn<Supplier>[] = [
     key: 'name',
     header: 'Name',
     width: 300,
+    render: (item: Supplier) => item.name,
   },
   {
     key: 'description',
     header: 'Description',
     width: 400,
+    render: (item: Supplier) => item.description,
   },
   {
     key: 'isActive',
     header: 'Status',
     width: 100,
+    render: (item: Supplier) => (item.isActive ? 'Active' : 'Inactive'),
   },
 ];
 

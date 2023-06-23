@@ -26,7 +26,7 @@ function TableRows<T extends DataItem>({
       <tr className='border-t border-gray-200 hover:bg-gray-50'>
         {rowCheck}
         {columns.map((column) => {
-          return <td>{row[column.key]}</td>;
+          return <td>{column.render(row)}</td>;
         })}
       </tr>
     );

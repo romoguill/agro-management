@@ -8,6 +8,7 @@ export interface DataItem {
 export interface TableColumn<T extends DataItem> {
   key: keyof T;
   header: string;
+  render: (item: T) => React.ReactNode;
   width?: number;
 }
 
