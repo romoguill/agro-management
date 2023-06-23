@@ -8,7 +8,8 @@ export interface DataItem {
 export interface TableColumn<T extends DataItem> {
   key: keyof T;
   header: string;
-  render: (item: T) => React.ReactNode;
+  // render is for overriding the default <td></td> component
+  render?: (item: T) => React.ReactNode;
   width?: number;
 }
 
