@@ -15,17 +15,19 @@ interface TableProps<T extends DataItem> {
   data: Array<T>;
   columns: Array<TableColumn<T>>;
   className?: string;
+  isCheckable?: boolean;
 }
 
 function Table<T extends DataItem>({
   data,
   columns,
   className,
+  isCheckable = true,
 }: TableProps<T>) {
   return (
     <table className={`table ${className}`}>
-      <TableHeader<T> columns={columns} />
-      <TableRows<T> data={data} columns={columns} />
+      <TableHeader<T> columns={columns} isCheckable={isCheckable} />
+      <TableRows<T> data={data} columns={columns} isCheckable={isCheckable} />
     </table>
   );
 }

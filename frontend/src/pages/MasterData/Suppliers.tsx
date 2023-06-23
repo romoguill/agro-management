@@ -89,6 +89,7 @@ function Suppliers() {
         data={demoSupplier}
         columns={columns}
         className='table-master-data text-left rounded-xl mt-5 overflow-hidden'
+        isCheckable={true}
       />
 
       {/* <table>
