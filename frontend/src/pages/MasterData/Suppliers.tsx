@@ -1,8 +1,6 @@
 import { MdNoteAdd, MdSearch } from 'react-icons/md';
-import { Link } from 'react-router-dom';
-import Table, { TableColumn } from '../../components/TableData/TableData';
 import BreadCrumb from '../../components/BreadCrumb';
-import ButtonPrimary from '../../components/Buttons/ButtonMainWithIcon';
+import Table, { TableColumn } from '../../components/TableData/TableData';
 
 type Supplier = {
   name: string;
@@ -62,7 +60,11 @@ function Suppliers() {
         />
       </div>
 
-      <ButtonPrimary>Add New</ButtonPrimary>
+      <button className='btn btn-primary'>
+        <MdNoteAdd />
+        Add New
+      </button>
+
       {/* TABLE CONTROLS */}
       <div className='flex gap-6 items-center text-gray-700 font-medium'>
         <div className='rounded-lg bg-white flex justify-between items-center px-2 focus-within:outline focus-within:outline-primary-500/30'>
