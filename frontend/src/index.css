@@ -16,7 +16,7 @@ input[type='checkbox'] {
 /* BUTTONS */
 .btn {
   @apply flex gap-2 justify-between items-center
-    rounded-xl px-3 py-2;
+    rounded-lg px-2.5 py-1.5;
 }
 
 .btn-primary {
@@ -53,8 +53,3 @@ input[type='checkbox'] {
 .table-master-data th {
   @apply px-4 py-3;
 }
-
-/* .table th,
-.table td {
-  @apply border border-gray-800;
-} */
