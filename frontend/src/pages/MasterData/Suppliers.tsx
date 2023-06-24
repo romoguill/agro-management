@@ -2,6 +2,7 @@ import { MdNoteAdd, MdSearch } from 'react-icons/md';
 import { Link } from 'react-router-dom';
 import Table, { TableColumn } from '../../components/TableData/TableData';
 import BreadCrumb from '../../components/BreadCrumb';
+import ButtonPrimary from '../../components/Buttons/ButtonMainWithIcon';
 
 type Supplier = {
   name: string;
@@ -59,16 +60,9 @@ function Suppliers() {
           mainLevelName='Master Data'
           mainLevelPath='master-data'
         />
-
-        <div
-          className='flex gap-2 justify-between items-center text-primary rounded-xl 
-          bg-gray-100 px-3 py-2 font-semibold'
-        >
-          <MdNoteAdd className='text-2xl' />
-          <p className='text-xl'>Add New</p>
-        </div>
       </div>
 
+      <ButtonPrimary>Add New</ButtonPrimary>
       {/* TABLE CONTROLS */}
       <div className='flex gap-6 items-center text-gray-700 font-medium'>
         <div className='rounded-lg bg-white flex justify-between items-center px-2 focus-within:outline focus-within:outline-primary-500/30'>
