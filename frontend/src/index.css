@@ -46,7 +46,7 @@ input[type='checkbox'] {
 
 /* TABLES */
 .table {
-  @apply w-full bg-white text-gray-800 font-medium;
+  @apply w-full bg-white text-gray-800 font-medium table-fixed;
 }
 
 .table-master-data td,

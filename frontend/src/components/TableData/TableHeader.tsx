@@ -13,14 +13,14 @@ function TableHeader<T extends DataItem>({
 
   if (isCheckable) {
     checkableHeader = (
-      <th>
+      <th className='w-10'>
         <input type='checkbox' />
       </th>
     );
   }
 
   const headers = columns.map((column) => {
-    return <th>{column.header}</th>;
+    return <th style={{ width: `${column.width}%` }}>{column.header}</th>;
   });
 
   return (

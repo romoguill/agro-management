@@ -26,17 +26,17 @@ const columns: TableColumn<Supplier>[] = [
   {
     key: 'name',
     header: 'Name',
-    width: 300,
+    width: 30,
   },
   {
     key: 'description',
     header: 'Description',
-    width: 400,
+    width: 60,
   },
   {
     key: 'isActive',
     header: 'Status',
-    width: 100,
+    width: 15,
     render: (item: Supplier) => (
       <td className={item.isActive ? 'text-green-500' : 'text-red-500'}>
         {item.isActive ? 'Active' : 'Inactive'}
