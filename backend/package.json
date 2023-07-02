@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon src/server.ts"
+    "dev": "nodemon src/server.ts"
   },
   "keywords": [],
   "author": "",
@@ -32,6 +32,12 @@
     "express-session": "^1.17.3",
     "http-errors": "^2.0.0",
     "mongoose": "^7.2.0",
-    "morgan": "^1.10.0"
+    "morgan": "^1.10.0",
+    "pino": "^8.14.1",
+    "pino-http": "^8.3.3",
+    "pino-pretty": "^10.0.0"
+  },
+  "overrides": {
+    "semver": "^7.5.3"
   }
 }
