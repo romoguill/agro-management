@@ -1,4 +1,5 @@
 import pino from 'pino';
+import path from 'path';
 
 const transport = pino.transport({
   targets: [
@@ -10,7 +11,9 @@ const transport = pino.transport({
     {
       target: 'pino/file',
       level: 'info',
-      options: { destination: `${__dirname}/server.log` },
+      options: {
+        destination: path.join(__dirname, '../..', 'logs/server.log'),
+      },
     },
   ],
 });
