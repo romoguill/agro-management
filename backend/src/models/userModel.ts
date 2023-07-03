@@ -1,6 +1,6 @@
-import { Schema, model, InferSchemaType } from 'mongoose';
+import mongoose from 'mongoose';
 
-const userSchema = new Schema(
+const userSchema = new mongoose.Schema(
   {
     email: {
       type: String,
@@ -23,6 +23,8 @@ const userSchema = new Schema(
   { timestamps: true }
 );
 
-type User = InferSchemaType<typeof userSchema>;
+type User = mongoose.InferSchemaType<typeof userSchema>;
 
-export default model<User>('User', userSchema);
+const UserModel = mongoose.model<User>('User', userSchema);
+
+export default UserModel;
