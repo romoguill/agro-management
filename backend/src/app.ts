@@ -4,6 +4,8 @@ import morgan from 'morgan';
 import session from 'express-session';
 import env from './utils/validateEnv';
 import MongoStore from 'connect-mongo';
+import { logger } from './utils/logger';
+import pinoHttp from 'pino-http';
 
 import userRouter from './routes/userRoutes';
 
@@ -28,6 +30,8 @@ app.use(
     }),
   })
 );
+
+app.use(pinoHttp({ logger }));
 
 // ROUTES
 app.use('/api/users', userRouter);
