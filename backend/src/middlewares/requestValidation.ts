@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import { AnyZodObject } from 'zod';
+import { AnyZodObject, ZodError } from 'zod';
 
 export function validate(validationSchema: AnyZodObject) {
   return function (req: Request, res: Response, next: NextFunction) {
@@ -10,7 +10,7 @@ export function validate(validationSchema: AnyZodObject) {
         params: req.params,
       });
     } catch (error) {
-      console.log(error);
+      next(error);
     }
   };
 }

@@ -2,7 +2,9 @@ import { z } from 'zod';
 import mongoose from 'mongoose';
 
 const User = z.object({
-  email: z.string().email({ message: 'Invalid email address' }),
+  email: z
+    .string({ required_error: 'Email is required' })
+    .email({ message: 'Invalid email address' }),
   firstName: z.string({ required_error: 'First name is required' }),
   lastName: z.string({ required_error: 'Last name is required' }),
   password: z
@@ -12,7 +14,7 @@ const User = z.object({
 
 const hasPasswordConfirmation = z.object({
   passwordConfirmation: z
-    .string({ required_error: 'Password is required' })
+    .string({ required_error: 'Password confirmation is required' })
     .min(6, 'Password must be at least 6 characters'),
 });
 

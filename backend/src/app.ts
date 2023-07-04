@@ -8,6 +8,7 @@ import { logger } from './utils/logger';
 import pinoHttp from 'pino-http';
 
 import userRouter from './routes/userRoutes';
+import { errorHandler } from './middlewares/errorHandler';
 
 const app = express();
 
@@ -41,16 +42,6 @@ app.use((req, res, next) => next(createHttpError(404, 'Endpoint not found')));
 
 // ERROR HANDLING
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-app.use((error: Error, req: Request, res: Response, next: NextFunction) => {
-  let errorMessage = 'An error occured';
-  let statusCode = 500;
-
-  if (isHttpError(error)) {
-    errorMessage = error.message;
-    statusCode = error.statusCode;
-  }
-
-  res.status(statusCode).send({ error: errorMessage });
-});
+app.use(errorHandler);
 
 export default app;
