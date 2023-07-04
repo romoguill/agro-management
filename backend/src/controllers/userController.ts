@@ -1,22 +1,13 @@
-import { RequestHandler, Request, Response } from 'express';
+import { RequestHandler, Request, Response, NextFunction } from 'express';
 import UserModel from '../models/userModel';
 import createHttpError from 'http-errors';
 import bcrypt from 'bcrypt';
 
-interface SignUpBody {
-  firstName?: string;
-  lastName?: string;
-  email?: string;
-  password?: string;
-  passwordConfirm?: string;
-}
-
-export const signUp: RequestHandler<
-  unknown,
-  unknown,
-  SignUpBody,
-  unknown
-> = async (req, res, next): Promise<void> => {
+export const signUp = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
   const { firstName, lastName, email, password, passwordConfirm } = req.body;
 
   try {

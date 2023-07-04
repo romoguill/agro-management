@@ -20,9 +20,9 @@ const withId = z.object({ _id: z.instanceof(mongoose.Types.ObjectId) });
 
 const UserWithoutSensitiveData = User.omit({ password: true });
 
-const createUserPayload = User.merge(hasPasswordConfirmation);
-
 const UserWithId = User.merge(withId);
+
+export const createUserPayload = User.merge(hasPasswordConfirmation);
 
 export type User = z.infer<typeof User>;
 export type UserWithId = z.infer<typeof UserWithId>;

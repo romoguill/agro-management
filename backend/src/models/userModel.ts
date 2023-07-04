@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
+import { User } from '../schemas/userSchemas';
 
-const userSchema = new mongoose.Schema(
+const userSchema = new mongoose.Schema<User>(
   {
     email: {
       type: String,
@@ -22,8 +23,6 @@ const userSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
-
-type User = mongoose.InferSchemaType<typeof userSchema>;
 
 const UserModel = mongoose.model<User>('User', userSchema);
 
