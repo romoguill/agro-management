@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { isHttpError } from 'http-errors';
 import { ZodError } from 'zod';
+import { MongoServerError } from 'mongodb';
 
 export function errorHandler(
   error: Error,

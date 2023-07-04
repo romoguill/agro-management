@@ -38,3 +38,4 @@ export const RequestCreateUser = z.object({
 export type User = z.infer<typeof User>;
 export type UserWithId = z.infer<typeof UserWithId>;
 export type UserWithoutSensitiveData = z.infer<typeof UserWithoutSensitiveData>;
+export type RequestCreateUser = z.infer<typeof RequestCreateUser>;

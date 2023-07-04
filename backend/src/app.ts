@@ -4,8 +4,9 @@ import morgan from 'morgan';
 import pinoHttp from 'pino-http';
 import { logger } from './utils/logger';
 
+import userRouter from './routes/user.route';
+
 import { errorHandler } from './middlewares/errorHandler';
-import userRouter from './routes/user.routes';
 
 const app = express();
 
