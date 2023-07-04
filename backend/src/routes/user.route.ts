@@ -1,8 +1,10 @@
 import { Router } from 'express';
 import * as UserController from '../controllers/user.controller';
+import { validate } from '../middlewares/requestValidation';
+import { RequestCreateUser } from '../schemas/user.schemas';
 
 const router = Router();
 
-router.post('/', UserController.createUser);
+router.post('/', validate(RequestCreateUser), UserController.createUser);
 
 export default router;

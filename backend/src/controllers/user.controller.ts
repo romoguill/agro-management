@@ -18,6 +18,8 @@ export async function createUser(
       ...req.body,
       password: hashedPassword,
     });
+
+    res.status(201).json({ user });
   } catch (error) {
     // Use mongodb driver because mongo errors don't propagate to mongoose
     if (error instanceof MongoServerError) {
