@@ -1,16 +1,16 @@
-import 'dotenv/config';
-import env from './utils/validateEnv';
+import env from 'dotenv';
+env.config();
 import mongoose from 'mongoose';
 import app from './app';
 import { logger } from './utils/logger';
 
 mongoose
-  .connect(env.MONGO_CONNECTION_URI)
+  .connect(process.env.MONGO_CONNECTION_URI as string)
   .then(() => {
     logger.info('Connected to Mongo Database');
 
-    app.listen(env.PORT, () =>
-      console.log(`Server running on port ${env.PORT}`)
+    app.listen(process.env.PORT, () =>
+      console.log(`Server running on port ${process.env.PORT}`)
     );
   })
   .catch((error) => console.log(error));
