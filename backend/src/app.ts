@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { Request, Response } from 'express';
 import createHttpError from 'http-errors';
 import morgan from 'morgan';
 import pinoHttp from 'pino-http';
@@ -16,6 +16,10 @@ app.use(morgan('dev'));
 app.use(pinoHttp({ logger }));
 
 // ROUTES
+app.get('/healthcheck', (req: Request, res: Response) => {
+  res.sendStatus(200);
+});
+
 app.use('/api/users', userRouter);
 
 // DEFAULT ROUTE
