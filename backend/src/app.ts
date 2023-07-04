@@ -5,7 +5,7 @@ import pinoHttp from 'pino-http';
 import { logger } from './utils/logger';
 
 import { errorHandler } from './middlewares/errorHandler';
-import userRouter from './routes/userRoutes';
+import userRouter from './routes/user.routes';
 
 const app = express();
 

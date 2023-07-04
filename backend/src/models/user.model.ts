@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { User } from '../schemas/userSchemas';
+import { User } from '../schemas/user.schemas';
 
 const userSchema = new mongoose.Schema<User>(
   {
@@ -19,6 +19,7 @@ const userSchema = new mongoose.Schema<User>(
     password: {
       type: String,
       required: true,
+      select: false,
     },
   },
   { timestamps: true }

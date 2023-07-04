@@ -1,5 +1,5 @@
 import { RequestHandler, Request, Response, NextFunction } from 'express';
-import UserModel from '../models/userModel';
+import UserModel from '../models/user.model';
 import createHttpError from 'http-errors';
 import bcrypt from 'bcrypt';
 
@@ -9,21 +9,7 @@ export const signUp = async (
   next: NextFunction
 ): Promise<void> => {
   const { firstName, lastName, email, password, passwordConfirm } = req.body;
-
   try {
-    if (
-      firstName === undefined ||
-      lastName === undefined ||
-      email === undefined ||
-      password === undefined
-    ) {
-      throw createHttpError(400, 'Some fields are missing. Could not Sign Up');
-    }
-
-    if (password !== passwordConfirm) {
-      throw createHttpError(400, "Passwords don't match");
-    }
-
     const existingEmail = await UserModel.findOne({ email }).exec();
 
     if (existingEmail) {
