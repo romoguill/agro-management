@@ -13,9 +13,9 @@ const User = z.object({
 });
 
 const hasPasswordConfirmation = z.object({
-  passwordConfirmation: z
-    .string({ required_error: 'Password confirmation is required' })
-    .min(6, 'Password must be at least 6 characters'),
+  passwordConfirmation: z.string({
+    required_error: 'Password confirmation is required',
+  }),
 });
 
 const withId = z.object({ _id: z.instanceof(mongoose.Types.ObjectId) });
@@ -24,11 +24,14 @@ const UserWithoutSensitiveData = User.omit({ password: true });
 
 const UserWithId = User.merge(withId);
 
-const createUserPayload = User.merge(hasPasswordConfirmation);
+const createUserPayload = User.merge(hasPasswordConfirmation).refine(
+  (data) => data.password === data.passwordConfirmation,
+  { message: "Passwords don't match" }
+);
 
 export const RequestCreateUser = z.object({
-  params: z.any(),
-  query: z.any(),
+  params: z.any().optional(),
+  query: z.any().optional(),
   body: createUserPayload,
 });
 
