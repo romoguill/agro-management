@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import { AnyZodObject, ZodError } from 'zod';
+import { AnyZodObject } from 'zod';
 
 export function validate(validationSchema: AnyZodObject) {
   return function (req: Request, res: Response, next: NextFunction) {

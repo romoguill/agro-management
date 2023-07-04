@@ -24,9 +24,14 @@ const UserWithoutSensitiveData = User.omit({ password: true });
 
 const UserWithId = User.merge(withId);
 
-export const createUserPayload = User.merge(hasPasswordConfirmation);
+const createUserPayload = User.merge(hasPasswordConfirmation);
+
+export const RequestCreateUser = z.object({
+  params: z.any(),
+  query: z.any(),
+  body: createUserPayload,
+});
 
 export type User = z.infer<typeof User>;
 export type UserWithId = z.infer<typeof UserWithId>;
 export type UserWithoutSensitiveData = z.infer<typeof UserWithoutSensitiveData>;
-export type createUserPayload = z.infer<typeof createUserPayload>;

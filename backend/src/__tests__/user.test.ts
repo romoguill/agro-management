@@ -11,7 +11,15 @@ describe('user', () => {
           password: '123456',
         };
 
-        supertest(app).post('/api/users').send(payload).expect(400);
+        const response = await supertest(app)
+          .post('/api/users/signup')
+          .send(payload);
+
+        expect(response.status).toEqual(400);
+        expect(response.body.error).toEqual([
+          'First name is required',
+          'Password confirmation is required',
+        ]);
       });
     });
   });
