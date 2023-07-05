@@ -1,8 +1,6 @@
 import supertest from 'supertest';
 import app from '../app';
 
-console.log(process.env.ENV);
-
 describe('user', () => {
   describe('user creation', () => {
     describe('given an invalid request body', () => {
