@@ -1,5 +1,4 @@
-import env from 'dotenv';
-env.config();
+import '../env.config';
 import mongoose from 'mongoose';
 import app from './app';
 import { logger } from './utils/logger';

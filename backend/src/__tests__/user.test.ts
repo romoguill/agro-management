@@ -1,5 +1,21 @@
 import supertest from 'supertest';
 import app from '../app';
+import { connectDB, dropCollections, dropDB } from './utils/connectMemoryDB';
+import { MongoMemoryServer } from 'mongodb-memory-server';
+
+let db: MongoMemoryServer | null = null;
+
+beforeAll(async () => {
+  db = await connectDB();
+});
+
+afterEach(async () => {
+  await dropCollections(db);
+});
+
+afterAll(async () => {
+  await dropDB(db);
+});
 
 describe('user', () => {
   describe('user creation', () => {
@@ -11,9 +27,7 @@ describe('user', () => {
           password: '123456',
         };
 
-        const response = await supertest(app)
-          .post('/api/users/signup')
-          .send(payload);
+        const response = await supertest(app).post('/api/users').send(payload);
 
         expect(response.status).toEqual(400);
         expect(response.body.error).toEqual([
@@ -31,9 +45,7 @@ describe('user', () => {
           passwordConfirmation: '1234',
         };
 
-        const response = await supertest(app)
-          .post('/api/users/signup')
-          .send(payload);
+        const response = await supertest(app).post('/api/users').send(payload);
 
         expect(response.status).toEqual(400);
         expect(response.body.error).toEqual([
@@ -50,9 +62,7 @@ describe('user', () => {
           passwordConfirmation: '567891',
         };
 
-        const response = await supertest(app)
-          .post('/api/users/signup')
-          .send(payload);
+        const response = await supertest(app).post('/api/users').send(payload);
 
         expect(response.status).toEqual(400);
         expect(response.body.error).toEqual(["Passwords don't match"]);

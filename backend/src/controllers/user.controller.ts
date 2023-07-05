@@ -10,8 +10,8 @@ export async function createUser(
   res: Response,
   next: NextFunction
 ) {
-  const bcryptSalt = 10;
-  const hashedPassword = bcrypt.hashSync(req.body.password, bcryptSalt);
+  const saltRounds = 10;
+  const hashedPassword = await bcrypt.hash(req.body.password, saltRounds);
 
   try {
     const user = await UserService.createUser({
