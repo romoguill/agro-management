@@ -19,9 +19,6 @@ export async function createUser(
       password: hashedPassword,
     });
 
-    const userfound = await UserService.getUser({ email: 'test@test.com' });
-    if (userfound) console.log('user exists');
-
     res.status(201).json({ user });
   } catch (error) {
     // Use mongodb driver because mongo errors don't propagate to mongoose
