@@ -1,7 +1,8 @@
+import { MongoMemoryServer } from 'mongodb-memory-server';
 import supertest from 'supertest';
 import app from '../app';
-import { connectDB, clearCollections, dropDB } from './utils/connectMemoryDB';
-import { MongoMemoryServer } from 'mongodb-memory-server';
+import { connectDB, dropDB } from './utils/connectMemoryDB';
+import mongoose from 'mongoose';
 
 let db: MongoMemoryServer | null = null;
 
@@ -21,6 +22,8 @@ const mockData = {
     passwordConfirmation: '456789',
   },
 };
+
+let newUserId: string | null;
 
 describe('user', () => {
   beforeAll(async () => {
@@ -95,10 +98,14 @@ describe('user', () => {
 
         expect(response.status).toBe(201);
         expect(response.body).toEqual({
+          _id: expect.any(String),
           email: mockData.newUser.email,
           firstName: mockData.newUser.firstName,
           lastName: mockData.newUser.lastName,
         });
+
+        // set userid for future tests
+        newUserId = response.body._id;
       });
 
       it('should not create a duplicate user with same email throwing a 409', async () => {
@@ -136,7 +143,38 @@ describe('user', () => {
     });
   });
 
-  describe.skip('GET /api/user/:id - user fetching', () => {
-    // describe('');
+  describe('GET /api/user/:id - user fetching', () => {
+    describe('given an invalid id', () => {
+      it('should return a 400 with a message', async () => {
+        const invalidId = '123';
+
+        const response = await supertest(app).get(`/api/users/${invalidId}`);
+
+        expect(response.statusCode).toBe(400);
+        expect(response.body).toEqual({ error: 'ID is invalid' });
+      });
+    });
+
+    describe('given an authorized user', () => {
+      it.todo('should return a 401 if user not logged in');
+
+      it.todo('should return a 403 if logged user is not admin');
+    });
+
+    describe('given correctly authenticated admin user', () => {
+      it("should return a 404 if the user doesn't exist", async () => {
+        // Just to be sure, guarantee id generated is different from newUser id
+        let nonexistentId = newUserId;
+        while (nonexistentId === newUserId) {
+          nonexistentId = new mongoose.Types.ObjectId().toString();
+        }
+
+        const response = await supertest(app).get(
+          `/api/users/${nonexistentId}`
+        );
+
+        expect(response.statusCode).toBe(404);
+      });
+    });
   });
 });

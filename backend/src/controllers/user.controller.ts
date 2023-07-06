@@ -20,6 +20,7 @@ export async function createUser(
     });
 
     const responseBody = {
+      _id: user._id,
       email: user.email,
       firstName: user.firstName,
       lastName: user.lastName,
@@ -45,6 +46,20 @@ export async function getAllUsers(
   try {
     const users = await UserService.getAllUsers();
     res.status(200).json(users);
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function getUserById(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  const { id } = req.params;
+  try {
+    const user = await UserService.getUserById(id);
+    res.status(200).json(user);
   } catch (error) {
     next(error);
   }

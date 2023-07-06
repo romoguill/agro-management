@@ -8,6 +8,16 @@ export function getAllUsers() {
     .exec();
 }
 
+export function getUserById(id: string) {
+  return UserModel.findById(id, {
+    email: true,
+    firstName: true,
+    lastName: true,
+  })
+    .lean()
+    .exec();
+}
+
 export function getUser(
   queryParams: FilterQuery<UserWithoutSensitiveData>,
   showPassword = false
