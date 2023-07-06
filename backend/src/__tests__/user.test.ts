@@ -95,14 +95,9 @@ describe('user', () => {
 
         expect(response.status).toBe(201);
         expect(response.body).toEqual({
-          user: {
-            email: mockData.newUser.email,
-            firstName: mockData.newUser.firstName,
-            lastName: mockData.newUser.lastName,
-            _id: expect.any(String),
-            createdAt: expect.any(String),
-            updatedAt: expect.any(String),
-          },
+          email: mockData.newUser.email,
+          firstName: mockData.newUser.firstName,
+          lastName: mockData.newUser.lastName,
         });
       });
 
@@ -119,24 +114,28 @@ describe('user', () => {
 
   describe('GET /api/user - user fetching', () => {
     describe('given an authorized user', () => {
-      it.todo('should return a 401 if user not logged in', async () => {
-        // TODO: create auth flow
-      });
+      it.todo('should return a 401 if user not logged in');
 
-      it.todo('should return a 403 if logged user is not admin', async () => {
-        // TODO: create auth flow
-      });
+      it.todo('should return a 403 if logged user is not admin');
     });
 
     describe('given correctly authenticated admin user', () => {
       it('should return a list of all users stored', async () => {
-        const response = await supertest(app).get('/api/user');
+        const response = await supertest(app).get('/api/users');
 
         expect(response.statusCode).toBe(200);
-        expect(response.body).toEqual(mockData.newUser);
+        expect(response.body).toEqual([
+          {
+            _id: expect.any(String),
+            email: mockData.newUser.email,
+            firstName: mockData.newUser.firstName,
+            lastName: mockData.newUser.lastName,
+          },
+        ]);
       });
     });
   });
+
   describe.skip('GET /api/user/:id - user fetching', () => {
     // describe('');
   });

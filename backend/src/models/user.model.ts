@@ -22,12 +22,15 @@ const userSchema = new mongoose.Schema<User>(
       select: false,
     },
   },
-  { timestamps: true }
+  {
+    timestamps: true,
+    toObject: { versionKey: false },
+    toJSON: { versionKey: false },
+  }
 );
 
 userSchema.set('toJSON', {
   transform: function (_doc, ret) {
-    delete ret['__v'];
     delete ret['password'];
     return ret;
   },

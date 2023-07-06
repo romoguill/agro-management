@@ -3,7 +3,9 @@ import { FilterQuery } from 'mongoose';
 import { User, UserWithoutSensitiveData } from '../schemas/user.schemas';
 
 export function getAllUsers() {
-  return UserModel.find().exec();
+  return UserModel.find({}, { email: true, firstName: true, lastName: true })
+    .lean()
+    .exec();
 }
 
 export function getUser(
@@ -11,9 +13,9 @@ export function getUser(
   showPassword = false
 ) {
   if (showPassword) {
-    return UserModel.find(queryParams).select({ password: 1 }).exec();
+    return UserModel.findOne(queryParams).select({ password: 1 }).lean().exec();
   } else {
-    return UserModel.find(queryParams).exec();
+    return UserModel.findOne(queryParams).lean().exec();
   }
 }
 
@@ -27,9 +29,11 @@ export function updateUser(
 ) {
   return UserModel.findOneAndUpdate(emailQuery, userUpdated, {
     new: true,
-  }).exec();
+  })
+    .lean()
+    .exec();
 }
 
 export function deleteUser(emailQuery: FilterQuery<{ email: string }>) {
-  return UserModel.findOneAndDelete(emailQuery).exec();
+  return UserModel.findOneAndDelete(emailQuery).lean().exec();
 }

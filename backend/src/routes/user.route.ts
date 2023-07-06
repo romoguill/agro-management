@@ -6,5 +6,6 @@ import { RequestCreateUser } from '../schemas/user.schemas';
 const router = Router();
 
 router.post('/', validate(RequestCreateUser), UserController.createUser);
+router.get('/', UserController.getAllUsers);
 
 export default router;

@@ -19,7 +19,13 @@ export async function createUser(
       password: hashedPassword,
     });
 
-    res.status(201).json({ user });
+    const responseBody = {
+      email: user.email,
+      firstName: user.firstName,
+      lastName: user.lastName,
+    };
+
+    res.status(201).json(responseBody);
   } catch (error) {
     // Use mongodb driver because mongo errors don't propagate to mongoose
     if (error instanceof MongoServerError) {
@@ -27,6 +33,19 @@ export async function createUser(
         return next(createHttpError(409, 'User email already in use'));
       }
     }
+    next(error);
+  }
+}
+
+export async function getAllUsers(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const users = await UserService.getAllUsers();
+    res.status(200).json(users);
+  } catch (error) {
     next(error);
   }
 }
