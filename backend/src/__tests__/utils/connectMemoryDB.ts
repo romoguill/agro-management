@@ -8,11 +8,11 @@ export async function connectDB() {
   return db;
 }
 
-export async function dropCollections(db: MongoMemoryServer | null) {
+export async function clearCollections(db: MongoMemoryServer | null) {
   if (!db) return;
 
   const collections = await mongoose.connection.db.collections();
-  collections.forEach(async (collection) => await collection.drop());
+  collections.forEach(async (collection) => await collection.deleteMany());
 }
 
 export async function dropDB(db: MongoMemoryServer | null) {
