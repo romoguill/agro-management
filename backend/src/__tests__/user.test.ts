@@ -148,7 +148,46 @@ describe('user', () => {
 
   describe(`GET ${apiRoot}/:id - user fetching`, () => {
     describe('given an invalid id', () =>
-      testInvalidIdParam(app, apiRoot, '123'));
+      testInvalidIdParam(app, apiRoot, 'get', '123'));
+
+    describe(`given an authorized user`, () => {
+      it.todo('should return a 401 if user not logged in');
+
+      it.todo('should return a 403 if logged user is not admin');
+    });
+
+    describe('given correctly authenticated admin user', () => {
+      it("should return a 404 if the user doesn't exist", async () => {
+        // Just to be sure, guarantee id generated is different from newUser id
+        let nonexistentId = newUserId;
+        while (nonexistentId === newUserId) {
+          nonexistentId = new mongoose.Types.ObjectId().toString();
+        }
+
+        const response = await supertest(app).get(
+          `/api/users/${nonexistentId}`
+        );
+
+        expect(response.statusCode).toBe(404);
+      });
+
+      it('should return the user if found', async () => {
+        const response = await supertest(app).get(`/api/users/${newUserId}`);
+
+        expect(response.statusCode).toBe(200);
+        expect(response.body).toEqual({
+          _id: newUserId,
+          email: mockData.newUser.email,
+          firstName: mockData.newUser.firstName,
+          lastName: mockData.newUser.lastName,
+        });
+      });
+    });
+  });
+
+  describe(`PATCH ${apiRoot}/:id - user updating`, () => {
+    describe('given an invalid id', () =>
+      testInvalidIdParam(app, apiRoot, 'get', '123'));
 
     describe(`given an authorized user`, () => {
       it.todo('should return a 401 if user not logged in');
