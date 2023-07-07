@@ -165,7 +165,7 @@ describe('user', () => {
         }
 
         const response = await supertest(app).get(
-          `/api/users/${nonexistentId}`
+          `${apiRoot}/${nonexistentId}`
         );
 
         expect(response.statusCode).toBe(404);
@@ -187,7 +187,7 @@ describe('user', () => {
 
   describe(`PATCH ${apiRoot}/:id - user updating`, () => {
     describe('given an invalid id', () =>
-      testInvalidIdParam(app, apiRoot, 'get', '123'));
+      testInvalidIdParam(app, apiRoot, 'patch', '123'));
 
     describe(`given an authorized user`, () => {
       it.todo('should return a 401 if user not logged in');
@@ -196,6 +196,11 @@ describe('user', () => {
     });
 
     describe('given correctly authenticated admin user', () => {
+      const modifiedFields = {
+        firstName: 'NameChanged',
+        lastName: 'LastNameChanged',
+      };
+
       it("should return a 404 if the user doesn't exist", async () => {
         // Just to be sure, guarantee id generated is different from newUser id
         let nonexistentId = newUserId;
@@ -203,22 +208,24 @@ describe('user', () => {
           nonexistentId = new mongoose.Types.ObjectId().toString();
         }
 
-        const response = await supertest(app).get(
-          `/api/users/${nonexistentId}`
-        );
+        const response = await supertest(app)
+          .patch(`${apiRoot}/${nonexistentId}`)
+          .send(modifiedFields);
 
         expect(response.statusCode).toBe(404);
       });
 
-      it('should return the user if found', async () => {
-        const response = await supertest(app).get(`/api/users/${newUserId}`);
+      it('should perform the modification with a status of 200 and a response of the updated user ', async () => {
+        const response = await supertest(app)
+          .patch(`${apiRoot}/${newUserId}`)
+          .send(modifiedFields);
 
         expect(response.statusCode).toBe(200);
         expect(response.body).toEqual({
           _id: newUserId,
           email: mockData.newUser.email,
-          firstName: mockData.newUser.firstName,
-          lastName: mockData.newUser.lastName,
+          firstName: modifiedFields.firstName,
+          lastName: modifiedFields.lastName,
         });
       });
     });
