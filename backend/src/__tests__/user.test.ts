@@ -175,6 +175,18 @@ describe('user', () => {
 
         expect(response.statusCode).toBe(404);
       });
+
+      it('should return the user if found', async () => {
+        const response = await supertest(app).get(`/api/users/${newUserId}`);
+
+        expect(response.statusCode).toBe(200);
+        expect(response.body).toEqual({
+          _id: newUserId,
+          email: mockData.newUser.email,
+          firstName: mockData.newUser.firstName,
+          lastName: mockData.newUser.lastName,
+        });
+      });
     });
   });
 });

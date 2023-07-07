@@ -59,6 +59,9 @@ export async function getUserById(
   const { id } = req.params;
   try {
     const user = await UserService.getUserById(id);
+
+    if (!user) return next(createHttpError(404, `No user found with id ${id}`));
+
     res.status(200).json(user);
   } catch (error) {
     next(error);
