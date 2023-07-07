@@ -3,8 +3,11 @@ import supertest from 'supertest';
 import app from '../app';
 import { connectDB, dropDB } from './utils/connectMemoryDB';
 import mongoose from 'mongoose';
+import { testInvalidIdParam } from './utils/reusableTests';
 
 let db: MongoMemoryServer | null = null;
+
+const apiRoot = '/api/users';
 
 const mockData = {
   newUser: {
@@ -34,7 +37,7 @@ describe('user', () => {
     await dropDB(db);
   });
 
-  describe('POST /api/user - user creation', () => {
+  describe(`POST ${apiRoot} - user creation`, () => {
     // beforeAll(async () => {
     //   await clearCollections(db);
     //   console.log('Deleting collections');
@@ -48,7 +51,7 @@ describe('user', () => {
           password: '123456',
         };
 
-        const response = await supertest(app).post('/api/users').send(payload);
+        const response = await supertest(app).post(apiRoot).send(payload);
 
         expect(response.status).toEqual(400);
         expect(response.body.error).toEqual([
@@ -66,7 +69,7 @@ describe('user', () => {
           passwordConfirmation: '1234',
         };
 
-        const response = await supertest(app).post('/api/users').send(payload);
+        const response = await supertest(app).post(apiRoot).send(payload);
 
         expect(response.status).toEqual(400);
         expect(response.body.error).toEqual([
@@ -83,7 +86,7 @@ describe('user', () => {
           passwordConfirmation: '567891',
         };
 
-        const response = await supertest(app).post('/api/users').send(payload);
+        const response = await supertest(app).post(apiRoot).send(payload);
 
         expect(response.status).toEqual(400);
         expect(response.body.error).toEqual(["Passwords don't match"]);
@@ -93,7 +96,7 @@ describe('user', () => {
     describe('given a valid request body', () => {
       it('should create user with response of 201', async () => {
         const response = await supertest(app)
-          .post('/api/users')
+          .post(apiRoot)
           .send(mockData.newUser);
 
         expect(response.status).toBe(201);
@@ -110,7 +113,7 @@ describe('user', () => {
 
       it('should not create a duplicate user with same email throwing a 409', async () => {
         const response = await supertest(app)
-          .post('/api/users')
+          .post(apiRoot)
           .send(mockData.newUserDuplicate);
 
         expect(response.status).toBe(409);
@@ -119,7 +122,7 @@ describe('user', () => {
     });
   });
 
-  describe('GET /api/user - user fetching', () => {
+  describe(`GET ${apiRoot} - user fetching`, () => {
     describe('given an authorized user', () => {
       it.todo('should return a 401 if user not logged in');
 
@@ -128,7 +131,7 @@ describe('user', () => {
 
     describe('given correctly authenticated admin user', () => {
       it('should return a list of all users stored', async () => {
-        const response = await supertest(app).get('/api/users');
+        const response = await supertest(app).get(apiRoot);
 
         expect(response.statusCode).toBe(200);
         expect(response.body).toEqual([
@@ -143,19 +146,11 @@ describe('user', () => {
     });
   });
 
-  describe('GET /api/user/:id - user fetching', () => {
-    describe('given an invalid id', () => {
-      it('should return a 400 with a message', async () => {
-        const invalidId = '123';
+  describe(`GET ${apiRoot}/:id - user fetching`, () => {
+    describe('given an invalid id', () =>
+      testInvalidIdParam(app, apiRoot, '123'));
 
-        const response = await supertest(app).get(`/api/users/${invalidId}`);
-
-        expect(response.statusCode).toBe(400);
-        expect(response.body).toEqual({ error: 'ID is invalid' });
-      });
-    });
-
-    describe('given an authorized user', () => {
+    describe(`given an authorized user`, () => {
       it.todo('should return a 401 if user not logged in');
 
       it.todo('should return a 403 if logged user is not admin');
