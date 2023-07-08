@@ -15,5 +15,6 @@ router.patch(
   validate(RequestUpdateUser),
   UserController.updateUser
 );
+router.delete('/:id', validateObjectId, UserController.deleteUser);
 
 export default router;

@@ -76,11 +76,27 @@ export async function updateUser(
   const { id } = req.params;
   try {
     const user = await UserService.updateUser(id, req.body);
-    console.log({ user });
 
     if (!user) return next(createHttpError(404, `No user found with id ${id}`));
 
     res.status(200).json(user);
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function deleteUser(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  const { id } = req.params;
+  try {
+    const user = await UserService.deleteUser(id);
+
+    if (!user) return next(createHttpError(404, `No user found with id ${id}`));
+
+    res.status(200).json({ success: `User with id ${id} was deleted` });
   } catch (error) {
     next(error);
   }
