@@ -230,4 +230,40 @@ describe('user', () => {
       });
     });
   });
+
+  describe(`DELETE ${apiRoot}/:id - user deleting`, () => {
+    describe('given an invalid id', () =>
+      testInvalidIdParam(app, apiRoot, 'delete', '123'));
+
+    describe(`given an authorized user`, () => {
+      it.todo('should return a 401 if user not logged in');
+
+      it.todo('should return a 403 if logged user is not admin');
+    });
+
+    describe('given correctly authenticated admin user', () => {
+      it("should return a 404 if the user doesn't exist", async () => {
+        // Just to be sure, guarantee id generated is different from newUser id
+        let nonexistentId = newUserId;
+        while (nonexistentId === newUserId) {
+          nonexistentId = new mongoose.Types.ObjectId().toString();
+        }
+
+        const response = await supertest(app).delete(
+          `${apiRoot}/${nonexistentId}`
+        );
+
+        expect(response.statusCode).toBe(404);
+      });
+
+      it('should perform the deletion with a status of 200 and a response with a message ', async () => {
+        const response = await supertest(app).delete(`${apiRoot}/${newUserId}`);
+
+        expect(response.statusCode).toBe(200);
+        expect(response.body).toEqual({
+          success: `User with id ${newUserId} was deleted`,
+        });
+      });
+    });
+  });
 });
