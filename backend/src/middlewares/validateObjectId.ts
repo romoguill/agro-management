@@ -8,10 +8,7 @@ export function validateObjectId(
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   next: NextFunction
 ) {
-  console.log(req.params.id);
-  console.log(mongoose.Types.ObjectId.isValid(req.params.id));
   if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
-    console.log('invalid');
     next(createHttpError(400, 'ID is invalid'));
   }
   next();

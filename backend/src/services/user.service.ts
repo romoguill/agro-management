@@ -1,6 +1,10 @@
 import UserModel from '../models/user.model';
 import { FilterQuery } from 'mongoose';
-import { User, UserWithoutSensitiveData } from '../schemas/user.schemas';
+import {
+  RequestUpdateUser,
+  User,
+  UserWithoutSensitiveData,
+} from '../schemas/user.schemas';
 
 export function getAllUsers() {
   return UserModel.find({}, { email: true, firstName: true, lastName: true })
@@ -34,16 +38,21 @@ export function createUser(newUser: User) {
 }
 
 export function updateUser(
-  emailQuery: FilterQuery<{ email: string }>,
-  userUpdated: User
+  id: string,
+  updatedFields: RequestUpdateUser['body']
 ) {
-  return UserModel.findOneAndUpdate(emailQuery, userUpdated, {
+  return UserModel.findByIdAndUpdate(id, updatedFields, {
     new: true,
+    projection: {
+      email: true,
+      firstName: true,
+      lastName: true,
+    },
   })
     .lean()
     .exec();
 }
 
-export function deleteUser(emailQuery: FilterQuery<{ email: string }>) {
-  return UserModel.findOneAndDelete(emailQuery).lean().exec();
+export function deleteUser(id: string) {
+  return UserModel.findByIdAndDelete(id).lean().exec();
 }

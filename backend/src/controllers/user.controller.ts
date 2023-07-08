@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import { RequestCreateUser } from '../schemas/user.schemas';
+import { RequestCreateUser, RequestUpdateUser } from '../schemas/user.schemas';
 import bcrypt from 'bcrypt';
 import * as UserService from '../services/user.service';
 import { MongoServerError } from 'mongodb';
@@ -59,6 +59,24 @@ export async function getUserById(
   const { id } = req.params;
   try {
     const user = await UserService.getUserById(id);
+
+    if (!user) return next(createHttpError(404, `No user found with id ${id}`));
+
+    res.status(200).json(user);
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function updateUser(
+  req: Request<RequestUpdateUser['params'], unknown, RequestUpdateUser['body']>,
+  res: Response,
+  next: NextFunction
+) {
+  const { id } = req.params;
+  try {
+    const user = await UserService.updateUser(id, req.body);
+    console.log({ user });
 
     if (!user) return next(createHttpError(404, `No user found with id ${id}`));
 

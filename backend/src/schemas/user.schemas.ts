@@ -29,13 +29,22 @@ const createUserPayload = User.merge(hasPasswordConfirmation).refine(
   { message: "Passwords don't match" }
 );
 
+const updateUserPayload = User.partial();
+
 export const RequestCreateUser = z.object({
   params: z.any().optional(),
   query: z.any().optional(),
   body: createUserPayload,
 });
 
+export const RequestUpdateUser = z.object({
+  params: z.object({ id: z.string() }),
+  query: z.any().optional(),
+  body: updateUserPayload,
+});
+
 export type User = z.infer<typeof User>;
 export type UserWithId = z.infer<typeof UserWithId>;
 export type UserWithoutSensitiveData = z.infer<typeof UserWithoutSensitiveData>;
 export type RequestCreateUser = z.infer<typeof RequestCreateUser>;
+export type RequestUpdateUser = z.infer<typeof RequestUpdateUser>;
