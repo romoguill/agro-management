@@ -1,6 +1,8 @@
 import { z } from 'zod';
 import mongoose from 'mongoose';
 
+const Roles = z.enum(['admin', 'user', 'visitor']);
+
 const User = z.object({
   email: z
     .string({ required_error: 'Email is required' })
@@ -10,6 +12,7 @@ const User = z.object({
   password: z
     .string({ required_error: 'Password is required' })
     .min(6, 'Password must be at least 6 characters'),
+  roles: z.array(Roles),
 });
 
 const hasPasswordConfirmation = z.object({
@@ -43,6 +46,7 @@ export const RequestUpdateUser = z.object({
   body: updateUserPayload,
 });
 
+export type Roles = z.infer<typeof Roles>;
 export type User = z.infer<typeof User>;
 export type UserWithId = z.infer<typeof UserWithId>;
 export type UserWithoutSensitiveData = z.infer<typeof UserWithoutSensitiveData>;
