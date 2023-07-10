@@ -34,6 +34,13 @@ const createUserPayload = User.merge(hasPasswordConfirmation).refine(
 
 const updateUserPayload = User.partial();
 
+// Some duplication. Couldn't find a better whay since after .refine you get a ZodEffect, not a ZodObject
+const registerUserPayload = User.merge(hasPasswordConfirmation)
+  .omit({ roles: true })
+  .refine((data) => data.password === data.passwordConfirmation, {
+    message: "Passwords don't match",
+  });
+
 export const RequestCreateUser = z.object({
   params: z.any().optional(),
   query: z.any().optional(),
@@ -46,9 +53,16 @@ export const RequestUpdateUser = z.object({
   body: updateUserPayload,
 });
 
+export const RequestRegisterUser = z.object({
+  params: z.any().optional(),
+  query: z.any().optional(),
+  body: registerUserPayload,
+});
+
 export type Roles = z.infer<typeof Roles>;
 export type User = z.infer<typeof User>;
 export type UserWithId = z.infer<typeof UserWithId>;
 export type UserWithoutSensitiveData = z.infer<typeof UserWithoutSensitiveData>;
 export type RequestCreateUser = z.infer<typeof RequestCreateUser>;
 export type RequestUpdateUser = z.infer<typeof RequestUpdateUser>;
+export type RequestRegisterUser = z.infer<typeof RequestRegisterUser>;

@@ -1,12 +1,12 @@
 import bcrypt from 'bcrypt';
 import { NextFunction, Request, Response } from 'express';
-import { RequestCreateUser } from '../schemas/user.schemas';
-import * as UserService from '../services/user.service';
-import { MongoServerError } from 'mongodb';
 import createHttpError from 'http-errors';
+import { MongoServerError } from 'mongodb';
+import { RequestRegisterUser } from '../schemas/user.schemas';
+import * as UserService from '../services/user.service';
 
 export async function register(
-  req: Request<unknown, unknown, RequestCreateUser['body']>,
+  req: Request<unknown, unknown, RequestRegisterUser['body']>,
   res: Response,
   next: NextFunction
 ) {
@@ -17,6 +17,7 @@ export async function register(
     const user = await UserService.createUser({
       ...req.body,
       password: hashedPassword,
+      roles: ['user'],
     });
 
     const responseBody = {
