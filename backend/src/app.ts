@@ -3,6 +3,7 @@ import createHttpError from 'http-errors';
 import morgan from 'morgan';
 import pinoHttp from 'pino-http';
 import { logger } from './utils/logger';
+import helmet from 'helmet';
 
 import userRouter from './routes/user.route';
 
@@ -13,6 +14,7 @@ const app = express();
 // MIDDLEWARES
 app.use(express.json());
 app.use(morgan('dev'));
+app.use(helmet());
 
 app.use(pinoHttp({ logger }));
 
