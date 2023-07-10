@@ -25,6 +25,7 @@ export async function register(
       email: user.email,
       firstName: user.firstName,
       lastName: user.lastName,
+      roles: user.roles,
     };
 
     res.status(201).json(responseBody);
