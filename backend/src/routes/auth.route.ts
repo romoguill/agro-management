@@ -1,14 +1,14 @@
-// import { Router } from 'express';
-// import * as UserController from '../controllers/user.controller';
-// import { validate } from '../middlewares/requestValidation';
-// import { RequestCreateUser } from '../schemas/user.schemas';
+import { Router } from 'express';
+import * as AuthController from '../controllers/auth.controller';
+import { validate } from '../middlewares/requestValidation';
+import { RequestRegisterUser } from '../schemas/user.schemas';
 
-// const router = Router();
+const router = Router();
 
-// router.post('/signup', validate(RequestCreateUser), UserController.signUp);
+router.post(
+  '/register',
+  validate(RequestRegisterUser),
+  AuthController.register
+);
 
-// router.post('/login', UserController.login);
-
-// router.post('/logout', UserController.logout);
-
-// export default router;
+export default router;

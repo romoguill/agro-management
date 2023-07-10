@@ -6,6 +6,7 @@ import { logger } from './utils/logger';
 import helmet from 'helmet';
 
 import userRouter from './routes/user.route';
+import authRouter from './routes/auth.route';
 
 import { errorHandler } from './middlewares/errorHandler';
 
@@ -24,6 +25,7 @@ app.get('/healthcheck', (req: Request, res: Response) => {
 });
 
 app.use('/api/users', userRouter);
+app.use('/api/auth', authRouter);
 
 // DEFAULT ROUTE
 app.use((req, res, next) => next(createHttpError(404, 'Endpoint not found')));
