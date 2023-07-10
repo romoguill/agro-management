@@ -16,6 +16,7 @@ const mockData = {
     lastName: 'Test',
     password: '123456',
     passwordConfirmation: '123456',
+    roles: ['user'],
   },
   newUserDuplicate: {
     email: 'test@test.com',
@@ -23,6 +24,7 @@ const mockData = {
     lastName: 'Lennon',
     password: '456789',
     passwordConfirmation: '456789',
+    roles: ['user'],
   },
 };
 
@@ -49,6 +51,7 @@ describe('user', () => {
           email: 'test@test.com',
           lastName: 'Test',
           password: '123456',
+          roles: ['user'],
         };
 
         const response = await supertest(app).post(apiRoot).send(payload);
@@ -67,6 +70,7 @@ describe('user', () => {
           lastName: 'Test',
           password: '1234',
           passwordConfirmation: '1234',
+          roles: ['user'],
         };
 
         const response = await supertest(app).post(apiRoot).send(payload);
@@ -84,6 +88,7 @@ describe('user', () => {
           lastName: 'Test',
           password: '123456',
           passwordConfirmation: '567891',
+          roles: ['user'],
         };
 
         const response = await supertest(app).post(apiRoot).send(payload);
@@ -105,6 +110,7 @@ describe('user', () => {
           email: mockData.newUser.email,
           firstName: mockData.newUser.firstName,
           lastName: mockData.newUser.lastName,
+          roles: mockData.newUser.roles,
         });
 
         // set userid for future tests
@@ -140,6 +146,7 @@ describe('user', () => {
             email: mockData.newUser.email,
             firstName: mockData.newUser.firstName,
             lastName: mockData.newUser.lastName,
+            roles: mockData.newUser.roles,
           },
         ]);
       });
@@ -180,6 +187,7 @@ describe('user', () => {
           email: mockData.newUser.email,
           firstName: mockData.newUser.firstName,
           lastName: mockData.newUser.lastName,
+          roles: mockData.newUser.roles,
         });
       });
     });
@@ -226,6 +234,7 @@ describe('user', () => {
           email: mockData.newUser.email,
           firstName: modifiedFields.firstName,
           lastName: modifiedFields.lastName,
+          roles: mockData.newUser.roles,
         });
       });
     });

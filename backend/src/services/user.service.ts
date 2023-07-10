@@ -7,7 +7,10 @@ import {
 } from '../schemas/user.schemas';
 
 export function getAllUsers() {
-  return UserModel.find({}, { email: true, firstName: true, lastName: true })
+  return UserModel.find(
+    {},
+    { email: true, firstName: true, lastName: true, roles: true }
+  )
     .lean()
     .exec();
 }
@@ -17,6 +20,7 @@ export function getUserById(id: string) {
     email: true,
     firstName: true,
     lastName: true,
+    roles: true,
   })
     .lean()
     .exec();
@@ -47,6 +51,7 @@ export function updateUser(
       email: true,
       firstName: true,
       lastName: true,
+      roles: true,
     },
   })
     .lean()
