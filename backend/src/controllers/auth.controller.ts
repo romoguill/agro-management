@@ -1,8 +1,9 @@
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 import { NextFunction, Request, Response } from 'express';
 import createHttpError from 'http-errors';
 import { MongoServerError } from 'mongodb';
-import { RequestRegisterUser } from '../schemas/user.schemas';
+import { RequestLoginUser, RequestRegisterUser } from '../schemas/user.schemas';
 import * as UserService from '../services/user.service';
 
 export async function register(
@@ -36,6 +37,47 @@ export async function register(
         return next(createHttpError(409, 'User email already in use'));
       }
     }
+    next(error);
+  }
+}
+
+export async function login(
+  req: Request<unknown, unknown, RequestLoginUser['body']>,
+  res: Response,
+  next: NextFunction
+) {
+  const { email, password } = req.body;
+
+  try {
+    const user = await UserService.getUser({ email });
+
+    if (!user) throw createHttpError(401, 'Invalid credentials');
+
+    const passwordsMatch = await bcrypt.compare(password, user.password);
+
+    if (!passwordsMatch) throw createHttpError(401, 'Invalid credentials');
+
+    const accessToken = jwt.sign(
+      { id: user._id, roles: user.roles },
+      process.env.JWT_SECRET_ACCESS_TOKEN as string,
+      { expiresIn: 10 }
+    );
+
+    const refreshToken = jwt.sign(
+      { id: user._id, roles: user.roles },
+      process.env.JWT_SECRET_REFRESH_TOKEN as string,
+      { expiresIn: 30 }
+    );
+
+    res.cookie('jwt', refreshToken, {
+      httpOnly: true,
+      secure: true,
+      sameSite: true,
+      maxAge: 1000 * 30,
+    });
+
+    res.json({ user, accessToken });
+  } catch (error) {
     next(error);
   }
 }

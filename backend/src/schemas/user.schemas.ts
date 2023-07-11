@@ -1,6 +1,8 @@
 import { z } from 'zod';
 import mongoose from 'mongoose';
 
+//---- MODELS
+
 const Roles = z.enum(['admin', 'user', 'visitor']);
 
 const User = z.object({
@@ -27,6 +29,8 @@ const UserWithoutSensitiveData = User.omit({ password: true });
 
 const UserWithId = User.merge(withId);
 
+//---- PAYLOADS SHCEMAS
+
 const createUserPayload = User.merge(hasPasswordConfirmation).refine(
   (data) => data.password === data.passwordConfirmation,
   { message: "Passwords don't match" }
@@ -40,6 +44,10 @@ const registerUserPayload = User.merge(hasPasswordConfirmation)
   .refine((data) => data.password === data.passwordConfirmation, {
     message: "Passwords don't match",
   });
+
+const loginUserPayload = User.pick({ email: true, password: true });
+
+//---- REQUESTS SCHEMAS
 
 export const RequestCreateUser = z.object({
   params: z.any().optional(),
@@ -59,6 +67,14 @@ export const RequestRegisterUser = z.object({
   body: registerUserPayload,
 });
 
+export const RequestLoginUser = z.object({
+  params: z.any().optional(),
+  query: z.any().optional(),
+  body: loginUserPayload,
+});
+
+//----- TS TYPES
+
 export type Roles = z.infer<typeof Roles>;
 export type User = z.infer<typeof User>;
 export type UserWithId = z.infer<typeof UserWithId>;
@@ -66,3 +82,4 @@ export type UserWithoutSensitiveData = z.infer<typeof UserWithoutSensitiveData>;
 export type RequestCreateUser = z.infer<typeof RequestCreateUser>;
 export type RequestUpdateUser = z.infer<typeof RequestUpdateUser>;
 export type RequestRegisterUser = z.infer<typeof RequestRegisterUser>;
+export type RequestLoginUser = z.infer<typeof RequestLoginUser>;
