@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import * as AuthController from '../controllers/auth.controller';
 import { validate } from '../middlewares/requestValidation';
-import { RequestRegisterUser } from '../schemas/user.schemas';
+import { RequestLoginUser, RequestRegisterUser } from '../schemas/user.schemas';
 
 const router = Router();
 
@@ -10,5 +10,7 @@ router.post(
   validate(RequestRegisterUser),
   AuthController.register
 );
+
+router.post('/login', validate(RequestLoginUser), AuthController.login);
 
 export default router;

@@ -30,11 +30,15 @@ export function getUser(
   queryParams: FilterQuery<UserWithoutSensitiveData>,
   showPassword = false
 ) {
-  if (showPassword) {
-    return UserModel.findOne(queryParams).select({ password: 1 }).lean().exec();
-  } else {
-    return UserModel.findOne(queryParams).lean().exec();
-  }
+  return UserModel.findOne(queryParams, {
+    email: true,
+    firstName: true,
+    lastName: true,
+    roles: true,
+    password: showPassword,
+  })
+    .lean()
+    .exec();
 }
 
 export function createUser(newUser: User) {

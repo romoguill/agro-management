@@ -49,9 +49,11 @@ export async function login(
   const { email, password } = req.body;
 
   try {
-    const user = await UserService.getUser({ email });
+    const user = await UserService.getUser({ email }, true);
 
     if (!user) throw createHttpError(401, 'Invalid credentials');
+
+    console.log(password, user.password);
 
     const passwordsMatch = await bcrypt.compare(password, user.password);
 
@@ -76,8 +78,12 @@ export async function login(
       maxAge: 1000 * 30,
     });
 
-    res.json({ user, accessToken });
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { password: _, ...responseUser } = user;
+
+    res.json({ user: responseUser, accessToken });
   } catch (error) {
+    console.log(error);
     next(error);
   }
 }
