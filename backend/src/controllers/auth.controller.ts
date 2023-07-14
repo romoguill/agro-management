@@ -108,10 +108,16 @@ export async function refreshToken(
     const jwtPayload = jwt.verify(
       refreshToken,
       process.env.JWT_SECRET_REFRESH_TOKEN as string
+    ) as TokenPayload;
+
+    const accessToken = jwt.sign(
+      { id: jwtPayload.id, roles: jwtPayload.roles },
+      process.env.JWT_SECRET_ACCESS_TOKEN as string,
+      { expiresIn: 10 }
     );
-    console.log(jwtPayload);
-    res.status(200).json({ jwtPayload });
-  } catch (error: any) {
+
+    res.status(200).json({ accessToken });
+  } catch (error) {
     next(error);
   }
 }
