@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { isHttpError } from 'http-errors';
+import { JsonWebTokenError, TokenExpiredError } from 'jsonwebtoken';
 import { ZodError } from 'zod';
 
 export function errorHandler(
@@ -15,6 +16,19 @@ export function errorHandler(
   if (error instanceof ZodError) {
     errorMessage = error.issues.map((issue) => issue.message);
     statusCode = 400;
+  }
+
+  if (
+    error instanceof JsonWebTokenError ||
+    error instanceof TokenExpiredError
+  ) {
+    res.clearCookie('jwt', {
+      httpOnly: true,
+      secure: true,
+      sameSite: true,
+    });
+    errorMessage = 'Invalid/Expired session';
+    statusCode = 401;
   }
 
   if (isHttpError(error)) {

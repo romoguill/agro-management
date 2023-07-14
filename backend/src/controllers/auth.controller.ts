@@ -1,5 +1,5 @@
 import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
+import jwt, { JsonWebTokenError } from 'jsonwebtoken';
 import { NextFunction, Request, Response } from 'express';
 import createHttpError from 'http-errors';
 import { MongoServerError } from 'mongodb';
@@ -100,7 +100,7 @@ export async function refreshToken(
 ) {
   const cookies = req.cookies;
 
-  if (!cookies.jwt) return res.sendStatus(401);
+  if (!cookies?.jwt) return res.sendStatus(401);
 
   const refreshToken = cookies.jwt;
 
@@ -110,7 +110,8 @@ export async function refreshToken(
       process.env.JWT_SECRET_REFRESH_TOKEN as string
     );
     console.log(jwtPayload);
-  } catch (error) {
+    res.status(200).json({ jwtPayload });
+  } catch (error: any) {
     next(error);
   }
 }

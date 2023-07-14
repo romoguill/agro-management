@@ -4,6 +4,7 @@ import morgan from 'morgan';
 import pinoHttp from 'pino-http';
 import { logger } from './utils/logger';
 import helmet from 'helmet';
+import cookieParser from 'cookie-parser';
 
 import userRouter from './routes/user.route';
 import authRouter from './routes/auth.route';
@@ -16,6 +17,7 @@ const app = express();
 app.use(express.json());
 app.use(morgan('dev'));
 app.use(helmet());
+app.use(cookieParser());
 
 app.use(pinoHttp({ logger }));
 
