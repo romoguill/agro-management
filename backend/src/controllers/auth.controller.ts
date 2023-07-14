@@ -6,6 +6,11 @@ import { MongoServerError } from 'mongodb';
 import { RequestLoginUser, RequestRegisterUser } from '../schemas/user.schemas';
 import * as UserService from '../services/user.service';
 
+export interface TokenPayload extends jwt.JwtPayload {
+  userId: string;
+  roles: string[];
+}
+
 export async function register(
   req: Request<unknown, unknown, RequestRegisterUser['body']>,
   res: Response,
@@ -84,6 +89,28 @@ export async function login(
     res.json({ user: responseUser, accessToken });
   } catch (error) {
     console.log(error);
+    next(error);
+  }
+}
+
+export async function refreshToken(
+  req: Request<unknown, unknown, RequestLoginUser['body']>,
+  res: Response,
+  next: NextFunction
+) {
+  const cookies = req.cookies;
+
+  if (!cookies.jwt) return res.sendStatus(401);
+
+  const refreshToken = cookies.jwt;
+
+  try {
+    const jwtPayload = jwt.verify(
+      refreshToken,
+      process.env.JWT_SECRET_REFRESH_TOKEN as string
+    );
+    console.log(jwtPayload);
+  } catch (error) {
     next(error);
   }
 }
