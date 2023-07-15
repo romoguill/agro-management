@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt';
-import jwt, { JsonWebTokenError } from 'jsonwebtoken';
 import { NextFunction, Request, Response } from 'express';
 import createHttpError from 'http-errors';
+import jwt from 'jsonwebtoken';
 import { MongoServerError } from 'mongodb';
 import { RequestLoginUser, RequestRegisterUser } from '../schemas/user.schemas';
 import * as UserService from '../services/user.service';
@@ -93,8 +93,8 @@ export async function login(
   }
 }
 
-export async function refreshToken(
-  req: Request<unknown, unknown, RequestLoginUser['body']>,
+export async function refreshAccessToken(
+  req: Request,
   res: Response,
   next: NextFunction
 ) {
@@ -120,4 +120,18 @@ export async function refreshToken(
   } catch (error) {
     next(error);
   }
+}
+
+export function logout(req: Request, res: Response) {
+  const cookies = req.cookies;
+
+  if (!cookies?.jwt) return res.sendStatus(401);
+
+  res.clearCookie('jwt', {
+    httpOnly: true,
+    secure: true,
+    sameSite: true,
+  });
+
+  res.sendStatus(204);
 }
