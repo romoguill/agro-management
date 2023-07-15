@@ -2,6 +2,7 @@ import supertest from 'supertest';
 import app from '../app';
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import { connectDB, dropDB } from './utils/connectMemoryDB';
+import cookie from 'cookie';
 
 let db: MongoMemoryServer | null = null;
 const authRoute = '/api/auth';
@@ -79,6 +80,66 @@ describe('authentication and authorization', () => {
 
         expect(response.status).toBe(409);
         expect(response.body).toEqual({ error: 'User email already in use' });
+      });
+    });
+  });
+
+  describe(`POST ${authRoute}/login - user login`, () => {
+    describe('given an invalid request body', () => {
+      it('should return a 400 with errors', async () => {
+        const payload = {
+          email: 'test@test.com',
+        };
+
+        const response = await supertest(app)
+          .post(`${authRoute}/login`)
+          .send(payload);
+
+        expect(response.status).toEqual(400);
+        expect(response.body.error).toEqual(['Password is required']);
+      });
+    });
+
+    describe('given an valid request body', () => {
+      it('should return a 401 if the credentials are invalid', async () => {
+        const payload = {
+          email: 'test@test.com',
+          password: '654321',
+        };
+
+        const response = await supertest(app)
+          .post(`${authRoute}/login`)
+          .send(payload);
+
+        expect(response.status).toEqual(401);
+        expect(response.body.error).toBe('Invalid credentials');
+      });
+
+      it('should return 200 if the credentials are valid, respond with body user and access token, set the cookie with refresh token', async () => {
+        const payload = {
+          email: 'test@test.com',
+          password: '123456',
+        };
+
+        const response = await supertest(app)
+          .post(`${authRoute}/login`)
+          .send(payload);
+
+        expect(response.status).toEqual(200);
+
+        const cookieParsed = cookie.parse(response.headers['set-cookie'][0]);
+
+        expect(cookieParsed.jwt).toBeTruthy();
+
+        expect(response.body.user).toEqual({
+          _id: expect.any(String),
+          email: 'test@test.com',
+          firstName: 'My',
+          lastName: 'Test',
+          roles: ['user'],
+        });
+
+        expect(response.body.accessToken).toEqual(expect.any(String));
       });
     });
   });

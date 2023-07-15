@@ -58,8 +58,6 @@ export async function login(
 
     if (!user) throw createHttpError(401, 'Invalid credentials');
 
-    console.log(password, user.password);
-
     const passwordsMatch = await bcrypt.compare(password, user.password);
 
     if (!passwordsMatch) throw createHttpError(401, 'Invalid credentials');
@@ -88,7 +86,6 @@ export async function login(
 
     res.json({ user: responseUser, accessToken });
   } catch (error) {
-    console.log(error);
     next(error);
   }
 }
