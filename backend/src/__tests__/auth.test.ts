@@ -180,4 +180,35 @@ describe('authentication and authorization', () => {
       });
     });
   });
+
+  describe(`POST ${authRoute}/logout - logout user`, () => {
+    describe('given an invalid cookie', () => {
+      it('should return a 401', async () => {
+        const response = await supertest(app)
+          .post(`${authRoute}/refresh`)
+          .set('Cookie', ['test=testing']);
+
+        expect(response.status).toEqual(401);
+      });
+    });
+
+    describe('given an valid cookie', () => {
+      it('should return a 204 and delete cookie', async () => {
+        const response = await supertest(app)
+          .post(`${authRoute}/logout`)
+          .set('Cookie', validCookie);
+
+        expect(response.status).toEqual(204);
+
+        const parsedCookie = cookie.parse(response.headers['set-cookie'][0]);
+
+        expect(parsedCookie).toEqual(
+          expect.objectContaining({
+            jwt: '',
+            Expires: 'Thu, 01 Jan 1970 00:00:00 GMT',
+          })
+        );
+      });
+    });
+  });
 });
