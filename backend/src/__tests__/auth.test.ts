@@ -25,6 +25,7 @@ const mockData = {
 };
 
 let newUserId = '';
+let validCookie: string[] = [];
 
 describe('authentication and authorization', () => {
   beforeAll(async () => {
@@ -127,6 +128,9 @@ describe('authentication and authorization', () => {
 
         expect(response.status).toEqual(200);
 
+        // Store it for later tests
+        validCookie = response.headers['set-cookie'];
+
         const cookieParsed = cookie.parse(response.headers['set-cookie'][0]);
 
         expect(cookieParsed.jwt).toBeTruthy();
@@ -140,6 +144,39 @@ describe('authentication and authorization', () => {
         });
 
         expect(response.body.accessToken).toEqual(expect.any(String));
+      });
+    });
+  });
+
+  describe(`POST ${authRoute}/refresh - renew access token`, () => {
+    describe('given an invalid cookie', () => {
+      it('should return a 401', async () => {
+        const response = await supertest(app)
+          .post(`${authRoute}/refresh`)
+          .set('Cookie', ['jwt=testing']);
+
+        expect(response.status).toEqual(401);
+        expect(response.body.error).toBe('Invalid/Expired session');
+      });
+    });
+
+    describe('given an valid cookie', () => {
+      it('should return a 200 with the new access token', async () => {
+        const response = await supertest(app)
+          .post(`${authRoute}/refresh`)
+          .set('Cookie', validCookie);
+
+        expect(response.status).toEqual(200);
+        expect(response.body).toEqual({
+          user: {
+            _id: expect.any(String),
+            email: 'test@test.com',
+            firstName: 'My',
+            lastName: 'Test',
+            roles: ['user'],
+          },
+          accessToken: expect.any(String),
+        });
       });
     });
   });

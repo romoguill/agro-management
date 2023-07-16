@@ -107,13 +107,15 @@ export async function refreshAccessToken(
       process.env.JWT_SECRET_REFRESH_TOKEN as string
     ) as TokenPayload;
 
+    const user = await UserService.getUserById(jwtPayload.id);
+
     const accessToken = jwt.sign(
       { id: jwtPayload.id, roles: jwtPayload.roles },
       process.env.JWT_SECRET_ACCESS_TOKEN as string,
       { expiresIn: 10 }
     );
 
-    res.status(200).json({ accessToken });
+    res.status(200).json({ user, accessToken });
   } catch (error) {
     next(error);
   }
