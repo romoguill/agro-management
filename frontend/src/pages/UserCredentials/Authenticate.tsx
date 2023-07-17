@@ -3,7 +3,7 @@ import * as Tabs from '@radix-ui/react-tabs';
 import LoginForm from './LoginForm';
 import SignUpForm from './SignUpForm';
 
-function Login() {
+function Auth() {
   return (
     <main className='flex justify-center items-center h-screen p-8 bg-gradient-to-r from-teal-200 to-lime-200'>
       <div className='rounded-md flex overflow-hidden'>
@@ -52,4 +52,5 @@ function Login() {
     </main>
   );
 }
-export default Login;
+
+export default Auth;

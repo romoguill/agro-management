@@ -33,7 +33,6 @@ function LoginForm() {
 
     try {
       const user = await signUp(data);
-      // TODO: Store user logged in Redux
     } catch (error) {
       if (error instanceof Error) {
         console.error(error);

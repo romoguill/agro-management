@@ -8,18 +8,19 @@ import MainLayout from './layouts/MainLayout';
 import Dashboard from './pages/Dashboard';
 import Home from './pages/Home';
 import Invoices from './pages/Invoices';
-import Authenticate from './pages/UserCredentials/Authenticate';
+import Auth from './pages/UserCredentials/Authenticate';
 import MasterData from './pages/MasterData/MasterData';
 import Suppliers from './pages/MasterData/Suppliers';
 import Products from './pages/MasterData/Products';
 import Currencies from './pages/MasterData/Currencies';
 import FarmPlots from './pages/MasterData/FarmPlots';
 import Agriculture from './pages/MasterData/Agriculture';
+import { AuthContextProvider } from './contexts/AuthContext';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
-      <Route path='/authenticate' element={<Authenticate />} />
+      <Route path='/authenticate' element={<Auth />} />
 
       <Route path='/' element={<MainLayout />}>
         <Route index element={<Home />} />
@@ -39,7 +40,11 @@ const router = createBrowserRouter(
 );
 
 function App() {
-  return <RouterProvider router={router} />;
+  return (
+    <AuthContextProvider>
+      <RouterProvider router={router} />;
+    </AuthContextProvider>
+  );
 }
 
 export default App;
