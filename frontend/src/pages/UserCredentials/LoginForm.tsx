@@ -3,7 +3,9 @@ import { useForm } from 'react-hook-form';
 import { FaRegEye, FaRegEyeSlash } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import { SpinnerCircularFixed } from 'spinners-react';
-import { LoginBody, login } from '../../apis/apiUsers';
+import { LoginBody } from '../../apis/apiUsers';
+import { useMutation } from '@tanstack/react-query';
+import axios from 'axios';
 
 function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
@@ -21,31 +23,39 @@ function LoginForm() {
     mode: 'all',
   });
 
+  const mutation = useMutation({
+    mutationFn: (credentials: LoginBody) => {
+      return axios.post('/api/auth/login', credentials);
+    },
+  });
+
   const onSubmit = async (
     data: LoginBody,
     e: React.BaseSyntheticEvent | undefined
   ) => {
     e?.preventDefault();
 
-    try {
-      const user = await login(data);
-      // TODO: Store user logged in Redux
-    } catch (error) {
-      if (error instanceof Error) {
-        console.error(error);
-        if (error.message === 'Invalid credentials') {
-          setError('root', {
-            type: '401',
-            message: 'Invalid credentails',
-          });
-        }
-      } else {
-        // Default error to show in UI
-        setError('root', {
-          message: 'An error ocurred, please try again later',
-        });
-      }
-    }
+    mutation.mutate(data);
+
+    // try {
+    //   const user = await login(data);
+    //   // TODO: Store user logged in Redux
+    // } catch (error) {
+    //   if (error instanceof Error) {
+    //     console.error(error);
+    //     if (error.message === 'Invalid credentials') {
+    //       setError('root', {
+    //         type: '401',
+    //         message: 'Invalid credentails',
+    //       });
+    //     }
+    //   } else {
+    //     // Default error to show in UI
+    //     setError('root', {
+    //       message: 'An error ocurred, please try again later',
+    //     });
+    //   }
+    // }
   };
 
   return (

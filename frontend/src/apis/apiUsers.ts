@@ -1,6 +1,3 @@
-import { User } from '../models/User';
-import { callApi } from './customFetch';
-
 export interface LoginBody {
   email: string;
   password: string;

@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import { FaRegEye, FaRegEyeSlash } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import { SpinnerCircularFixed } from 'spinners-react';
-import { SignUpBody, signUp } from '../../apis/apiUsers';
+import { SignUpBody } from '../../apis/apiUsers';
 
 function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
@@ -31,31 +31,31 @@ function LoginForm() {
   ) => {
     e?.preventDefault();
 
-    try {
-      const user = await signUp(data);
-    } catch (error) {
-      if (error instanceof Error) {
-        console.error(error);
-        if (
-          error.message === 'Email already in use. Please try another or login'
-        ) {
-          setError('root', {
-            type: '409',
-            message: 'Email already in use. Please try another or login',
-          });
-        } else if (error.message === "Passwords don't match") {
-          setError('root', {
-            type: '400',
-            message: "Passwords don't match",
-          });
-        }
-      } else {
-        // Default error to show in UI
-        setError('root', {
-          message: 'An error ocurred, please try again later',
-        });
-      }
-    }
+    // try {
+    //   const user = await signUp(data);
+    // } catch (error) {
+    //   if (error instanceof Error) {
+    //     console.error(error);
+    //     if (
+    //       error.message === 'Email already in use. Please try another or login'
+    //     ) {
+    //       setError('root', {
+    //         type: '409',
+    //         message: 'Email already in use. Please try another or login',
+    //       });
+    //     } else if (error.message === "Passwords don't match") {
+    //       setError('root', {
+    //         type: '400',
+    //         message: "Passwords don't match",
+    //       });
+    //     }
+    //   } else {
+    //     // Default error to show in UI
+    //     setError('root', {
+    //       message: 'An error ocurred, please try again later',
+    //     });
+    //   }
+    // }
   };
 
   return (
