@@ -5,7 +5,7 @@ export const AuthContext = createContext<{
   dispatch: React.Dispatch<AuthAction>;
 }>({ user: null, dispatch: () => null });
 
-enum AuthActionTypes {
+export enum AuthActionTypes {
   LOGIN = 'LOGIN',
   LOGOUT = 'LOGOUT',
 }
@@ -16,6 +16,7 @@ export interface User {
   lastName: string;
   email: string;
   roles: string[];
+  accessToken?: string;
 }
 
 interface AuthAction {

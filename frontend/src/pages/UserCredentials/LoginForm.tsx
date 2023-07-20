@@ -1,16 +1,18 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { FaRegEye, FaRegEyeSlash } from 'react-icons/fa';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { SpinnerCircularFixed, SpinnerDiamond } from 'spinners-react';
 import { LoginBody } from '../../apis/apiUsers';
 import { useMutation } from '@tanstack/react-query';
 import axios, { AxiosError } from 'axios';
 import useAuthContext from '../../hooks/useAuthContext';
+import { AuthActionTypes, User } from '../../contexts/AuthContext';
 
 function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
   const { dispatch } = useAuthContext();
+  const navigate = useNavigate();
 
   const {
     register,
@@ -26,19 +28,30 @@ function LoginForm() {
   });
 
   const mutation = useMutation({
-    mutationFn: (credentials: LoginBody) => {
-      return axios.post('/api/auth/login', credentials);
+    mutationFn: (
+      credentials: LoginBody
+    ): Promise<{ user: User; accessToken: string }> => {
+      return axios
+        .post('/api/auth/login', credentials)
+        .then((response) => response.data);
     },
   });
 
   const onSubmit = async (
-    data: LoginBody,
+    formData: LoginBody,
     e: React.BaseSyntheticEvent | undefined
   ) => {
     e?.preventDefault();
 
     try {
-      const response = await mutation.mutateAsync(data);
+      const { user, accessToken } = await mutation.mutateAsync(formData);
+
+      dispatch({
+        type: AuthActionTypes.LOGIN,
+        payload: { ...user, accessToken },
+      });
+
+      navigate('/');
     } catch (error) {
       if (error instanceof AxiosError) {
         setError('root', {
