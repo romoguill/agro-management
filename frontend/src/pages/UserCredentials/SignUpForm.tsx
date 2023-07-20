@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { FaRegEye, FaRegEyeSlash } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
-import { SpinnerCircularFixed } from 'spinners-react';
+import { SpinnerCircularFixed, SpinnerDiamond } from 'spinners-react';
 import { SignUpBody } from '../../apis/apiUsers';
 
 function LoginForm() {
@@ -199,7 +199,7 @@ function LoginForm() {
             style={{ color: '#d1d5db', textAlign: 'center', display: 'inline' }}
           />
         ) : (
-          'Login'
+          'SIGN UP'
         )}
       </button>
     </form>

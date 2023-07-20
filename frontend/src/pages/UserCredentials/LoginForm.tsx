@@ -2,13 +2,15 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { FaRegEye, FaRegEyeSlash } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
-import { SpinnerCircularFixed } from 'spinners-react';
+import { SpinnerCircularFixed, SpinnerDiamond } from 'spinners-react';
 import { LoginBody } from '../../apis/apiUsers';
 import { useMutation } from '@tanstack/react-query';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
+import useAuthContext from '../../hooks/useAuthContext';
 
 function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
+  const { dispatch } = useAuthContext();
 
   const {
     register,
@@ -35,27 +37,21 @@ function LoginForm() {
   ) => {
     e?.preventDefault();
 
-    mutation.mutate(data);
-
-    // try {
-    //   const user = await login(data);
-    //   // TODO: Store user logged in Redux
-    // } catch (error) {
-    //   if (error instanceof Error) {
-    //     console.error(error);
-    //     if (error.message === 'Invalid credentials') {
-    //       setError('root', {
-    //         type: '401',
-    //         message: 'Invalid credentails',
-    //       });
-    //     }
-    //   } else {
-    //     // Default error to show in UI
-    //     setError('root', {
-    //       message: 'An error ocurred, please try again later',
-    //     });
-    //   }
-    // }
+    try {
+      const response = await mutation.mutateAsync(data);
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        setError('root', {
+          type: String(error.response?.status),
+          message: error.response?.data.error,
+        });
+      } else {
+        setError('root', {
+          type: '500',
+          message: 'An error ocurred, please try again later',
+        });
+      }
+    }
   };
 
   return (
@@ -132,7 +128,7 @@ function LoginForm() {
             style={{ color: '#d1d5db', textAlign: 'center', display: 'inline' }}
           />
         ) : (
-          'Login'
+          'LOGIN'
         )}
       </button>
     </form>
