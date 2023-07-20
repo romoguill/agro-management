@@ -1,4 +1,8 @@
+import { useQuery } from '@tanstack/react-query';
+import axios from 'axios';
 import { ReactNode, createContext, useReducer } from 'react';
+import { redirect, useNavigate } from 'react-router-dom';
+import { SpinnerCircular } from 'spinners-react';
 
 export const AuthContext = createContext<{
   user: User | null;

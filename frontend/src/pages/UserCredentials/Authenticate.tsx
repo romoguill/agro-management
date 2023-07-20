@@ -2,8 +2,14 @@ import imageLogin from '../../assets/images/loginImage.jpg';
 import * as Tabs from '@radix-ui/react-tabs';
 import LoginForm from './LoginForm';
 import SignUpForm from './SignUpForm';
+import useAuthContext from '../../hooks/useAuthContext';
+import { redirect } from 'react-router-dom';
 
 function Auth() {
+  const { user } = useAuthContext();
+
+  if (user) redirect('/');
+
   return (
     <main className='flex justify-center items-center h-screen p-8 bg-gradient-to-r from-teal-200 to-lime-200'>
       <div className='rounded-md flex overflow-hidden'>

@@ -16,23 +16,26 @@ import Currencies from './pages/MasterData/Currencies';
 import FarmPlots from './pages/MasterData/FarmPlots';
 import Agriculture from './pages/MasterData/Agriculture';
 import { AuthContextProvider } from './contexts/AuthContext';
+import AuthGuard from './guards/AuthGuard';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
       <Route path='/authenticate' element={<Auth />} />
 
-      <Route path='/' element={<MainLayout />}>
-        <Route index element={<Home />} />
-        <Route path='dashboard' element={<Dashboard />} />
-        <Route path='invoices' element={<Invoices />} />
-        <Route path='master-data'>
-          <Route index element={<MasterData />} />
-          <Route path='suppliers' element={<Suppliers />} />
-          <Route path='products' element={<Products />} />
-          <Route path='currencies' element={<Currencies />} />
-          <Route path='plots' element={<FarmPlots />} />
-          <Route path='crops' element={<Agriculture />} />
+      <Route element={<AuthGuard />}>
+        <Route path='/' element={<MainLayout />}>
+          <Route index element={<Home />} />
+          <Route path='dashboard' element={<Dashboard />} />
+          <Route path='invoices' element={<Invoices />} />
+          <Route path='master-data'>
+            <Route index element={<MasterData />} />
+            <Route path='suppliers' element={<Suppliers />} />
+            <Route path='products' element={<Products />} />
+            <Route path='currencies' element={<Currencies />} />
+            <Route path='plots' element={<FarmPlots />} />
+            <Route path='crops' element={<Agriculture />} />
+          </Route>
         </Route>
       </Route>
     </>
