@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { Navigate, Outlet } from 'react-router-dom';
 import { SpinnerCircular } from 'spinners-react';
+import useAuthContext from '../hooks/useAuthContext';
 
 // TODO: Use roles prop to narrow down acces by role
 interface AuthGuardProps {
@@ -9,25 +10,9 @@ interface AuthGuardProps {
 }
 
 function AuthGuard({ roles }: AuthGuardProps) {
-  const { data, isLoading, isError } = useQuery({
-    queryKey: ['user'],
-    queryFn: () =>
-      axios.post(
-        '/api/auth/refresh',
-        {},
-        {
-          withCredentials: true,
-        }
-      ),
-    retry: false,
-  });
+  const { user } = useAuthContext();
 
-  if (isLoading) return <SpinnerCircular />;
-
-  console.log(data);
-  console.log(isError);
-
-  return isError ? <Navigate to={'/authenticate'} /> : <Outlet />;
+  return user ? <Outlet /> : <Navigate to={'/authenticate'} />;
 }
 
 export default AuthGuard;
