@@ -6,9 +6,9 @@ import useAuthContext from '../../hooks/useAuthContext';
 import { redirect } from 'react-router-dom';
 
 function Auth() {
-  const { user } = useAuthContext();
+  const { auth } = useAuthContext();
 
-  if (user) redirect('/');
+  if (auth.user) redirect('/');
 
   return (
     <main className='flex justify-center items-center h-screen p-8 bg-gradient-to-r from-teal-200 to-lime-200'>

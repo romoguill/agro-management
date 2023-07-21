@@ -7,6 +7,7 @@ import { SpinnerCircular } from 'spinners-react';
 export enum AuthActionTypes {
   LOGIN = 'LOGIN',
   LOGOUT = 'LOGOUT',
+  REFRESH_ACCESS_TOKEN = 'REFRESH_ACCESS_TOKEN',
 }
 
 export interface User {
@@ -24,7 +25,7 @@ interface AuthState {
 
 interface AuthAction {
   type: AuthActionTypes;
-  payload?: AuthState;
+  payload: AuthState;
 }
 
 const initialAuthState: AuthState = {
@@ -41,11 +42,13 @@ const authReducer = (state: AuthState, action: AuthAction): AuthState => {
   switch (action.type) {
     case AuthActionTypes.LOGIN:
       return {
-        user: action?.payload?.user ?? null,
-        accessToken: action?.payload?.accessToken ?? null,
+        user: action.payload.user,
+        accessToken: action.payload.accessToken,
       };
     case AuthActionTypes.LOGOUT:
       return { user: null, accessToken: null };
+    case AuthActionTypes.REFRESH_ACCESS_TOKEN:
+      return { ...state, accessToken: action.payload.accessToken };
     default:
       return state;
   }
