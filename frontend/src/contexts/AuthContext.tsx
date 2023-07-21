@@ -27,7 +27,7 @@ interface AuthAction {
   payload: AuthState;
 }
 
-const initialAuthState = {
+const initialAuthState: AuthState = {
   user: null,
   accessToken: null,
 };
@@ -58,14 +58,9 @@ interface AuthContextProviderProps {
 export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
   const [state, dispatch] = useReducer(authReducer, initialAuthState);
 
-  useEffect(() => {
-    console.log('hi');
-  }, [state]);
-
   // Try to refresh access token to know if user has to login again
-  const { data, isLoading, isError, isSuccess } = useQuery({
-    queryKey: ['auth'],
-    queryFn: () =>
+  useEffect(() => {
+    const fetchAuth = async () => {
       axios
         .post<AuthState>(
           '/api/auth/refresh',
@@ -74,15 +69,13 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
             withCredentials: true,
           }
         )
-        .then((response) => response.data),
-    retry: false,
-    // enabled: !state.user ? true : false,
-  });
+        .then((response) => {
+          dispatch({ type: AuthActionTypes.LOGIN, payload: response.data });
+        });
+    };
 
-  // If the refresh query is success it means the refresh token in httpOnly cookie was valid. Update user info in context
-  if (isSuccess) {
-    dispatch({ type: AuthActionTypes.LOGIN, payload: data });
-  }
+    fetchAuth();
+  }, []);
 
   return (
     <AuthContext.Provider value={{ auth: state, dispatch }}>

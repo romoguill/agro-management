@@ -10,9 +10,10 @@ interface AuthGuardProps {
 }
 
 function AuthGuard({ roles }: AuthGuardProps) {
-  const { user } = useAuthContext();
+  const { auth } = useAuthContext();
+  console.log(auth);
 
-  return user ? <Outlet /> : <Navigate to={'/authenticate'} />;
+  return auth ? <Outlet /> : <Navigate to={'/authenticate'} />;
 }
 
 export default AuthGuard;

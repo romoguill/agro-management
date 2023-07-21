@@ -1,13 +1,13 @@
+import { useMutation } from '@tanstack/react-query';
+import axios, { AxiosError } from 'axios';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { FaRegEye, FaRegEyeSlash } from 'react-icons/fa';
 import { Link, useNavigate } from 'react-router-dom';
-import { SpinnerCircularFixed, SpinnerDiamond } from 'spinners-react';
+import { SpinnerCircularFixed } from 'spinners-react';
 import { LoginBody } from '../../apis/apiUsers';
-import { useMutation } from '@tanstack/react-query';
-import axios, { AxiosError } from 'axios';
-import useAuthContext from '../../hooks/useAuthContext';
 import { AuthActionTypes, User } from '../../contexts/AuthContext';
+import useAuthContext from '../../hooks/useAuthContext';
 
 function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
@@ -48,7 +48,7 @@ function LoginForm() {
 
       dispatch({
         type: AuthActionTypes.LOGIN,
-        payload: { ...user, accessToken },
+        payload: { user, accessToken },
       });
 
       navigate('/');
