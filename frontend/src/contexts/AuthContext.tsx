@@ -24,7 +24,7 @@ interface AuthState {
 
 interface AuthAction {
   type: AuthActionTypes;
-  payload: AuthState;
+  payload?: AuthState;
 }
 
 const initialAuthState: AuthState = {
@@ -41,8 +41,8 @@ const authReducer = (state: AuthState, action: AuthAction): AuthState => {
   switch (action.type) {
     case AuthActionTypes.LOGIN:
       return {
-        user: action.payload.user,
-        accessToken: action.payload.accessToken,
+        user: action?.payload?.user ?? null,
+        accessToken: action?.payload?.accessToken ?? null,
       };
     case AuthActionTypes.LOGOUT:
       return { user: null, accessToken: null };

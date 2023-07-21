@@ -1,8 +1,9 @@
-import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
 import { Navigate, Outlet } from 'react-router-dom';
-import { SpinnerCircular } from 'spinners-react';
 import useAuthContext from '../hooks/useAuthContext';
+import jwtDecode from 'jwt-decode';
+import { AuthActionTypes } from '../contexts/AuthContext';
+import { JwtPayload } from '../ts/interfaces';
+import { isExpired } from '../utils/jwtExpiration';
 
 // TODO: Use roles prop to narrow down acces by role
 interface AuthGuardProps {
@@ -10,10 +11,18 @@ interface AuthGuardProps {
 }
 
 function AuthGuard({ roles }: AuthGuardProps) {
-  const { auth } = useAuthContext();
-  console.log(auth);
+  const { auth, dispatch } = useAuthContext();
 
-  return auth ? <Outlet /> : <Navigate to={'/authenticate'} />;
+  if (!auth.user || !auth.accessToken) return <Navigate to={'/authenticate'} />;
+
+  const isJwtExpired = isExpired(auth.accessToken);
+
+  if (isJwtExpired) {
+    dispatch({ type: AuthActionTypes.LOGOUT });
+    return <Navigate to={'/authenticate'} />;
+  }
+
+  return <Outlet />;
 }
 
 export default AuthGuard;
