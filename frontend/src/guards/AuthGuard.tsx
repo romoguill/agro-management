@@ -6,6 +6,7 @@ import { JwtPayload } from '../ts/interfaces';
 import { isExpired } from '../utils/jwtExpiration';
 import { useEffect } from 'react';
 import { refreshAccessToken } from '../apis/auth.api';
+import { SpinnerCircular } from 'spinners-react';
 
 // TODO: Use roles prop to narrow down acces by role
 interface AuthGuardProps {
@@ -13,17 +14,16 @@ interface AuthGuardProps {
 }
 
 function AuthGuard({ roles }: AuthGuardProps) {
-  const { auth, dispatch } = useAuthContext();
+  const { auth, dispatch, isLoadingAuth } = useAuthContext();
   const location = useLocation();
   const navigate = useNavigate();
 
   useEffect(() => {
+    if (isLoadingAuth) return;
+
     if (!(auth.accessToken && auth.user)) return navigate('/authenticate');
 
-    console.log(auth);
     const isJwtExpired = isExpired(auth.accessToken);
-
-    console.log(isJwtExpired);
 
     const updateAuthAccessToken = async () => {
       try {
@@ -44,9 +44,20 @@ function AuthGuard({ roles }: AuthGuardProps) {
     if (isJwtExpired) {
       updateAuthAccessToken();
     }
-  }, [location, auth, dispatch, navigate]);
+  }, [location, auth, isLoadingAuth, dispatch, navigate]);
 
-  return <Outlet />;
+  return isLoadingAuth ? (
+    <SpinnerCircular
+      style={{
+        position: 'fixed',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+      }}
+    />
+  ) : (
+    <Outlet />
+  );
 }
 
 export default AuthGuard;

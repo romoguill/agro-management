@@ -1,6 +1,12 @@
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
-import { ReactNode, createContext, useEffect, useReducer } from 'react';
+import {
+  ReactNode,
+  createContext,
+  useEffect,
+  useReducer,
+  useState,
+} from 'react';
 import { redirect, useNavigate } from 'react-router-dom';
 import { SpinnerCircular } from 'spinners-react';
 
@@ -36,7 +42,8 @@ const initialAuthState: AuthState = {
 export const AuthContext = createContext<{
   auth: AuthState;
   dispatch: React.Dispatch<AuthAction>;
-}>({ auth: initialAuthState, dispatch: () => null });
+  isLoadingAuth: boolean;
+}>({ auth: initialAuthState, dispatch: () => null, isLoadingAuth: true });
 
 const authReducer = (state: AuthState, action: AuthAction): AuthState => {
   switch (action.type) {
@@ -60,28 +67,30 @@ interface AuthContextProviderProps {
 
 export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
   const [state, dispatch] = useReducer(authReducer, initialAuthState);
+  const [isLoadingAuth, setIsLoadingAuth] = useState(true);
 
   // Try to refresh access token to know if user has to login again
   useEffect(() => {
     const fetchAuth = async () => {
-      axios
-        .post<AuthState>(
+      try {
+        const response = await axios.post<AuthState>(
           '/api/auth/refresh',
           {},
           {
             withCredentials: true,
           }
-        )
-        .then((response) => {
-          dispatch({ type: AuthActionTypes.LOGIN, payload: response.data });
-        });
+        );
+        dispatch({ type: AuthActionTypes.LOGIN, payload: response.data });
+      } finally {
+        setIsLoadingAuth(false);
+      }
     };
 
     fetchAuth();
   }, []);
 
   return (
-    <AuthContext.Provider value={{ auth: state, dispatch }}>
+    <AuthContext.Provider value={{ auth: state, dispatch, isLoadingAuth }}>
       {children}
     </AuthContext.Provider>
   );
