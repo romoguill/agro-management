@@ -1,12 +1,10 @@
-import { Navigate, Outlet, useLocation, useNavigate } from 'react-router-dom';
-import useAuthContext from '../hooks/useAuthContext';
-import jwtDecode from 'jwt-decode';
-import { AuthActionTypes } from '../contexts/AuthContext';
-import { JwtPayload } from '../ts/interfaces';
-import { isExpired } from '../utils/jwtExpiration';
 import { useEffect } from 'react';
-import { refreshAccessToken } from '../apis/auth.api';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { SpinnerCircular } from 'spinners-react';
+import { refreshAccessToken } from '../apis/auth.api';
+import { AuthActionTypes } from '../contexts/AuthContext';
+import useAuthContext from '../hooks/useAuthContext';
+import { isExpired } from '../utils/jwtExpiration';
 
 // TODO: Use roles prop to narrow down acces by role
 interface AuthGuardProps {
@@ -30,12 +28,11 @@ function AuthGuard({ roles }: AuthGuardProps) {
         const newAccessToken = await refreshAccessToken();
         dispatch({
           type: AuthActionTypes.REFRESH_ACCESS_TOKEN,
-          payload: { user: auth.user, accessToken: newAccessToken },
+          payload: { accessToken: newAccessToken },
         });
       } catch (error) {
         dispatch({
           type: AuthActionTypes.LOGOUT,
-          payload: { user: auth.user, accessToken: auth.accessToken },
         });
         return navigate('/authenticate');
       }

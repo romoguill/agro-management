@@ -1,4 +1,3 @@
-import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import {
   ReactNode,
@@ -7,8 +6,6 @@ import {
   useReducer,
   useState,
 } from 'react';
-import { redirect, useNavigate } from 'react-router-dom';
-import { SpinnerCircular } from 'spinners-react';
 
 export enum AuthActionTypes {
   LOGIN = 'LOGIN',
@@ -29,10 +26,16 @@ interface AuthState {
   accessToken: string | null;
 }
 
-interface AuthAction {
-  type: AuthActionTypes;
-  payload: AuthState;
-}
+type AuthAction =
+  | {
+      type: AuthActionTypes.LOGIN;
+      payload: { user: User; accessToken: string };
+    }
+  | { type: AuthActionTypes.LOGOUT }
+  | {
+      type: AuthActionTypes.REFRESH_ACCESS_TOKEN;
+      payload: { accessToken: string };
+    };
 
 const initialAuthState: AuthState = {
   user: null,
@@ -73,7 +76,7 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
   useEffect(() => {
     const fetchAuth = async () => {
       try {
-        const response = await axios.post<AuthState>(
+        const response = await axios.post<{ user: User; accessToken: string }>(
           '/api/auth/refresh',
           {},
           {
