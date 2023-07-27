@@ -22,6 +22,11 @@ import {
 } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
 
+type LoginResponseBody = {
+  user: User;
+  accessToken: string;
+};
+
 const loginFormSchema = z.object({
   email: z.string().min(1, 'Email is required').email('Email is invalid'),
   password: z.string().min(1, 'Password is required'),
@@ -45,12 +50,34 @@ function LoginForm() {
 
   const onSubmit = async (values: loginFormSchema) => {
     try {
-      const response = await axios.post('/api/auth/login', values);
-      console.log(response);
+      const { data } = await axios.post<LoginResponseBody>(
+        '/api/auth/login',
+        values
+      );
+      dispatch({
+        type: AuthActionTypes.LOGIN,
+        payload: { user: data.user, accessToken: data.accessToken },
+      });
+
+      navigate('/');
     } catch (error) {
       console.log(error);
+      if (error instanceof AxiosError) {
+        form.setError('root', {
+          type: String(error.response?.status),
+          message:
+            error.response?.data.error ??
+            'There was a problem, try again later',
+        });
+      }
     }
   };
+
+  const submitErrorMessage = form.formState.errors.root && (
+    <p className='text-sm font-medium text-red-500 dark:text-red-900'>
+      {form.formState.errors.root.message}
+    </p>
+  );
 
   return (
     <Form {...form}>
@@ -76,12 +103,32 @@ function LoginForm() {
             <FormItem>
               <FormLabel>Password</FormLabel>
               <FormControl>
-                <Input placeholder='password' {...field} />
+                <div className='relative'>
+                  <Input
+                    placeholder='password'
+                    {...field}
+                    type={showPassword ? 'text' : 'password'}
+                  />
+
+                  {showPassword ? (
+                    <FaRegEyeSlash
+                      className='cursor-pointer text-xl text-gray-500 absolute top-1/2 right-3 -translate-y-1/2'
+                      onClick={() => setShowPassword(false)}
+                    />
+                  ) : (
+                    <FaRegEye
+                      className='cursor-pointer text-xl text-gray-500 absolute top-1/2 right-3 -translate-y-1/2'
+                      onClick={() => setShowPassword(true)}
+                    />
+                  )}
+                </div>
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
+
+        {submitErrorMessage}
 
         <Button type='submit'>LOGIN</Button>
       </form>
