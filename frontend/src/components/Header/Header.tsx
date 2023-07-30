@@ -2,12 +2,30 @@ import Avatar from './Avatar';
 import sunflower from '../../assets/sunflower.svg';
 import { Link } from 'react-router-dom';
 import { FaBars } from 'react-icons/fa';
+import useAuthContext from '@/hooks/useAuthContext';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '../ui/dropdown-menu';
+import { AuthActionTypes } from '@/contexts/AuthContext';
 
 interface Props {
   setIsSidebarVisible: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 function Header({ setIsSidebarVisible }: Props) {
+  const { auth, dispatch } = useAuthContext();
+
+  const getUserInitials = () => {
+    if (!auth.user || !auth.user.firstName || !auth.user.lastName) {
+      return '...';
+    } else {
+      return auth.user.firstName[0] + auth.user.lastName[0];
+    }
+  };
+
   return (
     <header className='bg-gray-50 py-2 px-6 border-b border-gray-300'>
       <div className='flex justify-between items-center'>
@@ -22,7 +40,19 @@ function Header({ setIsSidebarVisible }: Props) {
           </Link>
         </div>
 
-        <Avatar fallback='RM' />
+        <DropdownMenu>
+          <DropdownMenuTrigger>
+            <Avatar fallback={getUserInitials()} />
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className='-translate-x-2'>
+            <DropdownMenuItem
+              onClick={() => dispatch({ type: AuthActionTypes.LOGOUT })}
+              className='text-red-600 font-semibold cursor-pointer hover:bg-red-50 focus:bg-red-50 focus:text-red-600'
+            >
+              Logout
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
     </header>
   );
