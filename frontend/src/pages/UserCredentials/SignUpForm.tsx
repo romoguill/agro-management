@@ -115,7 +115,7 @@ function SignUpForm({ handleTabChange }: SignUpFormProps) {
               <FormControl>
                 <Input placeholder='First Name' {...field} />
               </FormControl>
-              <FormMessage />
+              <FormMessage className='text-xs text-right pr-1' />
             </FormItem>
           )}
         />
@@ -128,7 +128,7 @@ function SignUpForm({ handleTabChange }: SignUpFormProps) {
               <FormControl>
                 <Input placeholder='Last Name' {...field} />
               </FormControl>
-              <FormMessage />
+              <FormMessage className='text-xs text-right pr-1' />
             </FormItem>
           )}
         />
@@ -141,7 +141,7 @@ function SignUpForm({ handleTabChange }: SignUpFormProps) {
               <FormControl>
                 <Input placeholder='Email' {...field} />
               </FormControl>
-              <FormMessage />
+              <FormMessage className='text-xs text-right pr-1' />
             </FormItem>
           )}
         />
@@ -173,7 +173,7 @@ function SignUpForm({ handleTabChange }: SignUpFormProps) {
                   )}
                 </div>
               </FormControl>
-              <FormMessage />
+              <FormMessage className='text-xs text-right pr-1' />
             </FormItem>
           )}
         />
@@ -190,7 +190,7 @@ function SignUpForm({ handleTabChange }: SignUpFormProps) {
                   type={showPassword ? 'text' : 'password'}
                 />
               </FormControl>
-              <FormMessage />
+              <FormMessage className='text-xs text-right pr-1' />
             </FormItem>
           )}
         />

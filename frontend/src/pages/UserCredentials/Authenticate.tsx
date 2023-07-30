@@ -19,10 +19,10 @@ function Auth() {
 
   return (
     <main className='flex justify-center items-center h-screen p-8 bg-gradient-to-r from-teal-200 to-lime-200'>
-      <div className='rounded-md flex overflow-hidden'>
+      <div className='rounded-md flex overflow-hidden min-h-[650px]'>
         <aside className='basis-[40%] hidden sm:block'>
           <img
-            className='h-[650px] object-cover'
+            className='object-cover h-full'
             src={imageLogin}
             alt='farm sunset'
           />

@@ -90,7 +90,7 @@ function LoginForm() {
               <FormControl>
                 <Input placeholder='Email' {...field} />
               </FormControl>
-              <FormMessage />
+              <FormMessage className='text-xs text-right pr-1' />
             </FormItem>
           )}
         />
@@ -122,7 +122,7 @@ function LoginForm() {
                   )}
                 </div>
               </FormControl>
-              <FormMessage />
+              <FormMessage className='text-xs text-right pr-1' />
             </FormItem>
           )}
         />
