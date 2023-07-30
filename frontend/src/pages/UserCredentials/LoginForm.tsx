@@ -88,7 +88,7 @@ function LoginForm() {
             <FormItem>
               <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input placeholder='email' {...field} />
+                <Input placeholder='Email' {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -104,7 +104,7 @@ function LoginForm() {
               <FormControl>
                 <div className='relative'>
                   <Input
-                    placeholder='password'
+                    placeholder='Password'
                     {...field}
                     type={showPassword ? 'text' : 'password'}
                   />

@@ -4,9 +4,16 @@ import LoginForm from './LoginForm';
 import SignUpForm from './SignUpForm';
 import useAuthContext from '../../hooks/useAuthContext';
 import { redirect } from 'react-router-dom';
+import { useState } from 'react';
 
 function Auth() {
   const { auth } = useAuthContext();
+
+  const [activeTab, setActiveTab] = useState('tab1');
+
+  const handleTabChange = (tabValue: string) => {
+    setActiveTab(tabValue);
+  };
 
   if (auth.user) redirect('/');
 
@@ -24,6 +31,8 @@ function Auth() {
         <Tabs.Root
           className='basis-[60%] flex flex-col grow max-w-[400px]'
           defaultValue='tab1'
+          value={activeTab}
+          onValueChange={handleTabChange}
         >
           <Tabs.List className='flex justify-between'>
             <Tabs.Trigger
@@ -51,7 +60,7 @@ function Auth() {
             value='tab2'
             className='p-5 bg-gray-50/40 grow min-w-[300px]'
           >
-            <SignUpForm />
+            <SignUpForm handleTabChange={handleTabChange} />
           </Tabs.Content>
         </Tabs.Root>
       </div>
