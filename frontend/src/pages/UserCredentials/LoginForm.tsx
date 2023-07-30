@@ -77,7 +77,10 @@ function LoginForm() {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)}>
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className='flex flex-col h-full gap-3'
+      >
         <FormField
           control={form.control}
           name='email'
@@ -126,7 +129,7 @@ function LoginForm() {
 
         {submitErrorMessage}
 
-        <Button type='submit'>
+        <Button type='submit' className='w-full mt-auto'>
           {form.formState.isSubmitting ? (
             <SpinnerCircularFixed
               size={20}
