@@ -18,6 +18,7 @@ import { z } from 'zod';
 import { AuthActionTypes, User } from '../../contexts/AuthContext';
 import useAuthContext from '../../hooks/useAuthContext';
 import { SpinnerCircularFixed } from 'spinners-react';
+import { toast } from 'react-toastify';
 
 type SignUpResponseBody = {
   user: User;
@@ -50,6 +51,18 @@ function SignUpForm({ handleTabChange }: SignUpFormProps) {
   const { dispatch } = useAuthContext();
   const navigate = useNavigate();
 
+  const notifyUserCreated = () =>
+    toast.success('User signed up. Please use credentials to login', {
+      position: 'top-right',
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: 'colored',
+    });
+
   const form = useForm<signUpFormSchema>({
     resolver: zodResolver(signUpFormSchema),
     defaultValues: {
@@ -65,6 +78,8 @@ function SignUpForm({ handleTabChange }: SignUpFormProps) {
   const onSubmit = async (values: signUpFormSchema) => {
     try {
       await axios.post<SignUpResponseBody>('/api/auth/register', values);
+
+      notifyUserCreated();
 
       handleTabChange('tab1');
     } catch (error) {

@@ -17,6 +17,8 @@ import FarmPlots from './pages/MasterData/FarmPlots';
 import Agriculture from './pages/MasterData/Agriculture';
 import { AuthContextProvider } from './contexts/AuthContext';
 import AuthGuard from './guards/AuthGuard';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -46,6 +48,7 @@ function App() {
   return (
     <AuthContextProvider>
       <RouterProvider router={router} />
+      <ToastContainer />
     </AuthContextProvider>
   );
 }
