@@ -1,17 +1,4 @@
-import { useMutation } from '@tanstack/react-query';
-import axios, { AxiosError } from 'axios';
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { FaRegEye, FaRegEyeSlash } from 'react-icons/fa';
-import { Link, useNavigate } from 'react-router-dom';
-import { SpinnerCircularFixed } from 'spinners-react';
-import { LoginBody } from '../../apis/apiUsers';
-import { AuthActionTypes, User } from '../../contexts/AuthContext';
-import useAuthContext from '../../hooks/useAuthContext';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { z } from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
+import { Button } from '@/components/ui/button';
 import {
   Form,
   FormControl,
@@ -20,7 +7,17 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { zodResolver } from '@hookform/resolvers/zod';
+import axios, { AxiosError } from 'axios';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { FaRegEye, FaRegEyeSlash } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
+import { z } from 'zod';
+import { AuthActionTypes, User } from '../../contexts/AuthContext';
+import useAuthContext from '../../hooks/useAuthContext';
+import { SpinnerCircularFixed } from 'spinners-react';
 
 type LoginResponseBody = {
   user: User;
@@ -61,7 +58,6 @@ function LoginForm() {
 
       navigate('/');
     } catch (error) {
-      console.log(error);
       if (error instanceof AxiosError) {
         form.setError('root', {
           type: String(error.response?.status),
@@ -130,7 +126,21 @@ function LoginForm() {
 
         {submitErrorMessage}
 
-        <Button type='submit'>LOGIN</Button>
+        <Button type='submit'>
+          {form.formState.isSubmitting ? (
+            <SpinnerCircularFixed
+              size={20}
+              thickness={200}
+              style={{
+                color: '#d1d5db',
+                textAlign: 'center',
+                display: 'inline',
+              }}
+            />
+          ) : (
+            'LOGIN'
+          )}
+        </Button>
       </form>
     </Form>
   );
