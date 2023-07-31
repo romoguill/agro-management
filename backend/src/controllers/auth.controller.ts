@@ -65,20 +65,20 @@ export async function login(
     const accessToken = jwt.sign(
       { id: user._id, roles: user.roles },
       process.env.JWT_SECRET_ACCESS_TOKEN as string,
-      { expiresIn: 10 }
+      { expiresIn: Number(process.env.ACCESS_TOKEN_TTL) }
     );
 
     const refreshToken = jwt.sign(
       { id: user._id, roles: user.roles },
       process.env.JWT_SECRET_REFRESH_TOKEN as string,
-      { expiresIn: 30 }
+      { expiresIn: Number(process.env.REFRESH_TOKEN_TTL) }
     );
 
     res.cookie('jwt', refreshToken, {
       httpOnly: true,
       secure: true,
       sameSite: true,
-      maxAge: 1000 * 30,
+      maxAge: 1000 * Number(process.env.REFRESH_TOKEN_TTL),
     });
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -112,7 +112,7 @@ export async function refreshAccessToken(
     const accessToken = jwt.sign(
       { id: jwtPayload.id, roles: jwtPayload.roles },
       process.env.JWT_SECRET_ACCESS_TOKEN as string,
-      { expiresIn: 10 }
+      { expiresIn: Number(process.env.ACCESS_TOKEN_TTL) }
     );
 
     res.status(200).json({ user, accessToken });
