@@ -10,6 +10,7 @@ import {
   DropdownMenuTrigger,
 } from '../ui/dropdown-menu';
 import { AuthActionTypes } from '@/contexts/AuthContext';
+import axios from 'axios';
 
 interface Props {
   setIsSidebarVisible: React.Dispatch<React.SetStateAction<boolean>>;
@@ -24,6 +25,11 @@ function Header({ setIsSidebarVisible }: Props) {
     } else {
       return auth.user.firstName[0] + auth.user.lastName[0];
     }
+  };
+
+  const handleLogout = async () => {
+    await axios.post('/api/auth/logout');
+    dispatch({ type: AuthActionTypes.LOGOUT });
   };
 
   return (
@@ -46,7 +52,7 @@ function Header({ setIsSidebarVisible }: Props) {
           </DropdownMenuTrigger>
           <DropdownMenuContent className='-translate-x-2'>
             <DropdownMenuItem
-              onClick={() => dispatch({ type: AuthActionTypes.LOGOUT })}
+              onClick={handleLogout}
               className='text-red-600 font-semibold cursor-pointer hover:bg-red-50 focus:bg-red-50 focus:text-red-600'
             >
               Logout
