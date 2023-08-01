@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import { z } from 'zod';
 
-export const supplierSchema = z.object({
+export const Supplier = z.object({
   name: z.string({ required_error: 'Name is required' }),
   description: z.string().optional(),
   category: z.array(z.enum(['Seeds', 'Fertilizers', 'Herbicides', 'Labor'])),
@@ -12,4 +12,16 @@ export const supplierSchema = z.object({
   cuit: z.string({ required_error: 'CUIT is required' }),
 });
 
-export type Supplier = z.infer<typeof supplierSchema>;
+export type Supplier = z.infer<typeof Supplier>;
+
+export const RequestCreateSupplier = z.object({
+  params: z.any().optional(),
+  query: z.any().optional(),
+  body: Supplier,
+})
+
+export type RequestCreateSupplier = z.infer<typeof RequestCreateSupplier>
+
+export const RequestUpdateSupplier = z.object({
+  params: 
+})
