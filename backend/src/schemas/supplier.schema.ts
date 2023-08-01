@@ -7,8 +7,8 @@ export const supplierSchema = z.object({
   category: z.instanceof(mongoose.Types.ObjectId),
   status: z.enum(['Active', 'Inactive']),
   phone: z.string({ required_error: 'Phone is required' }),
-  website: z.string({ required_error: 'Website is required' }),
-  avatarUrl: z.string({ required_error: 'Avatar is required' }),
+  website: z.string().optional(),
+  avatarUrl: z.string().optional(),
   cuit: z.string({ required_error: 'CUIT is required' }),
 });
 

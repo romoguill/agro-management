@@ -8,6 +8,7 @@ import cookieParser from 'cookie-parser';
 
 import userRouter from './routes/user.route';
 import authRouter from './routes/auth.route';
+import supplierRouter from './routes/MasterData/supplier.route';
 
 import { errorHandler } from './middlewares/errorHandler';
 
@@ -28,6 +29,7 @@ app.get('/healthcheck', (req: Request, res: Response) => {
 
 app.use('/api/users', userRouter);
 app.use('/api/auth', authRouter);
+app.use('/api/suppliers', supplierRouter);
 
 // DEFAULT ROUTE
 app.use((req, res, next) => next(createHttpError(404, 'Endpoint not found')));

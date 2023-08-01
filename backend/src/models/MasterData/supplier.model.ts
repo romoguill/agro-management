@@ -25,6 +25,7 @@ const supplierSchema = new mongoose.Schema<Supplier>({
   },
   phone: {
     type: String,
+    required: true,
   },
   website: {
     type: String,
@@ -34,6 +35,7 @@ const supplierSchema = new mongoose.Schema<Supplier>({
   },
   cuit: {
     type: String,
+    required: true,
   },
 });
 
