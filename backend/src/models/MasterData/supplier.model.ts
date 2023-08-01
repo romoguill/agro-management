@@ -1,6 +1,7 @@
-import { InferSchemaType, Schema, model } from 'mongoose';
+import mongoose from 'mongoose';
+import { Supplier } from '../../schemas/supplier.schema';
 
-const supplierSchema = new Schema({
+const supplierSchema = new mongoose.Schema<Supplier>({
   name: {
     type: String,
     required: true,
@@ -12,14 +13,18 @@ const supplierSchema = new Schema({
     minLength: 10,
     maxLength: 50,
   },
+  category: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+  },
   status: {
     type: String,
     required: true,
-    default: 'active',
-    enum: ['active', 'inactive'],
+    default: 'Active',
+    enum: ['Active', 'Inactive'],
   },
   phone: {
-    type: Number,
+    type: String,
   },
   website: {
     type: String,
@@ -27,11 +32,11 @@ const supplierSchema = new Schema({
   avatarUrl: {
     type: String,
   },
-  CUIT: {
+  cuit: {
     type: String,
   },
 });
 
-type Supplier = InferSchemaType<typeof supplierSchema>;
+const SupplierModel = mongoose.model<Supplier>('Supplier', supplierSchema);
 
-export default model<Supplier>('Supplier', supplierSchema);
+export default SupplierModel;
