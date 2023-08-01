@@ -14,7 +14,9 @@ const supplierSchema = new mongoose.Schema<Supplier>({
     maxLength: 50,
   },
   category: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: [
+      { type: String, enum: ['Seeds', 'Fertilizers', 'Herbicides', 'Labor'] },
+    ],
     required: true,
   },
   status: {
