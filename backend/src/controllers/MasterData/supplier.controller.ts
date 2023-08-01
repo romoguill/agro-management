@@ -10,3 +10,5 @@ export const getAllSuppliers = async (req: Request, res: Response) => {
   const suppliers = await SupplierService.getAllSuppliers();
   res.status(200).json({ suppliers });
 };
+
+export const getSupplier = async (req: Request, res: Response) => {};
