@@ -25,3 +25,7 @@ export const updateSupplier = (id: string, fields: Partial<Supplier>) => {
     .lean()
     .exec();
 };
+
+export const deleteSupplier = (id: string) => {
+  return SupplierModel.findByIdAndRemove(id).lean().exec();
+};

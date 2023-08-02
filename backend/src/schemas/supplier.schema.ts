@@ -40,3 +40,11 @@ export const RequestGetSupplierById = z.object({
 });
 
 export type RequestGetSupplierById = z.infer<typeof RequestGetSupplierById>;
+
+export const RequestDeleteSupplier = z.object({
+  params: objectIdValidator(),
+  query: z.any().optional(),
+  body: z.any().optional(),
+});
+
+export type RequestDeleteSupplier = z.infer<typeof RequestDeleteSupplier>;

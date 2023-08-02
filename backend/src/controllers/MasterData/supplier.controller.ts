@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import createHttpError from 'http-errors';
 import {
   RequestCreateSupplier,
+  RequestDeleteSupplier,
   RequestGetSupplierById,
   RequestUpdateSupplier,
 } from '../../schemas/supplier.schema';
@@ -51,8 +52,28 @@ export const updateSupplier = async (
 
   try {
     const supplier = await SupplierService.updateSupplier(id, req.body);
+    if (!supplier)
+      return next(createHttpError(404, `Supplier with id: ${id} not found`));
 
     res.status(200).json({ supplier });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const deleteSupplier = async (
+  req: Request<RequestDeleteSupplier['params']>,
+  res: Response,
+  next: NextFunction
+) => {
+  const { id } = req.params;
+
+  try {
+    const supplier = await SupplierService.deleteSupplier(id);
+    if (!supplier)
+      return next(createHttpError(404, `Supplier with id: ${id} not found`));
+
+    res.sendStatus(204);
   } catch (error) {
     next(error);
   }
