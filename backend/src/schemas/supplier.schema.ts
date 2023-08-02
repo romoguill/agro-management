@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import { z } from 'zod';
+import { objectIdValidator } from '../utils/idValidator';
 
 export const Supplier = z.object({
   name: z.string({ required_error: 'Name is required' }),
@@ -18,10 +19,20 @@ export const RequestCreateSupplier = z.object({
   params: z.any().optional(),
   query: z.any().optional(),
   body: Supplier,
-})
+});
 
-export type RequestCreateSupplier = z.infer<typeof RequestCreateSupplier>
+export type RequestCreateSupplier = z.infer<typeof RequestCreateSupplier>;
 
 export const RequestUpdateSupplier = z.object({
-  params: 
-})
+  params: objectIdValidator(),
+  query: z.any().optional(),
+  body: Supplier.partial(),
+});
+
+export type RequestUpdateSupplier = z.infer<typeof RequestUpdateSupplier>;
+
+export const RequestGetSupplierById = z.object({
+  params: objectIdValidator(),
+  query: z.any().optional(),
+  body: z.any().optional(),
+});
