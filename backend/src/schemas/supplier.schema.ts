@@ -36,3 +36,5 @@ export const RequestGetSupplierById = z.object({
   query: z.any().optional(),
   body: z.any().optional(),
 });
+
+export type RequestGetSupplierById = z.infer<typeof RequestGetSupplierById>;
