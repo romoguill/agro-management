@@ -18,5 +18,10 @@ export const getSupplierById = (id: string) => {
 };
 
 export const updateSupplier = (id: string, fields: Partial<Supplier>) => {
-  return SupplierModel.findByIdAndUpdate(id, fields).lean().exec();
+  return SupplierModel.findByIdAndUpdate(id, fields, {
+    returnDocument: 'after',
+    runValidators: true,
+  })
+    .lean()
+    .exec();
 };

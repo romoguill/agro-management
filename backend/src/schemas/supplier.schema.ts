@@ -26,7 +26,9 @@ export type RequestCreateSupplier = z.infer<typeof RequestCreateSupplier>;
 export const RequestUpdateSupplier = z.object({
   params: objectIdValidator(),
   query: z.any().optional(),
-  body: Supplier.partial(),
+  body: Supplier.partial().refine((data) => Object.keys(data).length > 0, {
+    message: 'There were no fields specified to be updated',
+  }),
 });
 
 export type RequestUpdateSupplier = z.infer<typeof RequestUpdateSupplier>;
