@@ -17,7 +17,7 @@ export function verifyAuth(roles: Roles[]) {
     try {
       const jwtPayload = jwt.verify(
         bearerToken,
-        process.env.JWT_SECRET_REFRESH_TOKEN as string
+        process.env.JWT_SECRET_ACCESS_TOKEN as string
       ) as TokenPayload;
 
       // Permision is granted if that user has one role that matches the requirement in validator
