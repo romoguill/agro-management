@@ -22,9 +22,11 @@ const mockData = {
   },
 };
 
+const fakeId = new mongoose.Types.ObjectId();
+
 let newSupplierId: string | null;
 
-describe('user', () => {
+describe('supplier', () => {
   beforeAll(async () => {
     db = await connectDB();
   });
@@ -33,240 +35,240 @@ describe('user', () => {
     await dropDB(db);
   });
 
-  describe(`POST ${apiRoot} - user creation`, () => {
-    // beforeAll(async () => {
-    //   await clearCollections(db);
-    //   console.log('Deleting collections');
-    // });
+  describe('given an unauthenticated user', () => {
+    it('POST to endpoint should return 401', async () => {
+      const response = await supertest(app).post(apiRoot);
 
-    describe('given an invalid request body', () => {
-      it('should return a 400 with errors: first name and password are required', async () => {
-        const payload = {
-          email: 'test@test.com',
-          lastName: 'Test',
-          password: '123456',
-          roles: ['user'],
-        };
-
-        const response = await supertest(app).post(apiRoot).send(payload);
-
-        expect(response.status).toEqual(400);
-        expect(response.body.error).toEqual([
-          'First name is required',
-          'Password confirmation is required',
-        ]);
-      });
-
-      it('should return a 400 with errors: password must be x chars long', async () => {
-        const payload = {
-          email: 'test@test.com',
-          firstName: 'My',
-          lastName: 'Test',
-          password: '1234',
-          passwordConfirmation: '1234',
-          roles: ['user'],
-        };
-
-        const response = await supertest(app).post(apiRoot).send(payload);
-
-        expect(response.status).toEqual(400);
-        expect(response.body.error).toEqual([
-          'Password must be at least 6 characters',
-        ]);
-      });
-
-      it('should return a 400 with errors: passwords must match', async () => {
-        const payload = {
-          email: 'test@test.com',
-          firstName: 'My',
-          lastName: 'Test',
-          password: '123456',
-          passwordConfirmation: '567891',
-          roles: ['user'],
-        };
-
-        const response = await supertest(app).post(apiRoot).send(payload);
-
-        expect(response.status).toEqual(400);
-        expect(response.body.error).toEqual(["Passwords don't match"]);
-      });
+      expect(response.status).toBe(401);
+      expect(response.body.error).toBe('Must be authenticated');
     });
 
-    describe('given a valid request body', () => {
-      it('should create user with response of 201', async () => {
-        const response = await supertest(app)
-          .post(apiRoot)
-          .send(mockData.newUser);
+    it('PATCH to endpoint should return 401', async () => {
+      const response = await supertest(app).patch(
+        `${apiRoot}/${fakeId.toString()}`
+      );
 
-        expect(response.status).toBe(201);
-        expect(response.body).toEqual({
-          _id: expect.any(String),
-          email: mockData.newUser.email,
-          firstName: mockData.newUser.firstName,
-          lastName: mockData.newUser.lastName,
-          roles: mockData.newUser.roles,
-        });
+      expect(response.status).toBe(401);
+      expect(response.body.error).toBe('Must be authenticated');
+    });
 
-        // set userid for future tests
-        newUserId = response.body._id;
-      });
+    it('DELETE to endpoint should return 401', async () => {
+      const response = await supertest(app).delete(
+        `${apiRoot}/${fakeId.toString()}`
+      );
 
-      it('should not create a duplicate user with same email throwing a 409', async () => {
-        const response = await supertest(app)
-          .post(apiRoot)
-          .send(mockData.newUserDuplicate);
-
-        expect(response.status).toBe(409);
-        expect(response.body).toEqual({ error: 'User email already in use' });
-      });
+      expect(response.status).toBe(401);
+      expect(response.body.error).toBe('Must be authenticated');
     });
   });
 
-  describe(`GET ${apiRoot} - user fetching`, () => {
-    describe('given an authorized user', () => {
-      it.todo('should return a 401 if user not logged in');
+  // describe(`POST ${apiRoot} - supplier creation`, () => {
+  //   describe('given an invalid request body', () => {
+  //     it('should return a 400 with errors', async () => {
+  //       const payload = {
+  //         name: 'SupplierTester',
+  //         description: 'A mock supplier',
+  //         category: 'Seeds',
+  //         status: 'Invalid Status',
+  //         website: 'www.supplier.com',
+  //         avatarUrl: 'url/somePic.jpg',
+  //         cuit: '20314359643',
+  //       };
 
-      it.todo('should return a 403 if logged user is not admin');
-    });
+  //       const response = await supertest(app).post(apiRoot).send(payload);
 
-    describe('given correctly authenticated admin user', () => {
-      it('should return a list of all users stored', async () => {
-        const response = await supertest(app).get(apiRoot);
+  //       expect(response.status).toEqual(400);
+  //       expect(response.body.error).toEqual(['Phone is required', '']);
+  //     });
 
-        expect(response.statusCode).toBe(200);
-        expect(response.body).toEqual([
-          {
-            _id: expect.any(String),
-            email: mockData.newUser.email,
-            firstName: mockData.newUser.firstName,
-            lastName: mockData.newUser.lastName,
-            roles: mockData.newUser.roles,
-          },
-        ]);
-      });
-    });
-  });
+  //     it('should return a 400 with errors: password must be x chars long', async () => {
+  //       const payload = {
+  //         email: 'test@test.com',
+  //         firstName: 'My',
+  //         lastName: 'Test',
+  //         password: '1234',
+  //         passwordConfirmation: '1234',
+  //         roles: ['supplier'],
+  //       };
 
-  describe(`GET ${apiRoot}/:id - user fetching`, () => {
-    describe('given an invalid id', () =>
-      testInvalidIdParam(app, apiRoot, 'get', '123'));
+  //       const response = await supertest(app).post(apiRoot).send(payload);
 
-    describe(`given an authorized user`, () => {
-      it.todo('should return a 401 if user not logged in');
+  //       expect(response.status).toEqual(400);
+  //       expect(response.body.error).toEqual([
+  //         'Password must be at least 6 characters',
+  //       ]);
+  //     });
 
-      it.todo('should return a 403 if logged user is not admin');
-    });
+  //     it('should return a 400 with errors: passwords must match', async () => {
+  //       const payload = {
+  //         email: 'test@test.com',
+  //         firstName: 'My',
+  //         lastName: 'Test',
+  //         password: '123456',
+  //         passwordConfirmation: '567891',
+  //         roles: ['supplier'],
+  //       };
 
-    describe('given correctly authenticated admin user', () => {
-      it("should return a 404 if the user doesn't exist", async () => {
-        // Just to be sure, guarantee id generated is different from newUser id
-        let nonexistentId = newUserId;
-        while (nonexistentId === newUserId) {
-          nonexistentId = new mongoose.Types.ObjectId().toString();
-        }
+  //       const response = await supertest(app).post(apiRoot).send(payload);
 
-        const response = await supertest(app).get(
-          `${apiRoot}/${nonexistentId}`
-        );
+  //       expect(response.status).toEqual(400);
+  //       expect(response.body.error).toEqual(["Passwords don't match"]);
+  //     });
+  //   });
 
-        expect(response.statusCode).toBe(404);
-      });
+  //   describe('given a valid request body', () => {
+  //     it('should create supplier with response of 201', async () => {
+  //       const response = await supertest(app)
+  //         .post(apiRoot)
+  //         .send(mockData.newSupplier);
 
-      it('should return the user if found', async () => {
-        const response = await supertest(app).get(`/api/users/${newUserId}`);
+  //       expect(response.status).toBe(201);
+  //       expect(response.body).toEqual({});
 
-        expect(response.statusCode).toBe(200);
-        expect(response.body).toEqual({
-          _id: newUserId,
-          email: mockData.newUser.email,
-          firstName: mockData.newUser.firstName,
-          lastName: mockData.newUser.lastName,
-          roles: mockData.newUser.roles,
-        });
-      });
-    });
-  });
+  //       // set supplierid for future tests
+  //       newSupplierId = response.body._id;
+  //     });
 
-  describe(`PATCH ${apiRoot}/:id - user updating`, () => {
-    describe('given an invalid id', () =>
-      testInvalidIdParam(app, apiRoot, 'patch', '123'));
+  //     it('should not create a duplicate supplier with same email throwing a 409', async () => {
+  //       const response = await supertest(app).post(apiRoot).send();
 
-    describe(`given an authorized user`, () => {
-      it.todo('should return a 401 if user not logged in');
+  //       expect(response.status).toBe(409);
+  //       expect(response.body).toEqual({
+  //         error: 'Supplier email already in use',
+  //       });
+  //     });
+  //   });
+  // });
 
-      it.todo('should return a 403 if logged user is not admin');
-    });
+  // describe(`GET ${apiRoot} - supplier fetching`, () => {
+  //   describe('given an authorized supplier', () => {
+  //     it.todo('should return a 401 if supplier not logged in');
 
-    describe('given correctly authenticated admin user', () => {
-      const modifiedFields = {
-        firstName: 'NameChanged',
-        lastName: 'LastNameChanged',
-      };
+  //     it.todo('should return a 403 if logged supplier is not admin');
+  //   });
 
-      it("should return a 404 if the user doesn't exist", async () => {
-        // Just to be sure, guarantee id generated is different from newUser id
-        let nonexistentId = newUserId;
-        while (nonexistentId === newUserId) {
-          nonexistentId = new mongoose.Types.ObjectId().toString();
-        }
+  //   describe('given correctly authenticated admin supplier', () => {
+  //     it('should return a list of all suppliers stored', async () => {
+  //       const response = await supertest(app).get(apiRoot);
 
-        const response = await supertest(app)
-          .patch(`${apiRoot}/${nonexistentId}`)
-          .send(modifiedFields);
+  //       expect(response.statusCode).toBe(200);
+  //       expect(response.body).toEqual([{}]);
+  //     });
+  //   });
+  // });
 
-        expect(response.statusCode).toBe(404);
-      });
+  // describe(`GET ${apiRoot}/:id - supplier fetching`, () => {
+  //   describe('given an invalid id', () =>
+  //     testInvalidIdParam(app, apiRoot, 'get', '123'));
 
-      it('should perform the modification with a status of 200 and a response of the updated user ', async () => {
-        const response = await supertest(app)
-          .patch(`${apiRoot}/${newUserId}`)
-          .send(modifiedFields);
+  //   describe(`given an authorized supplier`, () => {
+  //     it.todo('should return a 401 if supplier not logged in');
 
-        expect(response.statusCode).toBe(200);
-        expect(response.body).toEqual({
-          _id: newUserId,
-          email: mockData.newUser.email,
-          firstName: modifiedFields.firstName,
-          lastName: modifiedFields.lastName,
-          roles: mockData.newUser.roles,
-        });
-      });
-    });
-  });
+  //     it.todo('should return a 403 if logged supplier is not admin');
+  //   });
 
-  describe(`DELETE ${apiRoot}/:id - user deleting`, () => {
-    describe('given an invalid id', () =>
-      testInvalidIdParam(app, apiRoot, 'delete', '123'));
+  //   describe('given correctly authenticated admin supplier', () => {
+  //     it("should return a 404 if the supplier doesn't exist", async () => {
+  //       // Just to be sure, guarantee id generated is different from newSupplier id
+  //       let nonexistentId = newSupplierId;
+  //       while (nonexistentId === newSupplierId) {
+  //         nonexistentId = new mongoose.Types.ObjectId().toString();
+  //       }
 
-    describe(`given an authorized user`, () => {
-      it.todo('should return a 401 if user not logged in');
+  //       const response = await supertest(app).get(
+  //         `${apiRoot}/${nonexistentId}`
+  //       );
 
-      it.todo('should return a 403 if logged user is not admin');
-    });
+  //       expect(response.statusCode).toBe(404);
+  //     });
 
-    describe('given correctly authenticated admin user', () => {
-      it("should return a 404 if the user doesn't exist", async () => {
-        // Just to be sure, guarantee id generated is different from newUser id
-        let nonexistentId = newUserId;
-        while (nonexistentId === newUserId) {
-          nonexistentId = new mongoose.Types.ObjectId().toString();
-        }
+  //     it('should return the supplier if found', async () => {
+  //       const response = await supertest(app).get(
+  //         `/api/suppliers/${newSupplierId}`
+  //       );
 
-        const response = await supertest(app).delete(
-          `${apiRoot}/${nonexistentId}`
-        );
+  //       expect(response.statusCode).toBe(200);
+  //       expect(response.body).toEqual({});
+  //     });
+  //   });
+  // });
 
-        expect(response.statusCode).toBe(404);
-      });
+  // describe(`PATCH ${apiRoot}/:id - supplier updating`, () => {
+  //   describe('given an invalid id', () =>
+  //     testInvalidIdParam(app, apiRoot, 'patch', '123'));
 
-      it('should perform the deletion with a status of 200 and a response with a message ', async () => {
-        const response = await supertest(app).delete(`${apiRoot}/${newUserId}`);
+  //   describe(`given an authorized supplier`, () => {
+  //     it.todo('should return a 401 if supplier not logged in');
 
-        expect(response.statusCode).toBe(200);
-        expect(response.body).toEqual({
-          success: `User with id ${newUserId} was deleted`,
-        });
-      });
-    });
-  });
+  //     it.todo('should return a 403 if logged supplier is not admin');
+  //   });
+
+  //   describe('given correctly authenticated admin supplier', () => {
+  //     const modifiedFields = {
+  //       firstName: 'NameChanged',
+  //       lastName: 'LastNameChanged',
+  //     };
+
+  //     it("should return a 404 if the supplier doesn't exist", async () => {
+  //       // Just to be sure, guarantee id generated is different from newSupplier id
+  //       let nonexistentId = newSupplierId;
+  //       while (nonexistentId === newSupplierId) {
+  //         nonexistentId = new mongoose.Types.ObjectId().toString();
+  //       }
+
+  //       const response = await supertest(app)
+  //         .patch(`${apiRoot}/${nonexistentId}`)
+  //         .send(modifiedFields);
+
+  //       expect(response.statusCode).toBe(404);
+  //     });
+
+  //     it('should perform the modification with a status of 200 and a response of the updated supplier ', async () => {
+  //       const response = await supertest(app)
+  //         .patch(`${apiRoot}/${newSupplierId}`)
+  //         .send(modifiedFields);
+
+  //       expect(response.statusCode).toBe(200);
+  //       expect(response.body).toEqual({});
+  //     });
+  //   });
+  // });
+
+  // describe(`DELETE ${apiRoot}/:id - supplier deleting`, () => {
+  //   describe('given an invalid id', () =>
+  //     testInvalidIdParam(app, apiRoot, 'delete', '123'));
+
+  //   describe(`given an authorized supplier`, () => {
+  //     it.todo('should return a 401 if supplier not logged in');
+
+  //     it.todo('should return a 403 if logged supplier is not admin');
+  //   });
+
+  //   describe('given correctly authenticated admin supplier', () => {
+  //     it("should return a 404 if the supplier doesn't exist", async () => {
+  //       // Just to be sure, guarantee id generated is different from newSupplier id
+  //       let nonexistentId = newSupplierId;
+  //       while (nonexistentId === newSupplierId) {
+  //         nonexistentId = new mongoose.Types.ObjectId().toString();
+  //       }
+
+  //       const response = await supertest(app).delete(
+  //         `${apiRoot}/${nonexistentId}`
+  //       );
+
+  //       expect(response.statusCode).toBe(404);
+  //     });
+
+  //     it('should perform the deletion with a status of 200 and a response with a message ', async () => {
+  //       const response = await supertest(app).delete(
+  //         `${apiRoot}/${newSupplierId}`
+  //       );
+
+  //       expect(response.statusCode).toBe(200);
+  //       expect(response.body).toEqual({
+  //         success: `Supplier with id ${newSupplierId} was deleted`,
+  //       });
+  //     });
+  //   });
+  // });
 });

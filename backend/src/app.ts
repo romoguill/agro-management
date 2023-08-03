@@ -1,14 +1,13 @@
+import cookieParser from 'cookie-parser';
 import express, { Request, Response } from 'express';
+import helmet from 'helmet';
 import createHttpError from 'http-errors';
-import morgan from 'morgan';
 import pinoHttp from 'pino-http';
 import { logger } from './utils/logger';
-import helmet from 'helmet';
-import cookieParser from 'cookie-parser';
 
-import userRouter from './routes/user.route';
-import authRouter from './routes/auth.route';
 import supplierRouter from './routes/MasterData/supplier.route';
+import authRouter from './routes/auth.route';
+import userRouter from './routes/user.route';
 
 import { errorHandler } from './middlewares/errorHandler';
 
@@ -16,7 +15,7 @@ const app = express();
 
 // MIDDLEWARES
 app.use(express.json());
-app.use(morgan('dev'));
+
 app.use(helmet());
 app.use(cookieParser());
 
