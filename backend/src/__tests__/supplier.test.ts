@@ -35,30 +35,33 @@ describe('supplier', () => {
     await dropDB(db);
   });
 
-  describe('given an unauthenticated user', () => {
-    it('POST to endpoint should return 401', async () => {
-      const response = await supertest(app).post(apiRoot);
+  // AUTHENTICATION / AUTHORIZATION TESTS
+  describe('auth validation', () => {
+    describe('given an unauthenticated user', () => {
+      it('POST to endpoint should return 401', async () => {
+        const response = await supertest(app).post(apiRoot);
 
-      expect(response.status).toBe(401);
-      expect(response.body.error).toBe('Must be authenticated');
-    });
+        expect(response.status).toBe(401);
+        expect(response.body.error).toBe('Must be authenticated');
+      });
 
-    it('PATCH to endpoint should return 401', async () => {
-      const response = await supertest(app).patch(
-        `${apiRoot}/${fakeId.toString()}`
-      );
+      it('PATCH to endpoint should return 401', async () => {
+        const response = await supertest(app).patch(
+          `${apiRoot}/${fakeId.toString()}`
+        );
 
-      expect(response.status).toBe(401);
-      expect(response.body.error).toBe('Must be authenticated');
-    });
+        expect(response.status).toBe(401);
+        expect(response.body.error).toBe('Must be authenticated');
+      });
 
-    it('DELETE to endpoint should return 401', async () => {
-      const response = await supertest(app).delete(
-        `${apiRoot}/${fakeId.toString()}`
-      );
+      it('DELETE to endpoint should return 401', async () => {
+        const response = await supertest(app).delete(
+          `${apiRoot}/${fakeId.toString()}`
+        );
 
-      expect(response.status).toBe(401);
-      expect(response.body.error).toBe('Must be authenticated');
+        expect(response.status).toBe(401);
+        expect(response.body.error).toBe('Must be authenticated');
+      });
     });
   });
 
