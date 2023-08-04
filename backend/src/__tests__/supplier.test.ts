@@ -8,6 +8,9 @@ import { createUserAndLogin } from './utils/mockUser';
 import { RequestCreateUser } from '../schemas/user.schemas';
 
 let db: MongoMemoryServer | null = null;
+let adminAccessToken = '';
+let userAccessToken = '';
+let visitorAccessToken = '';
 
 const apiRoot = '/api/suppliers';
 
@@ -21,6 +24,9 @@ const mockData = {
     website: 'www.supplier.com',
     avatarUrl: 'url/somePic.jpg',
     cuit: '20314359643',
+  },
+  supplierModified: {
+    description: 'Mock supplier updated',
   },
 };
 
@@ -43,7 +49,7 @@ const mockUser: RequestCreateUser['body'] = {
 };
 
 const mockVisitor: RequestCreateUser['body'] = {
-  email: 'user@test.com',
+  email: 'visitor@test.com',
   firstName: 'Tester',
   lastName: 'User',
   password: '123456',
@@ -58,8 +64,9 @@ let newSupplierId: string | null;
 describe('supplier', () => {
   beforeAll(async () => {
     db = await connectDB();
-    const adminAccessToken = await createUserAndLogin(app, mockAdmin);
-    const userAccessToken = await createUserAndLogin(app, mockUser);
+    adminAccessToken = await createUserAndLogin(app, mockAdmin);
+    userAccessToken = await createUserAndLogin(app, mockUser);
+    visitorAccessToken = await createUserAndLogin(app, mockVisitor);
   });
 
   afterAll(async () => {
@@ -96,11 +103,31 @@ describe('supplier', () => {
     });
 
     describe('given an authenticated user', () => {
-      it('POST should return a 401 for a role of type "Visitor"', async () => {});
+      it('POST should return a 401 for a role of type "Visitor"', async () => {
+        const response = await supertest(app)
+          .post(apiRoot)
+          .send(mockData.newSupplier)
+          .set('Authorization', `Bearer ${visitorAccessToken}`);
 
-      it('PATCH should return a 401 for a role of type "Visitor"', async () => {});
+        expect(response.status).toBe(403);
+      });
 
-      it('DELETE should return a 401 for a role of type "User"', async () => {});
+      it('PATCH should return a 401 for a role of type "Visitor"', async () => {
+        const response = await supertest(app)
+          .patch(`${apiRoot}/${fakeId}`)
+          .send(mockData.supplierModified)
+          .set('Authorization', `Bearer ${visitorAccessToken}`);
+
+        expect(response.status).toBe(403);
+      });
+
+      it('DELETE should return a 401 for a role of type "User"', async () => {
+        const response = await supertest(app)
+          .delete(`${apiRoot}/${fakeId}`)
+          .set('Authorization', `Bearer ${visitorAccessToken}`);
+
+        expect(response.status).toBe(403);
+      });
     });
   });
 
