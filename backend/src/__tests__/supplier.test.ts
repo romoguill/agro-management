@@ -312,4 +312,28 @@ describe('supplier', () => {
     //   });
     // });
   });
+
+  describe(`GET ${apiRoot} - supplier fetch`, () => {});
+
+  describe(`PATCH ${apiRoot} - supplier update`, () => {
+    describe('given an invalid request body', () => {
+      it('should return a 400 with errors', async () => {
+        const payload = {
+          description: 123,
+        };
+
+        const response = await supertest(app)
+          .patch(`${apiRoot}/${fakeId}`)
+          .send(payload)
+          .set('Authorization', `Bearer ${adminAccessToken}`);
+
+        expect(response.status).toEqual(400);
+        expect(response.body.error).toEqual([
+          'Expected string, received number',
+        ]);
+      });
+    });
+  });
+
+  describe(`DELETE ${apiRoot} - supplier delete`, () => {});
 });
