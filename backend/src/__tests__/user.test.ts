@@ -16,7 +16,7 @@ const mockData = {
     lastName: 'Test',
     password: '123456',
     passwordConfirmation: '123456',
-    roles: ['user'],
+    roles: ['User'],
   },
   newUserDuplicate: {
     email: 'test@test.com',
@@ -24,7 +24,7 @@ const mockData = {
     lastName: 'Lennon',
     password: '456789',
     passwordConfirmation: '456789',
-    roles: ['user'],
+    roles: ['User'],
   },
 };
 
@@ -51,7 +51,7 @@ describe('user', () => {
           email: 'test@test.com',
           lastName: 'Test',
           password: '123456',
-          roles: ['user'],
+          roles: ['User'],
         };
 
         const response = await supertest(app).post(apiRoot).send(payload);
@@ -70,7 +70,7 @@ describe('user', () => {
           lastName: 'Test',
           password: '1234',
           passwordConfirmation: '1234',
-          roles: ['user'],
+          roles: ['User'],
         };
 
         const response = await supertest(app).post(apiRoot).send(payload);
@@ -88,7 +88,7 @@ describe('user', () => {
           lastName: 'Test',
           password: '123456',
           passwordConfirmation: '567891',
-          roles: ['user'],
+          roles: ['User'],
         };
 
         const response = await supertest(app).post(apiRoot).send(payload);

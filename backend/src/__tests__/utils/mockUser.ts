@@ -1,12 +1,16 @@
-import supertest from 'supertest';
+import bcrypt from 'bcrypt';
 import { Express } from 'express';
-import { RequestRegisterUser } from '../../schemas/user.schemas';
+import supertest from 'supertest';
+import UserModel from '../../models/user.model';
+import { RequestCreateUser } from '../../schemas/user.schemas';
 
 export const createUserAndLogin = async (
   app: Express,
-  userData: RequestRegisterUser['body']
+  userData: RequestCreateUser['body']
 ) => {
-  await supertest(app).post('/api/auth/register').send(userData);
+  const hashedPassword = bcrypt.hash(userData.password, 10);
+
+  UserModel.create({ ...userData, hashedPassword });
 
   const response = await supertest(app)
     .post('/api/auth/login')

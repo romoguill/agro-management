@@ -4,6 +4,8 @@ import app from '../app';
 import { connectDB, dropDB } from './utils/connectMemoryDB';
 import mongoose from 'mongoose';
 import { testInvalidIdParam } from './utils/reusableTests';
+import { createUserAndLogin } from './utils/mockUser';
+import { RequestCreateUser } from '../schemas/user.schemas';
 
 let db: MongoMemoryServer | null = null;
 
@@ -22,6 +24,33 @@ const mockData = {
   },
 };
 
+const mockAdmin: RequestCreateUser['body'] = {
+  email: 'admin@test.com',
+  firstName: 'Tester',
+  lastName: 'Admin',
+  password: '123456',
+  passwordConfirmation: '123456',
+  roles: ['Admin'],
+};
+
+const mockUser: RequestCreateUser['body'] = {
+  email: 'user@test.com',
+  firstName: 'Tester',
+  lastName: 'User',
+  password: '123456',
+  passwordConfirmation: '123456',
+  roles: ['User'],
+};
+
+const mockVisitor: RequestCreateUser['body'] = {
+  email: 'user@test.com',
+  firstName: 'Tester',
+  lastName: 'User',
+  password: '123456',
+  passwordConfirmation: '123456',
+  roles: ['Visitor'],
+};
+
 const fakeId = new mongoose.Types.ObjectId();
 
 let newSupplierId: string | null;
@@ -29,6 +58,9 @@ let newSupplierId: string | null;
 describe('supplier', () => {
   beforeAll(async () => {
     db = await connectDB();
+    const adminAccessToken = createUserAndLogin(app, mockAdmin);
+    const userAccessToken = createUserAndLogin(app, mockUser);
+    console.log(adminAccessToken);
   });
 
   afterAll(async () => {
@@ -62,6 +94,15 @@ describe('supplier', () => {
         expect(response.status).toBe(401);
         expect(response.body.error).toBe('Must be authenticated');
       });
+    });
+
+    describe('given an authenticated user', () => {
+      const visitorCredentials =
+        it('POST should return a 401 for a role of type "Visitor"', async () => {});
+
+      it('PATCH should return a 401 for a role of type "Visitor"', async () => {});
+
+      it('DELETE should return a 401 for a role of type "User"', async () => {});
     });
   });
 

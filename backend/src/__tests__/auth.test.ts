@@ -67,7 +67,7 @@ describe('authentication and authorization', () => {
           email: mockData.newUser.email,
           firstName: mockData.newUser.firstName,
           lastName: mockData.newUser.lastName,
-          roles: ['user'],
+          roles: ['User'],
         });
 
         // set userid for future tests
@@ -140,7 +140,7 @@ describe('authentication and authorization', () => {
           email: 'test@test.com',
           firstName: 'My',
           lastName: 'Test',
-          roles: ['user'],
+          roles: ['User'],
         });
 
         expect(response.body.accessToken).toEqual(expect.any(String));
@@ -173,7 +173,7 @@ describe('authentication and authorization', () => {
             email: 'test@test.com',
             firstName: 'My',
             lastName: 'Test',
-            roles: ['user'],
+            roles: ['User'],
           },
           accessToken: expect.any(String),
         });

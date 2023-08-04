@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 
 //---- MODELS
 
-const Roles = z.enum(['admin', 'user', 'visitor']);
+const Roles = z.enum(['Admin', 'User', 'Visitor']);
 
 const User = z.object({
   email: z

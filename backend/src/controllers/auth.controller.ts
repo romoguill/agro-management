@@ -23,7 +23,7 @@ export async function register(
     const user = await UserService.createUser({
       ...req.body,
       password: hashedPassword,
-      roles: ['user'],
+      roles: ['User'],
     });
 
     const responseBody = {
