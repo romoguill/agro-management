@@ -73,7 +73,6 @@ describe('supplier', () => {
     await dropDB(db);
   });
 
-  // AUTHENTICATION / AUTHORIZATION TESTS
   describe('auth validation', () => {
     describe('given an unauthenticated user', () => {
       it('POST to endpoint should return 401', async () => {
@@ -131,213 +130,186 @@ describe('supplier', () => {
     });
   });
 
-  // describe(`POST ${apiRoot} - supplier creation`, () => {
-  //   describe('given an invalid request body', () => {
-  //     it('should return a 400 with errors', async () => {
-  //       const payload = {
-  //         name: 'SupplierTester',
-  //         description: 'A mock supplier',
-  //         category: 'Seeds',
-  //         status: 'Invalid Status',
-  //         website: 'www.supplier.com',
-  //         avatarUrl: 'url/somePic.jpg',
-  //         cuit: '20314359643',
-  //       };
+  describe(`POST ${apiRoot} - supplier creation`, () => {
+    describe('given an invalid request body', () => {
+      it('should return a 400 with errors', async () => {
+        const payload = {
+          name: 'SupplierTester',
+          description: 'A mock supplier',
+          category: ['Seeds'],
+          status: 'Invalid Status',
+          website: 'www.supplier.com',
+          avatarUrl: 'url/somePic.jpg',
+          cuit: '20314359643',
+        };
 
-  //       const response = await supertest(app).post(apiRoot).send(payload);
+        const response = await supertest(app)
+          .post(apiRoot)
+          .send(payload)
+          .set('Authorization', `Bearer ${adminAccessToken}`);
 
-  //       expect(response.status).toEqual(400);
-  //       expect(response.body.error).toEqual(['Phone is required', '']);
-  //     });
+        expect(response.status).toEqual(400);
+        expect(response.body.error).toEqual([
+          `Invalid enum value. Expected 'Active' | 'Inactive', received 'Invalid Status'`,
+          'Phone is required',
+        ]);
+      });
+    });
 
-  //     it('should return a 400 with errors: password must be x chars long', async () => {
-  //       const payload = {
-  //         email: 'test@test.com',
-  //         firstName: 'My',
-  //         lastName: 'Test',
-  //         password: '1234',
-  //         passwordConfirmation: '1234',
-  //         roles: ['supplier'],
-  //       };
+    //   describe('given a valid request body', () => {
+    //     it('should create supplier with response of 201', async () => {
+    //       const response = await supertest(app)
+    //         .post(apiRoot)
+    //         .send(mockData.newSupplier);
 
-  //       const response = await supertest(app).post(apiRoot).send(payload);
+    //       expect(response.status).toBe(201);
+    //       expect(response.body).toEqual({});
 
-  //       expect(response.status).toEqual(400);
-  //       expect(response.body.error).toEqual([
-  //         'Password must be at least 6 characters',
-  //       ]);
-  //     });
+    //       // set supplierid for future tests
+    //       newSupplierId = response.body._id;
+    //     });
 
-  //     it('should return a 400 with errors: passwords must match', async () => {
-  //       const payload = {
-  //         email: 'test@test.com',
-  //         firstName: 'My',
-  //         lastName: 'Test',
-  //         password: '123456',
-  //         passwordConfirmation: '567891',
-  //         roles: ['supplier'],
-  //       };
+    //     it('should not create a duplicate supplier with same email throwing a 409', async () => {
+    //       const response = await supertest(app).post(apiRoot).send();
 
-  //       const response = await supertest(app).post(apiRoot).send(payload);
+    //       expect(response.status).toBe(409);
+    //       expect(response.body).toEqual({
+    //         error: 'Supplier email already in use',
+    //       });
+    //     });
+    //   });
+    // });
 
-  //       expect(response.status).toEqual(400);
-  //       expect(response.body.error).toEqual(["Passwords don't match"]);
-  //     });
-  //   });
+    // describe(`GET ${apiRoot} - supplier fetching`, () => {
+    //   describe('given an authorized supplier', () => {
+    //     it.todo('should return a 401 if supplier not logged in');
 
-  //   describe('given a valid request body', () => {
-  //     it('should create supplier with response of 201', async () => {
-  //       const response = await supertest(app)
-  //         .post(apiRoot)
-  //         .send(mockData.newSupplier);
+    //     it.todo('should return a 403 if logged supplier is not admin');
+    //   });
 
-  //       expect(response.status).toBe(201);
-  //       expect(response.body).toEqual({});
+    //   describe('given correctly authenticated admin supplier', () => {
+    //     it('should return a list of all suppliers stored', async () => {
+    //       const response = await supertest(app).get(apiRoot);
 
-  //       // set supplierid for future tests
-  //       newSupplierId = response.body._id;
-  //     });
+    //       expect(response.statusCode).toBe(200);
+    //       expect(response.body).toEqual([{}]);
+    //     });
+    //   });
+    // });
 
-  //     it('should not create a duplicate supplier with same email throwing a 409', async () => {
-  //       const response = await supertest(app).post(apiRoot).send();
+    // describe(`GET ${apiRoot}/:id - supplier fetching`, () => {
+    //   describe('given an invalid id', () =>
+    //     testInvalidIdParam(app, apiRoot, 'get', '123'));
 
-  //       expect(response.status).toBe(409);
-  //       expect(response.body).toEqual({
-  //         error: 'Supplier email already in use',
-  //       });
-  //     });
-  //   });
-  // });
+    //   describe(`given an authorized supplier`, () => {
+    //     it.todo('should return a 401 if supplier not logged in');
 
-  // describe(`GET ${apiRoot} - supplier fetching`, () => {
-  //   describe('given an authorized supplier', () => {
-  //     it.todo('should return a 401 if supplier not logged in');
+    //     it.todo('should return a 403 if logged supplier is not admin');
+    //   });
 
-  //     it.todo('should return a 403 if logged supplier is not admin');
-  //   });
+    //   describe('given correctly authenticated admin supplier', () => {
+    //     it("should return a 404 if the supplier doesn't exist", async () => {
+    //       // Just to be sure, guarantee id generated is different from newSupplier id
+    //       let nonexistentId = newSupplierId;
+    //       while (nonexistentId === newSupplierId) {
+    //         nonexistentId = new mongoose.Types.ObjectId().toString();
+    //       }
 
-  //   describe('given correctly authenticated admin supplier', () => {
-  //     it('should return a list of all suppliers stored', async () => {
-  //       const response = await supertest(app).get(apiRoot);
+    //       const response = await supertest(app).get(
+    //         `${apiRoot}/${nonexistentId}`
+    //       );
 
-  //       expect(response.statusCode).toBe(200);
-  //       expect(response.body).toEqual([{}]);
-  //     });
-  //   });
-  // });
+    //       expect(response.statusCode).toBe(404);
+    //     });
 
-  // describe(`GET ${apiRoot}/:id - supplier fetching`, () => {
-  //   describe('given an invalid id', () =>
-  //     testInvalidIdParam(app, apiRoot, 'get', '123'));
+    //     it('should return the supplier if found', async () => {
+    //       const response = await supertest(app).get(
+    //         `/api/suppliers/${newSupplierId}`
+    //       );
 
-  //   describe(`given an authorized supplier`, () => {
-  //     it.todo('should return a 401 if supplier not logged in');
+    //       expect(response.statusCode).toBe(200);
+    //       expect(response.body).toEqual({});
+    //     });
+    //   });
+    // });
 
-  //     it.todo('should return a 403 if logged supplier is not admin');
-  //   });
+    // describe(`PATCH ${apiRoot}/:id - supplier updating`, () => {
+    //   describe('given an invalid id', () =>
+    //     testInvalidIdParam(app, apiRoot, 'patch', '123'));
 
-  //   describe('given correctly authenticated admin supplier', () => {
-  //     it("should return a 404 if the supplier doesn't exist", async () => {
-  //       // Just to be sure, guarantee id generated is different from newSupplier id
-  //       let nonexistentId = newSupplierId;
-  //       while (nonexistentId === newSupplierId) {
-  //         nonexistentId = new mongoose.Types.ObjectId().toString();
-  //       }
+    //   describe(`given an authorized supplier`, () => {
+    //     it.todo('should return a 401 if supplier not logged in');
 
-  //       const response = await supertest(app).get(
-  //         `${apiRoot}/${nonexistentId}`
-  //       );
+    //     it.todo('should return a 403 if logged supplier is not admin');
+    //   });
 
-  //       expect(response.statusCode).toBe(404);
-  //     });
+    //   describe('given correctly authenticated admin supplier', () => {
+    //     const modifiedFields = {
+    //       firstName: 'NameChanged',
+    //       lastName: 'LastNameChanged',
+    //     };
 
-  //     it('should return the supplier if found', async () => {
-  //       const response = await supertest(app).get(
-  //         `/api/suppliers/${newSupplierId}`
-  //       );
+    //     it("should return a 404 if the supplier doesn't exist", async () => {
+    //       // Just to be sure, guarantee id generated is different from newSupplier id
+    //       let nonexistentId = newSupplierId;
+    //       while (nonexistentId === newSupplierId) {
+    //         nonexistentId = new mongoose.Types.ObjectId().toString();
+    //       }
 
-  //       expect(response.statusCode).toBe(200);
-  //       expect(response.body).toEqual({});
-  //     });
-  //   });
-  // });
+    //       const response = await supertest(app)
+    //         .patch(`${apiRoot}/${nonexistentId}`)
+    //         .send(modifiedFields);
 
-  // describe(`PATCH ${apiRoot}/:id - supplier updating`, () => {
-  //   describe('given an invalid id', () =>
-  //     testInvalidIdParam(app, apiRoot, 'patch', '123'));
+    //       expect(response.statusCode).toBe(404);
+    //     });
 
-  //   describe(`given an authorized supplier`, () => {
-  //     it.todo('should return a 401 if supplier not logged in');
+    //     it('should perform the modification with a status of 200 and a response of the updated supplier ', async () => {
+    //       const response = await supertest(app)
+    //         .patch(`${apiRoot}/${newSupplierId}`)
+    //         .send(modifiedFields);
 
-  //     it.todo('should return a 403 if logged supplier is not admin');
-  //   });
+    //       expect(response.statusCode).toBe(200);
+    //       expect(response.body).toEqual({});
+    //     });
+    //   });
+    // });
 
-  //   describe('given correctly authenticated admin supplier', () => {
-  //     const modifiedFields = {
-  //       firstName: 'NameChanged',
-  //       lastName: 'LastNameChanged',
-  //     };
+    // describe(`DELETE ${apiRoot}/:id - supplier deleting`, () => {
+    //   describe('given an invalid id', () =>
+    //     testInvalidIdParam(app, apiRoot, 'delete', '123'));
 
-  //     it("should return a 404 if the supplier doesn't exist", async () => {
-  //       // Just to be sure, guarantee id generated is different from newSupplier id
-  //       let nonexistentId = newSupplierId;
-  //       while (nonexistentId === newSupplierId) {
-  //         nonexistentId = new mongoose.Types.ObjectId().toString();
-  //       }
+    //   describe(`given an authorized supplier`, () => {
+    //     it.todo('should return a 401 if supplier not logged in');
 
-  //       const response = await supertest(app)
-  //         .patch(`${apiRoot}/${nonexistentId}`)
-  //         .send(modifiedFields);
+    //     it.todo('should return a 403 if logged supplier is not admin');
+    //   });
 
-  //       expect(response.statusCode).toBe(404);
-  //     });
+    //   describe('given correctly authenticated admin supplier', () => {
+    //     it("should return a 404 if the supplier doesn't exist", async () => {
+    //       // Just to be sure, guarantee id generated is different from newSupplier id
+    //       let nonexistentId = newSupplierId;
+    //       while (nonexistentId === newSupplierId) {
+    //         nonexistentId = new mongoose.Types.ObjectId().toString();
+    //       }
 
-  //     it('should perform the modification with a status of 200 and a response of the updated supplier ', async () => {
-  //       const response = await supertest(app)
-  //         .patch(`${apiRoot}/${newSupplierId}`)
-  //         .send(modifiedFields);
+    //       const response = await supertest(app).delete(
+    //         `${apiRoot}/${nonexistentId}`
+    //       );
 
-  //       expect(response.statusCode).toBe(200);
-  //       expect(response.body).toEqual({});
-  //     });
-  //   });
-  // });
+    //       expect(response.statusCode).toBe(404);
+    //     });
 
-  // describe(`DELETE ${apiRoot}/:id - supplier deleting`, () => {
-  //   describe('given an invalid id', () =>
-  //     testInvalidIdParam(app, apiRoot, 'delete', '123'));
+    //     it('should perform the deletion with a status of 200 and a response with a message ', async () => {
+    //       const response = await supertest(app).delete(
+    //         `${apiRoot}/${newSupplierId}`
+    //       );
 
-  //   describe(`given an authorized supplier`, () => {
-  //     it.todo('should return a 401 if supplier not logged in');
-
-  //     it.todo('should return a 403 if logged supplier is not admin');
-  //   });
-
-  //   describe('given correctly authenticated admin supplier', () => {
-  //     it("should return a 404 if the supplier doesn't exist", async () => {
-  //       // Just to be sure, guarantee id generated is different from newSupplier id
-  //       let nonexistentId = newSupplierId;
-  //       while (nonexistentId === newSupplierId) {
-  //         nonexistentId = new mongoose.Types.ObjectId().toString();
-  //       }
-
-  //       const response = await supertest(app).delete(
-  //         `${apiRoot}/${nonexistentId}`
-  //       );
-
-  //       expect(response.statusCode).toBe(404);
-  //     });
-
-  //     it('should perform the deletion with a status of 200 and a response with a message ', async () => {
-  //       const response = await supertest(app).delete(
-  //         `${apiRoot}/${newSupplierId}`
-  //       );
-
-  //       expect(response.statusCode).toBe(200);
-  //       expect(response.body).toEqual({
-  //         success: `Supplier with id ${newSupplierId} was deleted`,
-  //       });
-  //     });
-  //   });
-  // });
+    //       expect(response.statusCode).toBe(200);
+    //       expect(response.body).toEqual({
+    //         success: `Supplier with id ${newSupplierId} was deleted`,
+    //       });
+    //     });
+    //   });
+    // });
+  });
 });
