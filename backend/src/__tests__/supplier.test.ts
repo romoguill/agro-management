@@ -58,9 +58,8 @@ let newSupplierId: string | null;
 describe('supplier', () => {
   beforeAll(async () => {
     db = await connectDB();
-    const adminAccessToken = createUserAndLogin(app, mockAdmin);
-    const userAccessToken = createUserAndLogin(app, mockUser);
-    console.log(adminAccessToken);
+    const adminAccessToken = await createUserAndLogin(app, mockAdmin);
+    const userAccessToken = await createUserAndLogin(app, mockUser);
   });
 
   afterAll(async () => {
@@ -97,8 +96,7 @@ describe('supplier', () => {
     });
 
     describe('given an authenticated user', () => {
-      const visitorCredentials =
-        it('POST should return a 401 for a role of type "Visitor"', async () => {});
+      it('POST should return a 401 for a role of type "Visitor"', async () => {});
 
       it('PATCH should return a 401 for a role of type "Visitor"', async () => {});
 

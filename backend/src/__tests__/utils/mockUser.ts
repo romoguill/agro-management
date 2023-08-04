@@ -8,9 +8,12 @@ export const createUserAndLogin = async (
   app: Express,
   userData: RequestCreateUser['body']
 ) => {
-  const hashedPassword = bcrypt.hash(userData.password, 10);
+  const hashedPassword = await bcrypt.hash(userData.password, 10);
 
-  UserModel.create({ ...userData, hashedPassword });
+  const user = await UserModel.create({
+    ...userData,
+    password: hashedPassword,
+  });
 
   const response = await supertest(app)
     .post('/api/auth/login')
