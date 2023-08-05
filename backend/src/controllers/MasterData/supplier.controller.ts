@@ -10,15 +10,20 @@ import * as SupplierService from '../../services/MasterData/supplier.service';
 
 export const createSupplier = async (
   req: Request<unknown, unknown, RequestCreateSupplier['body']>,
-  res: Response
+  res: Response,
+  next: NextFunction
 ) => {
-  const supplier = await SupplierService.createSupplier(req.body);
-  res.status(200).json({ supplier });
+  try {
+    const supplier = await SupplierService.createSupplier(req.body);
+    res.status(201).json(supplier);
+  } catch (error) {
+    next(error);
+  }
 };
 
 export const getAllSuppliers = async (req: Request, res: Response) => {
   const suppliers = await SupplierService.getAllSuppliers();
-  res.status(200).json({ suppliers });
+  res.status(200).json(suppliers);
 };
 
 export const getSupplier = async (
@@ -33,7 +38,7 @@ export const getSupplier = async (
     if (!supplier)
       return next(createHttpError(404, `Supplier with id: ${id} not found`));
 
-    res.status(200).json({ supplier });
+    res.status(200).json(supplier);
   } catch (error) {
     next(error);
   }
@@ -55,7 +60,7 @@ export const updateSupplier = async (
     if (!supplier)
       return next(createHttpError(404, `Supplier with id: ${id} not found`));
 
-    res.status(200).json({ supplier });
+    res.status(200).json(supplier);
   } catch (error) {
     next(error);
   }

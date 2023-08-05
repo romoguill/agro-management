@@ -18,7 +18,7 @@ const mockData = {
   newSupplier: {
     name: 'SupplierTester',
     description: 'A mock supplier',
-    category: 'Seeds',
+    category: ['Seeds'],
     status: 'Active',
     phone: '642675648',
     website: 'www.supplier.com',
@@ -156,29 +156,36 @@ describe('supplier', () => {
       });
     });
 
-    //   describe('given a valid request body', () => {
-    //     it('should create supplier with response of 201', async () => {
-    //       const response = await supertest(app)
-    //         .post(apiRoot)
-    //         .send(mockData.newSupplier);
+    describe('given a valid request body', () => {
+      it('should create supplier with response of 201', async () => {
+        const response = await supertest(app)
+          .post(apiRoot)
+          .send(mockData.newSupplier)
+          .set('Authorization', `Bearer ${adminAccessToken}`);
 
-    //       expect(response.status).toBe(201);
-    //       expect(response.body).toEqual({});
+        expect(response.status).toBe(201);
+        expect(response.body).toEqual({
+          __v: expect.any(Number),
+          _id: expect.any(String),
+          ...mockData.newSupplier,
+        });
 
-    //       // set supplierid for future tests
-    //       newSupplierId = response.body._id;
-    //     });
+        // set supplierid for future tests
+        newSupplierId = response.body._id;
+      });
 
-    //     it('should not create a duplicate supplier with same email throwing a 409', async () => {
-    //       const response = await supertest(app).post(apiRoot).send();
+      it('should not create a duplicate supplier with same email throwing a 409', async () => {
+        const response = await supertest(app)
+          .post(apiRoot)
+          .send(mockData.newSupplier)
+          .set('Authorization', `Bearer ${adminAccessToken}`);
 
-    //       expect(response.status).toBe(409);
-    //       expect(response.body).toEqual({
-    //         error: 'Supplier email already in use',
-    //       });
-    //     });
-    //   });
-    // });
+        expect(response.status).toBe(409);
+        expect(response.body).toEqual({
+          error: 'Supplier name already in use',
+        });
+      });
+    });
 
     // describe(`GET ${apiRoot} - supplier fetching`, () => {
     //   describe('given an authorized supplier', () => {
