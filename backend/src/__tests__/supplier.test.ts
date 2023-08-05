@@ -303,5 +303,36 @@ describe('supplier', () => {
     });
   });
 
-  describe(`DELETE ${apiRoot} - supplier delete`, () => {});
+  describe(`DELETE ${apiRoot} - supplier delete`, () => {
+    describe('given an invalid id', () => {
+      it('should return a 400 error', async () => {
+        const response = await supertest(app)
+          .delete(`${apiRoot}/123`)
+          .set('Authorization', `Bearer ${adminAccessToken}`);
+
+        expect(response.status).toBe(400);
+        expect(response.body).toEqual({ error: ['Id is not valid'] });
+      });
+    });
+
+    describe('given a nonexisting supplier', () => {
+      it('should return a 404', async () => {
+        const response = await supertest(app)
+          .delete(`${apiRoot}/${fakeId}`)
+          .set('Authorization', `Bearer ${adminAccessToken}`);
+
+        expect(response.statusCode).toBe(404);
+      });
+    });
+
+    describe('given an existing id', () => {
+      it('should send status 204', async () => {
+        const response = await supertest(app)
+          .delete(`${apiRoot}/${newSupplierId}`)
+          .set('Authorization', `Bearer ${adminAccessToken}`);
+
+        expect(response.status).toEqual(204);
+      });
+    });
+  });
 });
