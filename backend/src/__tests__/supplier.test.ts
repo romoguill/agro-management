@@ -187,6 +187,60 @@ describe('supplier', () => {
       });
     });
 
+    describe(`GET ${apiRoot} - supplier fetching`, () => {
+      it('should return a list of all suppliers stored', async () => {
+        const response = await supertest(app)
+          .get(apiRoot)
+          .set('Authorization', `Bearer ${adminAccessToken}`);
+
+        expect(response.statusCode).toBe(200);
+        expect(response.body).toEqual([
+          {
+            __v: 0,
+            _id: newSupplierId,
+            ...mockData.newSupplier,
+          },
+        ]);
+      });
+    });
+  });
+
+  describe(`GET ${apiRoot}/:id - supplier fetching`, () => {
+    describe('given an invalid id', () => {
+      it('should return a 400 error', async () => {
+        const response = await supertest(app)
+          .get(`${apiRoot}/123`)
+          .set('Authorization', `Bearer ${adminAccessToken}`);
+
+        expect(response.status).toBe(400);
+        expect(response.body).toEqual({ error: ['Id is not valid'] });
+      });
+    });
+
+    describe('given a nonexisting supplier', () => {
+      it('should return a 404', async () => {
+        const response = await supertest(app)
+          .get(`${apiRoot}/${fakeId}`)
+          .set('Authorization', `Bearer ${adminAccessToken}`);
+
+        expect(response.statusCode).toBe(404);
+      });
+      describe('given an existing supplier', () => {
+        it('should return the supplier if found', async () => {
+          const response = await supertest(app)
+            .get(`/api/suppliers/${newSupplierId}`)
+            .set('Authorization', `Bearer ${adminAccessToken}`);
+
+          expect(response.statusCode).toBe(200);
+          expect(response.body).toEqual({
+            __v: 0,
+            _id: newSupplierId,
+            ...mockData.newSupplier,
+          });
+        });
+      });
+    });
+
     // describe(`GET ${apiRoot} - supplier fetching`, () => {
     //   describe('given an authorized supplier', () => {
     //     it.todo('should return a 401 if supplier not logged in');
