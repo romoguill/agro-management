@@ -182,7 +182,7 @@ describe('supplier', () => {
 
         expect(response.status).toBe(409);
         expect(response.body).toEqual({
-          error: 'Supplier name already in use',
+          error: 'name must be unique',
         });
       });
     });
