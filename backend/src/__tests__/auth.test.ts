@@ -1,8 +1,8 @@
+import cookie from 'cookie';
+import { MongoMemoryServer } from 'mongodb-memory-server';
 import supertest from 'supertest';
 import app from '../app';
-import { MongoMemoryServer } from 'mongodb-memory-server';
 import { connectDB, dropDB } from './utils/connectMemoryDB';
-import cookie from 'cookie';
 
 let db: MongoMemoryServer | null = null;
 const authRoute = '/api/auth';

@@ -1,4 +1,5 @@
 import { MdNoteAdd, MdSearch } from 'react-icons/md';
+import { Button } from '../ui/button';
 
 interface TableActionsProps {
   search?: boolean;
@@ -34,10 +35,10 @@ function TableActions({
       </div>
 
       {addEntry && (
-        <button className='btn btn-primary'>
-          <MdNoteAdd />
+        <Button className=' gap-2' variant='action'>
+          <MdNoteAdd className={'text-xl'} />
           Add New
-        </button>
+        </Button>
       )}
     </section>
   );

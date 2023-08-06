@@ -1,11 +1,10 @@
 import { MongoMemoryServer } from 'mongodb-memory-server';
+import mongoose from 'mongoose';
 import supertest from 'supertest';
 import app from '../app';
-import { connectDB, dropDB } from './utils/connectMemoryDB';
-import mongoose from 'mongoose';
-import { testInvalidIdParam } from './utils/reusableTests';
-import { createUserAndLogin } from './utils/mockUser';
 import { RequestCreateUser } from '../schemas/user.schemas';
+import { connectDB, dropDB } from './utils/connectMemoryDB';
+import { createUserAndLogin } from './utils/mockUser';
 
 let db: MongoMemoryServer | null = null;
 let adminAccessToken = '';
