@@ -5,7 +5,7 @@ export interface JwtPayload {
   roles: string[];
 }
 
-export enum MasterDataEntitys {
+export enum MasterDataEntities {
   SUPPLIERS = 'Suppliers',
   PRODUCTS = 'Products',
   CURRENCIES = 'Curriencies',

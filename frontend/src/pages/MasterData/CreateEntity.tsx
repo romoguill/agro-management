@@ -5,12 +5,12 @@ import {
   SelectItem,
   SelectTrigger,
 } from '@/components/ui/select';
+import { MasterDataEntities } from '@/ts/interfaces';
 import { SelectValue } from '@radix-ui/react-select';
 import { useState } from 'react';
 
 function CreateEntity() {
-  const [open, setOpen] = useState(false);
-  const [value, setValue] = useState('');
+  const [selectedEntity, setSelectedEntity] = useState('');
 
   return (
     <div>
@@ -20,12 +20,16 @@ function CreateEntity() {
         mainLevelPath='master-data'
       />
 
-      <Select>
+      <Select onValueChange={setSelectedEntity}>
         <SelectTrigger>
           <SelectValue placeholder='Select what to create' />
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value='Supplier'>Supplier</SelectItem>
+          {Object.keys(MasterDataEntities).map((key) => (
+            <SelectItem value={key}>
+              {MasterDataEntities[key as keyof typeof MasterDataEntities]}
+            </SelectItem>
+          ))}
         </SelectContent>
       </Select>
     </div>

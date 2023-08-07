@@ -12,7 +12,7 @@ function BreadCrumb({
   mainLevelPath,
 }: BreadCrumbProps) {
   return (
-    <h1 className='text-2xl/none font-section-title font-bold text-gray-800 uppercase'>
+    <h1 className='text-2xl/none font-section-title font-bold text-gray-800 uppercase mb-5'>
       <span className='text-xl text-gray-600 pr-2 capitalize'>
         <Link to={`/${mainLevelPath}`} className='hover:text-primary pr-2'>
           {mainLevelName}
