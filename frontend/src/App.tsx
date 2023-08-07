@@ -19,6 +19,7 @@ import { AuthContextProvider } from './contexts/AuthContext';
 import AuthGuard from './guards/AuthGuard';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import CreateEntity from './pages/MasterData/CreateEntity';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -37,6 +38,7 @@ const router = createBrowserRouter(
             <Route path='currencies' element={<Currencies />} />
             <Route path='plots' element={<FarmPlots />} />
             <Route path='crops' element={<Agriculture />} />
+            <Route path='new' element={<CreateEntity />} />
           </Route>
         </Route>
       </Route>
