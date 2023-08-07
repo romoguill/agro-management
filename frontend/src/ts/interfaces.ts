@@ -4,3 +4,11 @@ export interface JwtPayload {
   id: string;
   roles: string[];
 }
+
+export enum MasterDataEntitys {
+  SUPPLIERS = 'Suppliers',
+  PRODUCTS = 'Products',
+  CURRENCIES = 'Curriencies',
+  FARM_PLOTS = 'Farm Plots',
+  AGRICULTIRE = 'Agriculture',
+}

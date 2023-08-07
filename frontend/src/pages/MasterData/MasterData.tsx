@@ -1,3 +1,4 @@
+import { MasterDataEntitys } from '@/ts/interfaces';
 import MasterDataCard, {
   MasterDataCardProps,
 } from '../../components/MasterDataCard';
@@ -5,30 +6,30 @@ import MasterDataCard, {
 function MasterData() {
   const options: MasterDataCardProps[] = [
     {
-      title: 'Suppliers',
+      title: MasterDataEntitys.SUPPLIERS,
       description:
         'Suppliers details such as contact details, their products and payment info',
       link: 'suppliers',
     },
     {
-      title: 'Products',
+      title: MasterDataEntitys.PRODUCTS,
       description:
         'Product description, suppliers that provide them and parameters used for the app',
       link: 'products',
     },
     {
-      title: 'Currencies',
+      title: MasterDataEntitys.CURRENCIES,
       description:
         'Currencies availables with their conversion rate and other variables',
       link: 'currencies',
     },
     {
-      title: 'Farm Plots',
+      title: MasterDataEntitys.FARM_PLOTS,
       description: 'Manage and create new plots of land to be used',
       link: 'plots',
     },
     {
-      title: 'Agriculture',
+      title: MasterDataEntitys.AGRICULTIRE,
       description: 'Details about crops',
       link: 'crops',
     },
