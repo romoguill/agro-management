@@ -1,4 +1,5 @@
 import BreadCrumb from '@/components/BreadCrumb';
+import CreateSupplierForm from '@/components/MasterData/CreateSupplierForm';
 import {
   Select,
   SelectContent,
@@ -26,12 +27,21 @@ function CreateEntity() {
         </SelectTrigger>
         <SelectContent>
           {Object.keys(MasterDataEntities).map((key) => (
-            <SelectItem value={key}>
+            <SelectItem
+              value={MasterDataEntities[key as keyof typeof MasterDataEntities]}
+              key={key}
+            >
               {MasterDataEntities[key as keyof typeof MasterDataEntities]}
             </SelectItem>
           ))}
         </SelectContent>
       </Select>
+
+      <CreateSupplierForm />
+
+      {/* {selectedEntity === MasterDataEntities.SUPPLIERS && (
+        <CreateSupplierForm />
+      )} */}
     </div>
   );
 }
