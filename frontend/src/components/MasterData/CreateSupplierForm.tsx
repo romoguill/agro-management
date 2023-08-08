@@ -1,19 +1,20 @@
-import useAuthContext from '@/hooks/useAuthContext';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { AxiosError } from 'axios';
-import { useForm } from 'react-hook-form';
-import { Form, useNavigate } from 'react-router-dom';
-import { SpinnerCircularFixed } from 'spinners-react';
-import { z } from 'zod';
-import { Button } from '../ui/button';
+import { Button } from '@/components/ui/button';
 import {
+  Form,
   FormControl,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
-} from '../ui/form';
-import { Input } from '../ui/input';
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { AxiosError } from 'axios';
+import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
+import { SpinnerCircularFixed } from 'spinners-react';
+import { z } from 'zod';
+import useAuthContext from '../../hooks/useAuthContext';
 
 const createSupplierFormSchema = z.object({
   name: z.string({ required_error: 'Name is required' }),
@@ -31,9 +32,6 @@ const createSupplierFormSchema = z.object({
 type createSupplierFormSchema = z.infer<typeof createSupplierFormSchema>;
 
 function CreateSupplierForm() {
-  const { dispatch } = useAuthContext();
-  const navigate = useNavigate();
-
   const form = useForm<createSupplierFormSchema>({
     resolver: zodResolver(createSupplierFormSchema),
     defaultValues: {
