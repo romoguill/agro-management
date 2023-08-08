@@ -17,16 +17,22 @@ import { z } from 'zod';
 import useAuthContext from '../../hooks/useAuthContext';
 
 const createSupplierFormSchema = z.object({
-  name: z.string({ required_error: 'Name is required' }),
+  name: z
+    .string({ required_error: 'Name is required' })
+    .min(1, 'Name is required'),
   description: z.string().optional(),
   category: z.array(
     z.enum(['Seeds', 'Fertilizers', 'Herbicides', 'Labor'], {}),
     { required_error: 'Category must be an array' }
   ),
-  phone: z.string({ required_error: 'Phone is required' }),
+  phone: z
+    .string({ required_error: 'Phone is required' })
+    .min(1, 'Phone is required'),
   website: z.string().optional(),
   avatarUrl: z.string().optional(),
-  cuit: z.string({ required_error: 'CUIT is required' }),
+  cuit: z
+    .string({ required_error: 'CUIT is required' })
+    .length(10, 'CUIT is invalid (10 numbers, no space)'),
 });
 
 type createSupplierFormSchema = z.infer<typeof createSupplierFormSchema>;

@@ -22,7 +22,7 @@ function CreateEntity() {
       />
 
       <Select onValueChange={setSelectedEntity}>
-        <SelectTrigger>
+        <SelectTrigger className='bg-slate-100'>
           <SelectValue placeholder='Select what to create' />
         </SelectTrigger>
         <SelectContent>
@@ -37,11 +37,15 @@ function CreateEntity() {
         </SelectContent>
       </Select>
 
-      <CreateSupplierForm />
+      {selectedEntity && (
+        <hr className='mt-5 w-1/2 m-auto h-[2px] border-none bg-gradient-to-r from-slate-100 via-slate-400 to-slate-100' />
+      )}
 
-      {/* {selectedEntity === MasterDataEntities.SUPPLIERS && (
-        <CreateSupplierForm />
-      )} */}
+      <section className='mt-5'>
+        {selectedEntity === MasterDataEntities.SUPPLIERS && (
+          <CreateSupplierForm />
+        )}
+      </section>
     </div>
   );
 }
