@@ -11,10 +11,8 @@ import { Input } from '@/components/ui/input';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { AxiosError } from 'axios';
 import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
 import { SpinnerCircularFixed } from 'spinners-react';
 import { z } from 'zod';
-import useAuthContext from '../../hooks/useAuthContext';
 
 const createSupplierFormSchema = z.object({
   name: z

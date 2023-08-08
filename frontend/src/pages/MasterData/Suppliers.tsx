@@ -1,8 +1,7 @@
-import { MdNoteAdd, MdSearch } from 'react-icons/md';
-import BreadCrumb from '../../components/BreadCrumb';
-import Table, { TableColumn } from '../../components/TableData/TableData';
-import TableActions from '../../components/TableData/TableActions';
 import { MasterDataEntities } from '@/ts/interfaces';
+import BreadCrumb from '../../components/BreadCrumb';
+import TableActions from '../../components/TableData/TableActions';
+import Table, { TableColumn } from '../../components/TableData/TableData';
 
 type Supplier = {
   name: string;

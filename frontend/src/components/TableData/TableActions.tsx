@@ -37,7 +37,7 @@ function TableActions({
       </div>
 
       {addEntity && (
-        <Link to={`/master-data/new?entity=${addEntity}`}>
+        <Link to={`/master-data/new?entity=${encodeURIComponent(addEntity)}`}>
           <Button className=' gap-2' variant='action'>
             <MdNoteAdd className={'text-xl'} />
             Add New
