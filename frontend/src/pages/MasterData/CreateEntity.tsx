@@ -8,10 +8,21 @@ import {
 } from '@/components/ui/select';
 import { MasterDataEntities } from '@/ts/interfaces';
 import { SelectValue } from '@radix-ui/react-select';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 
 function CreateEntity() {
   const [selectedEntity, setSelectedEntity] = useState('');
+  const [searchParams] = useSearchParams();
+
+  useEffect(() => {
+    const entityParam = searchParams.get('entity');
+
+    if (!entityParam) return;
+
+    setSelectedEntity(entityParam);
+    console.log(entityParam);
+  }, [searchParams]);
 
   return (
     <div>
@@ -21,7 +32,7 @@ function CreateEntity() {
         mainLevelPath='master-data'
       />
 
-      <Select onValueChange={setSelectedEntity}>
+      <Select onValueChange={setSelectedEntity} value={selectedEntity}>
         <SelectTrigger className='bg-slate-100'>
           <SelectValue placeholder='Select what to create' />
         </SelectTrigger>

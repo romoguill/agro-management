@@ -2,6 +2,7 @@ import { MdNoteAdd, MdSearch } from 'react-icons/md';
 import BreadCrumb from '../../components/BreadCrumb';
 import Table, { TableColumn } from '../../components/TableData/TableData';
 import TableActions from '../../components/TableData/TableActions';
+import { MasterDataEntities } from '@/ts/interfaces';
 
 type Supplier = {
   name: string;
@@ -59,7 +60,7 @@ function Suppliers() {
         mainLevelPath='master-data'
       />
 
-      <TableActions addEntry={true} />
+      <TableActions addEntity={MasterDataEntities.SUPPLIERS} />
 
       <Table<Supplier>
         data={demoSupplier}

@@ -1,16 +1,18 @@
 import { MdNoteAdd, MdSearch } from 'react-icons/md';
 import { Button } from '../ui/button';
+import { Link } from 'react-router-dom';
+import { MasterDataEntities } from '@/ts/interfaces';
 
 interface TableActionsProps {
   search?: boolean;
   filterInactive?: boolean;
-  addEntry?: boolean;
+  addEntity?: MasterDataEntities;
 }
 
 function TableActions({
   search = true,
   filterInactive = true,
-  addEntry = false,
+  addEntity,
 }: TableActionsProps) {
   return (
     <section className='flex justify-between mt-6'>
@@ -34,11 +36,13 @@ function TableActions({
         )}
       </div>
 
-      {addEntry && (
-        <Button className=' gap-2' variant='action'>
-          <MdNoteAdd className={'text-xl'} />
-          Add New
-        </Button>
+      {addEntity && (
+        <Link to={`/master-data/new?entity=${addEntity}`}>
+          <Button className=' gap-2' variant='action'>
+            <MdNoteAdd className={'text-xl'} />
+            Add New
+          </Button>
+        </Link>
       )}
     </section>
   );
