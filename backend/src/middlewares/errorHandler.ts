@@ -11,6 +11,8 @@ export function errorHandler(
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   next: NextFunction
 ) {
+  console.log(error);
+
   let errorMessage: string | string[] = 'An error occured';
   let statusCode = 500;
 

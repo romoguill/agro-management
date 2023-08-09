@@ -9,13 +9,14 @@ const supplierSchema = new mongoose.Schema<Supplier>({
   },
   description: {
     type: String,
-    required: true,
-    minLength: 10,
     maxLength: 50,
   },
   category: {
     type: [
-      { type: String, enum: ['Seeds', 'Fertilizers', 'Herbicides', 'Labor'] },
+      {
+        type: String,
+        enum: ['Seeds', 'Fertilizers', 'Herbicides', 'Pesticides', 'Labor'],
+      },
     ],
     required: true,
   },

@@ -45,7 +45,7 @@ function CreateSupplierForm() {
     defaultValues: {
       name: '',
       description: '',
-      category: undefined,
+      category: [],
       phone: '',
       website: '',
       avatarUrl: '',
@@ -56,9 +56,14 @@ function CreateSupplierForm() {
 
   const onSubmit = async (values: createSupplierFormSchema) => {
     try {
-      const response = await axios.post('/suppliers', values, {
-        headers: { Authorization: `Bearer ${auth.accessToken}` },
-      });
+      console.log(values);
+      const response = await axios.post(
+        '/api/suppliers',
+        { ...values, status: 'Active' },
+        {
+          headers: { Authorization: `Bearer ${auth.accessToken}` },
+        }
+      );
       console.log(response);
     } catch (error) {
       if (error instanceof AxiosError) {
@@ -136,7 +141,18 @@ function CreateSupplierForm() {
                             className='flex flex-row items-start space-x-3 space-y-0'
                           >
                             <FormControl>
-                              <Checkbox />
+                              <Checkbox
+                                checked={field.value?.includes(item)}
+                                onCheckedChange={(checked) => {
+                                  return checked
+                                    ? field.onChange([...field.value, item])
+                                    : field.onChange(
+                                        field.value?.filter(
+                                          (value) => value !== item
+                                        )
+                                      );
+                                }}
+                              />
                             </FormControl>
                             <FormLabel className='leading-none text-slate-700'>
                               {item}
