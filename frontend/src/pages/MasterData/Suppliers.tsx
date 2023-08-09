@@ -2,27 +2,18 @@ import { MasterDataEntities } from '@/ts/interfaces';
 import BreadCrumb from '../../components/BreadCrumb';
 import TableActions from '../../components/TableData/TableActions';
 import Table, { TableColumn } from '../../components/TableData/TableData';
+import { useQuery } from '@tanstack/react-query';
+import axios from 'axios';
+import useAuthContext from '@/hooks/useAuthContext';
+import { SpinnerCircularFixed } from 'spinners-react';
 
-type Supplier = {
+type SupplierDisplay = {
   name: string;
   description: string;
   isActive: boolean;
 };
 
-const demoSupplier: Supplier[] = [
-  {
-    name: 'YPF',
-    description: 'Fertilizers and herbicides',
-    isActive: true,
-  },
-  {
-    name: 'Monsanto',
-    description: 'Seeds',
-    isActive: false,
-  },
-];
-
-const columns: TableColumn<Supplier>[] = [
+const columns: TableColumn<SupplierDisplay>[] = [
   {
     key: 'name',
     header: 'Name',
@@ -37,7 +28,7 @@ const columns: TableColumn<Supplier>[] = [
     key: 'isActive',
     header: 'Status',
     width: 15,
-    render: (item: Supplier) => (
+    render: (item: SupplierDisplay) => (
       <td className={item.isActive ? 'text-green-500' : 'text-red-500'}>
         {item.isActive ? 'Active' : 'Inactive'}
       </td>
@@ -46,10 +37,19 @@ const columns: TableColumn<Supplier>[] = [
 ];
 
 function Suppliers() {
-  function toggleStatus() {
-    // TODO
-    return;
-  }
+  const { auth } = useAuthContext();
+
+  const getSuppliers = async () => {
+    const response = await axios.get('/api/suppliers', {
+      headers: { Authorization: `Bearer ${auth.accessToken}` },
+    });
+    return response.data;
+  };
+
+  const { data, error, isLoading } = useQuery({
+    queryKey: ['suppliers'],
+    queryFn: getSuppliers,
+  });
 
   return (
     <div>
@@ -61,12 +61,32 @@ function Suppliers() {
 
       <TableActions addEntity={MasterDataEntities.SUPPLIERS} />
 
-      <Table<Supplier>
-        data={demoSupplier}
-        columns={columns}
-        className='table-master-data text-left rounded-xl mt-4 overflow-hidden'
-        isCheckable={true}
-      />
+      {isLoading && (
+        <SpinnerCircularFixed
+          size={30}
+          thickness={200}
+          style={{
+            color: '#d1d5db',
+            display: 'block',
+            margin: '2rem auto',
+          }}
+        />
+      )}
+
+      {error && (
+        <p className='font-semibold text-slate-700 text-center my-2'>
+          Oops! There was an error while getting data
+        </p>
+      )}
+
+      {data && (
+        <Table<SupplierDisplay>
+          data={data}
+          columns={columns}
+          className='text-left rounded-xl mt-4 overflow-hidden'
+          isCheckable={true}
+        />
+      )}
     </div>
   );
 }
