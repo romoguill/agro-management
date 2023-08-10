@@ -21,7 +21,6 @@ function CreateEntity() {
     if (!entityParam) return;
 
     setSelectedEntity(entityParam);
-    console.log(entityParam);
   }, [searchParams]);
 
   return (

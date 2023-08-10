@@ -18,6 +18,7 @@ import { SpinnerCircularFixed } from 'spinners-react';
 import { z } from 'zod';
 import { Checkbox } from '../ui/checkbox';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { toast } from 'react-toastify';
 
 const createSupplierFormSchema = z.object({
   name: z
@@ -43,6 +44,32 @@ function CreateSupplierForm() {
   const { auth } = useAuthContext();
   const queryClient = useQueryClient();
 
+  const form = useForm<createSupplierFormSchema>({
+    resolver: zodResolver(createSupplierFormSchema),
+    defaultValues: {
+      name: '',
+      description: '',
+      category: [],
+      phone: '',
+      website: '',
+      avatarUrl: '',
+      cuit: '',
+    },
+    mode: 'onBlur',
+  });
+
+  const notifySupplierCreated = () =>
+    toast.success('Supplier created!', {
+      position: 'top-right',
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: 'light',
+    });
+
   const addSupplier = async (values: createSupplierFormSchema) => {
     const response = await axios.post(
       '/api/suppliers',
@@ -59,27 +86,13 @@ function CreateSupplierForm() {
     mutationFn: addSupplier,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['suppliers'] });
-    },
-  });
 
-  const form = useForm<createSupplierFormSchema>({
-    resolver: zodResolver(createSupplierFormSchema),
-    defaultValues: {
-      name: '',
-      description: '',
-      category: [],
-      phone: '',
-      website: '',
-      avatarUrl: '',
-      cuit: '',
-    },
-    mode: 'onBlur',
-  });
+      notifySupplierCreated();
 
-  const onSubmit = async (values: createSupplierFormSchema) => {
-    try {
-      mutation.mutate(values);
-    } catch (error) {
+      form.reset();
+      window.scrollTo({ top: 0 });
+    },
+    onError: (error) => {
       if (error instanceof AxiosError) {
         form.setError('root', {
           type: String(error.response?.status),
@@ -88,7 +101,11 @@ function CreateSupplierForm() {
             'There was a problem, try again later',
         });
       }
-    }
+    },
+  });
+
+  const onSubmit = async (values: createSupplierFormSchema) => {
+    mutation.mutate(values);
   };
 
   const submitErrorMessage = form.formState.errors.root && (
