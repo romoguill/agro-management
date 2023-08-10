@@ -20,3 +20,14 @@ export enum SupplierCategories {
   PETICIDES = 'Pesticides',
   LABOR = 'Labor',
 }
+
+export type Supplier = {
+  avatarUrl: string;
+  category: SupplierCategories[];
+  cuit: string;
+  description: string;
+  name: string;
+  phone: string;
+  status: 'Active' | 'Inactive';
+  website: string;
+};

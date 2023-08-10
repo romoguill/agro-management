@@ -1,20 +1,19 @@
-import { MasterDataEntities } from '@/ts/interfaces';
+import useAuthContext from '@/hooks/useAuthContext';
+import { MasterDataEntities, Supplier } from '@/ts/interfaces';
+import { useQuery } from '@tanstack/react-query';
+import axios, { AxiosError } from 'axios';
+import { SpinnerCircularFixed } from 'spinners-react';
 import BreadCrumb from '../../components/BreadCrumb';
 import TableActions from '../../components/TableData/TableActions';
 import Table, { TableColumn } from '../../components/TableData/TableData';
-import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
-import useAuthContext from '@/hooks/useAuthContext';
-import { SpinnerCircularFixed } from 'spinners-react';
-import { toast } from 'react-toastify';
 
 type SupplierDisplay = {
   name: string;
   description: string;
-  isActive: boolean;
+  status: 'Active' | 'Inactive';
 };
 
-const columns: TableColumn<SupplierDisplay>[] = [
+const columns: TableColumn<Supplier>[] = [
   {
     key: 'name',
     header: 'Name',
@@ -26,12 +25,12 @@ const columns: TableColumn<SupplierDisplay>[] = [
     width: 60,
   },
   {
-    key: 'isActive',
+    key: 'status',
     header: 'Status',
     width: 15,
-    render: (item: SupplierDisplay) => (
-      <td className={item.isActive ? 'text-green-500' : 'text-red-500'}>
-        {item.isActive ? 'Active' : 'Inactive'}
+    render: (item: Supplier) => (
+      <td className={item.status ? 'text-green-500' : 'text-red-500'}>
+        {item.status ? 'Active' : 'Inactive'}
       </td>
     ),
   },
@@ -47,7 +46,7 @@ function Suppliers() {
     return response.data;
   };
 
-  const { data, error, isLoading } = useQuery({
+  const { data, error, isLoading } = useQuery<Supplier[], AxiosError>({
     queryKey: ['suppliers'],
     queryFn: getSuppliers,
   });
@@ -81,7 +80,7 @@ function Suppliers() {
       )}
 
       {data && (
-        <Table<SupplierDisplay>
+        <Table<Supplier>
           data={data}
           columns={columns}
           className='text-left rounded-xl mt-4 overflow-hidden'
