@@ -17,6 +17,7 @@ import { useForm } from 'react-hook-form';
 import { SpinnerCircularFixed } from 'spinners-react';
 import { z } from 'zod';
 import { Checkbox } from '../ui/checkbox';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 const createSupplierFormSchema = z.object({
   name: z
@@ -40,6 +41,27 @@ type createSupplierFormSchema = z.infer<typeof createSupplierFormSchema>;
 
 function CreateSupplierForm() {
   const { auth } = useAuthContext();
+  const queryClient = useQueryClient();
+
+  const addSupplier = async (values: createSupplierFormSchema) => {
+    const response = await axios.post(
+      '/api/suppliers',
+      { ...values, status: 'Active' },
+      {
+        headers: { Authorization: `Bearer ${auth.accessToken}` },
+      }
+    );
+
+    return response.data;
+  };
+
+  const mutation = useMutation({
+    mutationFn: addSupplier,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['suppliers'] });
+    },
+  });
+
   const form = useForm<createSupplierFormSchema>({
     resolver: zodResolver(createSupplierFormSchema),
     defaultValues: {
@@ -56,15 +78,7 @@ function CreateSupplierForm() {
 
   const onSubmit = async (values: createSupplierFormSchema) => {
     try {
-      console.log(values);
-      const response = await axios.post(
-        '/api/suppliers',
-        { ...values, status: 'Active' },
-        {
-          headers: { Authorization: `Bearer ${auth.accessToken}` },
-        }
-      );
-      console.log(response);
+      mutation.mutate(values);
     } catch (error) {
       if (error instanceof AxiosError) {
         form.setError('root', {
