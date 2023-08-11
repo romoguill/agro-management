@@ -31,3 +31,7 @@ export type Supplier = {
   status: 'Active' | 'Inactive';
   website: string;
 };
+
+export type SupplierWithId = Supplier & {
+  _id: string;
+};

@@ -3,6 +3,7 @@ import TableHeader from './TableHeader';
 import TableRows from './TableRows';
 
 export type DataItem = {
+  _id: string;
   [key: string]: React.ReactNode;
 };
 

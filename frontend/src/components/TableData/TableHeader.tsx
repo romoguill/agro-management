@@ -21,7 +21,11 @@ function TableHeader<T extends DataItem>({
 
   const headers = columns.map((column) => {
     return (
-      <th className='py-3 px-1' style={{ width: `${column.width}%` }}>
+      <th
+        key={column.header}
+        className='py-3 px-1'
+        style={{ width: `${column.width}%` }}
+      >
         {column.header}
       </th>
     );

@@ -1,5 +1,5 @@
 import useAuthContext from '@/hooks/useAuthContext';
-import { MasterDataEntities, Supplier } from '@/ts/interfaces';
+import { MasterDataEntities, Supplier, SupplierWithId } from '@/ts/interfaces';
 import { useQuery } from '@tanstack/react-query';
 import axios, { AxiosError } from 'axios';
 import { SpinnerCircularFixed } from 'spinners-react';
@@ -7,13 +7,7 @@ import BreadCrumb from '../../components/BreadCrumb';
 import TableActions from '../../components/TableData/TableActions';
 import Table, { TableColumn } from '../../components/TableData/TableData';
 
-type SupplierDisplay = {
-  name: string;
-  description: string;
-  status: 'Active' | 'Inactive';
-};
-
-const columns: TableColumn<Supplier>[] = [
+const columns: TableColumn<SupplierWithId>[] = [
   {
     key: 'name',
     header: 'Name',
@@ -28,8 +22,11 @@ const columns: TableColumn<Supplier>[] = [
     key: 'status',
     header: 'Status',
     width: 15,
-    render: (item: Supplier) => (
-      <td className={item.status ? 'text-green-500' : 'text-red-500'}>
+    render: (item: SupplierWithId) => (
+      <td
+        key={'status'}
+        className={item.status ? 'text-green-500' : 'text-red-500'}
+      >
         {item.status ? 'Active' : 'Inactive'}
       </td>
     ),
@@ -46,10 +43,12 @@ function Suppliers() {
     return response.data;
   };
 
-  const { data, error, isLoading } = useQuery<Supplier[], AxiosError>({
+  const { data, error, isLoading } = useQuery<SupplierWithId[], AxiosError>({
     queryKey: ['suppliers'],
     queryFn: getSuppliers,
   });
+
+  console.log(data);
 
   return (
     <div>
@@ -80,7 +79,7 @@ function Suppliers() {
       )}
 
       {data && (
-        <Table<Supplier>
+        <Table<SupplierWithId>
           data={data}
           columns={columns}
           className='text-left rounded-xl mt-4 overflow-hidden'

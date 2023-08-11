@@ -23,14 +23,18 @@ function TableRows<T extends DataItem>({
 
   const rows = data.map((row) => {
     return (
-      <tr className='border-t border-gray-200 hover:bg-gray-50'>
+      <tr key={row._id} className='border-t border-gray-200 hover:bg-gray-50'>
         {rowCheck}
         {columns.map((column) => {
           if (column.render) {
             return column.render(row);
           }
 
-          return <td className='py-2 px-1'>{row[column.key]}</td>;
+          return (
+            <td key={column.header} className='py-2 px-1'>
+              {row[column.key]}
+            </td>
+          );
         })}
       </tr>
     );
