@@ -43,7 +43,10 @@ function Suppliers() {
     return response.data;
   };
 
-  const { data, error, isLoading } = useQuery<SupplierWithId[], AxiosError>({
+  const { data, error, isLoading, isError } = useQuery<
+    SupplierWithId[],
+    AxiosError
+  >({
     queryKey: ['suppliers'],
     queryFn: getSuppliers,
   });
@@ -72,13 +75,13 @@ function Suppliers() {
         />
       )}
 
-      {error && (
+      {isError && (
         <p className='font-semibold text-slate-700 text-center my-2'>
           Oops! There was an error while getting data
         </p>
       )}
 
-      {data && (
+      {!isError && data && (
         <Table<SupplierWithId>
           data={data}
           columns={columns}

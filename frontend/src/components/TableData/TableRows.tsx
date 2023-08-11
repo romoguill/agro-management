@@ -32,7 +32,7 @@ function TableRows<T extends DataItem>({
     return (
       <tr
         key={row._id}
-        className='border-t border-gray-200 hover:bg-gray-50'
+        className='border-t border-gray-200 hover:bg-gray-50 cursor-pointer'
         onClick={() => handleRowSelect(row._id)}
       >
         {rowCheck}
