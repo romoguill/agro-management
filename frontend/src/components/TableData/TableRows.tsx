@@ -1,3 +1,4 @@
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { DataItem, TableColumn } from './TableData';
 
 interface TableRowsProps<T extends DataItem> {
@@ -11,6 +12,12 @@ function TableRows<T extends DataItem>({
   columns,
   isCheckable = true,
 }: TableRowsProps<T>) {
+  const navigate = useNavigate();
+
+  const handleRowSelect = (id: string) => {
+    navigate(`./${id}`, { relative: 'path' });
+  };
+
   let rowCheck: JSX.Element | null = null;
 
   if (isCheckable) {
@@ -23,7 +30,11 @@ function TableRows<T extends DataItem>({
 
   const rows = data.map((row) => {
     return (
-      <tr key={row._id} className='border-t border-gray-200 hover:bg-gray-50'>
+      <tr
+        key={row._id}
+        className='border-t border-gray-200 hover:bg-gray-50'
+        onClick={() => handleRowSelect(row._id)}
+      >
         {rowCheck}
         {columns.map((column) => {
           if (column.render) {
