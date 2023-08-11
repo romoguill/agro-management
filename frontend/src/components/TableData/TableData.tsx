@@ -1,3 +1,4 @@
+import { cn } from '@/lib/utils';
 import TableHeader from './TableHeader';
 import TableRows from './TableRows';
 
@@ -27,7 +28,7 @@ function Table<T extends DataItem>({
   isCheckable = true,
 }: TableProps<T>) {
   return (
-    <table className={`table ${className}`}>
+    <table className={cn('text-left', className)}>
       <TableHeader<T> columns={columns} isCheckable={isCheckable} />
       <TableRows<T> data={data} columns={columns} isCheckable={isCheckable} />
     </table>
