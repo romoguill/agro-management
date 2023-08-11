@@ -13,19 +13,23 @@ function TableHeader<T extends DataItem>({
 
   if (isCheckable) {
     checkableHeader = (
-      <th className='w-10'>
+      <th className='w-10 py-3 px-1'>
         <input type='checkbox' />
       </th>
     );
   }
 
   const headers = columns.map((column) => {
-    return <th style={{ width: `${column.width}%` }}>{column.header}</th>;
+    return (
+      <th className='py-3 px-1' style={{ width: `${column.width}%` }}>
+        {column.header}
+      </th>
+    );
   });
 
   return (
     <thead>
-      <tr>
+      <tr className='shadow-md shadow-slate-200/70 '>
         {checkableHeader}
         {headers}
       </tr>

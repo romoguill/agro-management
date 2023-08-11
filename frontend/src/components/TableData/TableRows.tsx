@@ -30,7 +30,7 @@ function TableRows<T extends DataItem>({
             return column.render(row);
           }
 
-          return <td>{row[column.key]}</td>;
+          return <td className='py-2 px-1'>{row[column.key]}</td>;
         })}
       </tr>
     );
