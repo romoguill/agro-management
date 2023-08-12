@@ -20,7 +20,7 @@ import { Checkbox } from '../ui/checkbox';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
 
-const createSupplierFormSchema = z.object({
+export const createSupplierFormSchema = z.object({
   name: z
     .string({ required_error: 'Name is required' })
     .min(1, 'Name is required'),
@@ -38,7 +38,7 @@ const createSupplierFormSchema = z.object({
     .length(10, 'CUIT is invalid (10 numbers, no space)'),
 });
 
-type createSupplierFormSchema = z.infer<typeof createSupplierFormSchema>;
+export type createSupplierFormSchema = z.infer<typeof createSupplierFormSchema>;
 
 function CreateSupplierForm() {
   const { auth } = useAuthContext();
@@ -257,7 +257,7 @@ function CreateSupplierForm() {
 
         {submitErrorMessage}
 
-        <Button type='submit' className='w-full mt-auto'>
+        <Button type='submit' className='w-full mt-4'>
           {form.formState.isSubmitting ? (
             <SpinnerCircularFixed
               size={20}

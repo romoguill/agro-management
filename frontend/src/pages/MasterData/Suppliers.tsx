@@ -51,8 +51,6 @@ function Suppliers() {
     queryFn: getSuppliers,
   });
 
-  console.log(data);
-
   return (
     <div>
       <BreadCrumb
@@ -92,4 +90,5 @@ function Suppliers() {
     </div>
   );
 }
+
 export default Suppliers;

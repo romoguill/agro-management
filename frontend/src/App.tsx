@@ -4,22 +4,24 @@ import {
   createBrowserRouter,
   createRoutesFromElements,
 } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { AuthContextProvider } from './contexts/AuthContext';
+import AuthGuard from './guards/AuthGuard';
 import MainLayout from './layouts/MainLayout';
 import Dashboard from './pages/Dashboard';
 import Home from './pages/Home';
 import Invoices from './pages/Invoices';
-import Auth from './pages/UserCredentials/Authenticate';
-import MasterData from './pages/MasterData/MasterData';
-import Suppliers from './pages/MasterData/Suppliers';
-import Products from './pages/MasterData/Products';
+import Agriculture from './pages/MasterData/Agriculture';
+import CreateEntity from './pages/MasterData/CreateEntity';
 import Currencies from './pages/MasterData/Currencies';
 import FarmPlots from './pages/MasterData/FarmPlots';
-import Agriculture from './pages/MasterData/Agriculture';
-import { AuthContextProvider } from './contexts/AuthContext';
-import AuthGuard from './guards/AuthGuard';
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import CreateEntity from './pages/MasterData/CreateEntity';
+import MasterData from './pages/MasterData/MasterData';
+import Products from './pages/MasterData/Products';
+import EditEntity from './pages/MasterData/SupplierDetail';
+import Suppliers from './pages/MasterData/Suppliers';
+import Auth from './pages/UserCredentials/Authenticate';
+import SupplierDetail from './pages/MasterData/SupplierDetail';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -29,16 +31,25 @@ const router = createBrowserRouter(
       <Route element={<AuthGuard />}>
         <Route path='/' element={<MainLayout />}>
           <Route index element={<Home />} />
+
           <Route path='dashboard' element={<Dashboard />} />
+
           <Route path='invoices' element={<Invoices />} />
+
           <Route path='master-data'>
             <Route index element={<MasterData />} />
-            <Route path='suppliers' element={<Suppliers />} />
+
+            <Route path='suppliers'>
+              <Route index element={<Suppliers />} />
+              <Route path=':_id' element={<SupplierDetail />} />
+            </Route>
+
             <Route path='products' element={<Products />} />
             <Route path='currencies' element={<Currencies />} />
             <Route path='plots' element={<FarmPlots />} />
             <Route path='crops' element={<Agriculture />} />
             <Route path='new' element={<CreateEntity />} />
+            <Route path='edit' element={<EditEntity />} />
           </Route>
         </Route>
       </Route>
