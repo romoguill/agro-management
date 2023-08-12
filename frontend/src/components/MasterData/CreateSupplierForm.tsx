@@ -9,22 +9,32 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem,
+} from '@/components/ui/select';
 import useAuthContext from '@/hooks/useAuthContext';
-import { SupplierCategories } from '@/ts/interfaces';
+import { EntityStatus, SupplierCategories } from '@/ts/interfaces';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import axios, { AxiosError } from 'axios';
 import { useForm } from 'react-hook-form';
+import { toast } from 'react-toastify';
 import { SpinnerCircularFixed } from 'spinners-react';
 import { z } from 'zod';
 import { Checkbox } from '../ui/checkbox';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { toast } from 'react-toastify';
 
 export const createSupplierFormSchema = z.object({
   name: z
     .string({ required_error: 'Name is required' })
     .min(1, 'Name is required'),
   description: z.string().optional(),
+  status: z.nativeEnum(EntityStatus, {
+    required_error: 'Status is required',
+  }),
   category: z.array(z.nativeEnum(SupplierCategories), {
     required_error: 'Category must be an array',
   }),
@@ -49,6 +59,7 @@ function CreateSupplierForm() {
     defaultValues: {
       name: '',
       description: '',
+      status: EntityStatus.ACTIVE,
       category: [],
       phone: '',
       website: '',
@@ -71,13 +82,9 @@ function CreateSupplierForm() {
     });
 
   const addSupplier = async (values: createSupplierFormSchema) => {
-    const response = await axios.post(
-      '/api/suppliers',
-      { ...values, status: 'Active' },
-      {
-        headers: { Authorization: `Bearer ${auth.accessToken}` },
-      }
-    );
+    const response = await axios.post('/api/suppliers', values, {
+      headers: { Authorization: `Bearer ${auth.accessToken}` },
+    });
 
     return response.data;
   };
@@ -129,6 +136,29 @@ function CreateSupplierForm() {
               <FormControl>
                 <Input placeholder='Name' {...field} />
               </FormControl>
+              <FormMessage className='text-xs text-right pr-1' />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name='status'
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Status</FormLabel>
+              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder='Select status' />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  {Object.values(EntityStatus).map((status) => (
+                    <SelectItem value={status}>{status}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
               <FormMessage className='text-xs text-right pr-1' />
             </FormItem>
           )}

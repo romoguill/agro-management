@@ -13,6 +13,11 @@ export enum MasterDataEntities {
   AGRICULTIRE = 'Agriculture',
 }
 
+export enum EntityStatus {
+  ACTIVE = 'Active',
+  INACTIVE = 'Inactive',
+}
+
 export enum SupplierCategories {
   SEEDS = 'Seeds',
   FERTILIZERS = 'Fertilizers',
