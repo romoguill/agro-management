@@ -5,7 +5,7 @@ export const Supplier = z.object({
   name: z.string({ required_error: 'Name is required' }),
   description: z.string().optional(),
   category: z.array(
-    z.enum(['Seeds', 'Fertilizers', 'Herbicides', 'Labor'], {}),
+    z.enum(['Seeds', 'Fertilizers', 'Herbicides', 'Labor', 'Pesticides'], {}),
     { required_error: 'Category must be an array' }
   ),
   status: z.enum(['Active', 'Inactive']),

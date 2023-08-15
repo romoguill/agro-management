@@ -22,7 +22,7 @@ export enum SupplierCategories {
   SEEDS = 'Seeds',
   FERTILIZERS = 'Fertilizers',
   HERBICIDES = 'Herbicides',
-  PETICIDES = 'Pesticides',
+  PESTICIDES = 'Pesticides',
   LABOR = 'Labor',
 }
 

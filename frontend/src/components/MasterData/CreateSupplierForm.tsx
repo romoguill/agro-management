@@ -155,7 +155,9 @@ function CreateSupplierForm() {
                 </FormControl>
                 <SelectContent>
                   {Object.values(EntityStatus).map((status) => (
-                    <SelectItem value={status}>{status}</SelectItem>
+                    <SelectItem key={status} value={status}>
+                      {status}
+                    </SelectItem>
                   ))}
                 </SelectContent>
               </Select>

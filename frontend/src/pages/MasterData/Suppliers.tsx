@@ -1,5 +1,5 @@
 import useAuthContext from '@/hooks/useAuthContext';
-import { MasterDataEntities, Supplier, SupplierWithId } from '@/ts/interfaces';
+import { MasterDataEntities, SupplierWithId } from '@/ts/interfaces';
 import { useQuery } from '@tanstack/react-query';
 import axios, { AxiosError } from 'axios';
 import { SpinnerCircularFixed } from 'spinners-react';
@@ -25,9 +25,9 @@ const columns: TableColumn<SupplierWithId>[] = [
     render: (item: SupplierWithId) => (
       <td
         key={'status'}
-        className={item.status ? 'text-green-500' : 'text-red-500'}
+        className={item.status === 'Active' ? 'text-green-500' : 'text-red-500'}
       >
-        {item.status ? 'Active' : 'Inactive'}
+        {item.status}
       </td>
     ),
   },
@@ -43,10 +43,7 @@ function Suppliers() {
     return response.data;
   };
 
-  const { data, error, isLoading, isError } = useQuery<
-    SupplierWithId[],
-    AxiosError
-  >({
+  const { data, isLoading, isError } = useQuery<SupplierWithId[], AxiosError>({
     queryKey: ['suppliers'],
     queryFn: getSuppliers,
   });
