@@ -1,5 +1,6 @@
 import BreadCrumb from '@/components/BreadCrumb';
-import CreateSupplierForm from '@/components/MasterData/CreateSupplierForm';
+import SupplierForm from '@/components/MasterData/SupplierForm';
+import CreateSupplierForm from '@/components/MasterData/SupplierForm';
 import useAuthContext from '@/hooks/useAuthContext';
 import { SupplierWithId } from '@/ts/interfaces';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
@@ -61,7 +62,7 @@ function SupplierDetail() {
           </p>
         )}
 
-        {!isError && data && <CreateSupplierForm data={data} />}
+        {!isError && data && <SupplierForm data={data} />}
       </section>
     </div>
   );

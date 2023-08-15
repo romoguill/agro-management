@@ -26,6 +26,7 @@ import { toast } from 'react-toastify';
 import { SpinnerCircularFixed } from 'spinners-react';
 import { z } from 'zod';
 import { Checkbox } from '../ui/checkbox';
+import { useParams } from 'react-router-dom';
 
 export const createSupplierFormSchema = z.object({
   name: z
@@ -50,8 +51,14 @@ export const createSupplierFormSchema = z.object({
 
 export type createSupplierFormSchema = z.infer<typeof createSupplierFormSchema>;
 
-function CreateSupplierForm() {
+type SupplierFormProps = {
+  mode: 'update' | 'create';
+};
+
+function SupplierForm({ mode }: SupplierFormProps) {
   const { auth } = useAuthContext();
+  const { id } = useParams();
+
   const queryClient = useQueryClient();
 
   const form = useForm<createSupplierFormSchema>({
@@ -69,8 +76,8 @@ function CreateSupplierForm() {
     mode: 'onBlur',
   });
 
-  const notifySupplierCreated = () =>
-    toast.success('Supplier created!', {
+  const notifySuccess = (msg: string) =>
+    toast.success(msg, {
       position: 'top-right',
       autoClose: 5000,
       hideProgressBar: false,
@@ -89,30 +96,52 @@ function CreateSupplierForm() {
     return response.data;
   };
 
-  const mutation = useMutation({
+  const updateSupplier = async (values: createSupplierFormSchema) => {
+    const response = await axios.patch(`/api/suppliers/${id}`, values, {
+      headers: { Authorization: `Bearer ${auth.accessToken}` },
+    });
+
+    return response.data;
+  };
+
+  const errorHandler = (error: unknown) => {
+    if (error instanceof AxiosError) {
+      form.setError('root', {
+        type: String(error.response?.status),
+        message:
+          error.response?.data.error ?? 'There was a problem, try again later',
+      });
+    }
+  };
+
+  const createMutation = useMutation({
     mutationFn: addSupplier,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['suppliers'] });
 
-      notifySupplierCreated();
+      notifySuccess('Supplier created!');
 
       form.reset();
       window.scrollTo({ top: 0 });
     },
-    onError: (error) => {
-      if (error instanceof AxiosError) {
-        form.setError('root', {
-          type: String(error.response?.status),
-          message:
-            error.response?.data.error ??
-            'There was a problem, try again later',
-        });
-      }
+    onError: errorHandler,
+  });
+
+  const updateMutation = useMutation({
+    mutationFn: updateSupplier,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['suppliers'] });
+
+      notifySuccess('Supplier updated!');
+
+      window.scrollTo({ top: 0 });
     },
+    onError: errorHandler,
   });
 
   const onSubmit = async (values: createSupplierFormSchema) => {
-    mutation.mutate(values);
+    if (mode === 'create') createMutation.mutate(values);
+    if (mode === 'update') updateMutation.mutate(values);
   };
 
   const submitErrorMessage = form.formState.errors.root && (
@@ -309,4 +338,4 @@ function CreateSupplierForm() {
   );
 }
 
-export default CreateSupplierForm;
+export default SupplierForm;

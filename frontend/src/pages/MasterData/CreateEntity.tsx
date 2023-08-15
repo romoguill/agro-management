@@ -1,5 +1,5 @@
 import BreadCrumb from '@/components/BreadCrumb';
-import CreateSupplierForm from '@/components/MasterData/CreateSupplierForm';
+import CreateSupplierForm from '@/components/MasterData/SupplierForm';
 import {
   Select,
   SelectContent,
