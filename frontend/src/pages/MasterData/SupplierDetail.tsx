@@ -62,7 +62,7 @@ function SupplierDetail() {
           </p>
         )}
 
-        {!isError && data && <SupplierForm data={data} />}
+        {!isError && data && <SupplierForm mode='view' data={data} />}
       </section>
     </div>
   );

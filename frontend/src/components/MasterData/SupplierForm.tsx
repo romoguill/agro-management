@@ -17,7 +17,7 @@ import {
   SelectItem,
 } from '@/components/ui/select';
 import useAuthContext from '@/hooks/useAuthContext';
-import { EntityStatus, SupplierCategories } from '@/ts/interfaces';
+import { EntityStatus, Supplier, SupplierCategories } from '@/ts/interfaces';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import axios, { AxiosError } from 'axios';
@@ -52,10 +52,11 @@ export const createSupplierFormSchema = z.object({
 export type createSupplierFormSchema = z.infer<typeof createSupplierFormSchema>;
 
 type SupplierFormProps = {
-  mode: 'update' | 'create';
+  mode: 'update' | 'create' | 'view';
+  data?: Supplier;
 };
 
-function SupplierForm({ mode }: SupplierFormProps) {
+function SupplierForm({ mode, data }: SupplierFormProps) {
   const { auth } = useAuthContext();
   const { id } = useParams();
 
@@ -63,7 +64,7 @@ function SupplierForm({ mode }: SupplierFormProps) {
 
   const form = useForm<createSupplierFormSchema>({
     resolver: zodResolver(createSupplierFormSchema),
-    defaultValues: {
+    defaultValues: data ?? {
       name: '',
       description: '',
       status: EntityStatus.ACTIVE,
@@ -163,7 +164,11 @@ function SupplierForm({ mode }: SupplierFormProps) {
             <FormItem>
               <FormLabel>Name</FormLabel>
               <FormControl>
-                <Input placeholder='Name' {...field} />
+                <Input
+                  placeholder='Name'
+                  {...field}
+                  disabled={mode === 'view'}
+                />
               </FormControl>
               <FormMessage className='text-xs text-right pr-1' />
             </FormItem>
@@ -176,7 +181,11 @@ function SupplierForm({ mode }: SupplierFormProps) {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Status</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
+              <Select
+                onValueChange={field.onChange}
+                defaultValue={field.value}
+                disabled={mode === 'view'}
+              >
                 <FormControl>
                   <SelectTrigger>
                     <SelectValue placeholder='Select status' />
@@ -202,7 +211,11 @@ function SupplierForm({ mode }: SupplierFormProps) {
             <FormItem>
               <FormLabel>Description</FormLabel>
               <FormControl>
-                <Input placeholder='Description' {...field} />
+                <Input
+                  placeholder='Description'
+                  {...field}
+                  disabled={mode === 'view'}
+                />
               </FormControl>
               <FormMessage className='text-xs text-right pr-1' />
             </FormItem>
@@ -234,6 +247,7 @@ function SupplierForm({ mode }: SupplierFormProps) {
                           >
                             <FormControl>
                               <Checkbox
+                                disabled={mode === 'view'}
                                 checked={field.value?.includes(item)}
                                 onCheckedChange={(checked) => {
                                   return checked
@@ -267,7 +281,11 @@ function SupplierForm({ mode }: SupplierFormProps) {
             <FormItem>
               <FormLabel>Phone</FormLabel>
               <FormControl>
-                <Input placeholder='Phone' {...field} />
+                <Input
+                  placeholder='Phone'
+                  {...field}
+                  disabled={mode === 'view'}
+                />
               </FormControl>
               <FormMessage className='text-xs text-right pr-1' />
             </FormItem>
@@ -281,7 +299,11 @@ function SupplierForm({ mode }: SupplierFormProps) {
             <FormItem>
               <FormLabel>Website</FormLabel>
               <FormControl>
-                <Input placeholder='Website' {...field} />
+                <Input
+                  placeholder='Website'
+                  {...field}
+                  disabled={mode === 'view'}
+                />
               </FormControl>
               <FormMessage className='text-xs text-right pr-1' />
             </FormItem>
@@ -295,7 +317,11 @@ function SupplierForm({ mode }: SupplierFormProps) {
             <FormItem>
               <FormLabel>AvatarUrl</FormLabel>
               <FormControl>
-                <Input placeholder='AvatarUrl' {...field} />
+                <Input
+                  placeholder='AvatarUrl'
+                  {...field}
+                  disabled={mode === 'view'}
+                />
               </FormControl>
               <FormMessage className='text-xs text-right pr-1' />
             </FormItem>
@@ -309,7 +335,11 @@ function SupplierForm({ mode }: SupplierFormProps) {
             <FormItem>
               <FormLabel>Cuit</FormLabel>
               <FormControl>
-                <Input placeholder='Cuit' {...field} />
+                <Input
+                  placeholder='Cuit'
+                  {...field}
+                  disabled={mode === 'view'}
+                />
               </FormControl>
               <FormMessage className='text-xs text-right pr-1' />
             </FormItem>
@@ -318,21 +348,23 @@ function SupplierForm({ mode }: SupplierFormProps) {
 
         {submitErrorMessage}
 
-        <Button type='submit' className='w-full mt-4'>
-          {form.formState.isSubmitting ? (
-            <SpinnerCircularFixed
-              size={20}
-              thickness={200}
-              style={{
-                color: '#d1d5db',
-                textAlign: 'center',
-                display: 'inline',
-              }}
-            />
-          ) : (
-            'CREATE'
-          )}
-        </Button>
+        {mode !== 'view' && (
+          <Button type='submit' className='w-full mt-4'>
+            {form.formState.isSubmitting ? (
+              <SpinnerCircularFixed
+                size={20}
+                thickness={200}
+                style={{
+                  color: '#d1d5db',
+                  textAlign: 'center',
+                  display: 'inline',
+                }}
+              />
+            ) : (
+              mode.toUpperCase()
+            )}
+          </Button>
+        )}
       </form>
     </Form>
   );

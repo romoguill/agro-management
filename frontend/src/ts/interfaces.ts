@@ -33,7 +33,7 @@ export type Supplier = {
   description: string;
   name: string;
   phone: string;
-  status: 'Active' | 'Inactive';
+  status: EntityStatus;
   website: string;
 };
 
