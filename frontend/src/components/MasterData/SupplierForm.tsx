@@ -144,6 +144,8 @@ function SupplierForm({ mode, toggleMode, data }: SupplierFormProps) {
 
       notifySuccess('Supplier updated!');
 
+      toggleMode?.();
+
       window.scrollTo({ top: 0 });
     },
     onError: errorHandler,
@@ -240,7 +242,7 @@ function SupplierForm({ mode, toggleMode, data }: SupplierFormProps) {
               <FormDescription className='!mt-0'>
                 Select at least one of the following categories
               </FormDescription>
-              <div className='md:grid grid-cols-2 gap-2'>
+              <div className='flex flex-col md:grid grid-cols-2 gap-2'>
                 {Object.values(SupplierCategories)
                   .sort()
                   .map((item) => (
