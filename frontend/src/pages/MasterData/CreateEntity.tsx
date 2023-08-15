@@ -1,4 +1,5 @@
 import BreadCrumb from '@/components/BreadCrumb';
+import SupplierForm from '@/components/MasterData/SupplierForm';
 import CreateSupplierForm from '@/components/MasterData/SupplierForm';
 import {
   Select,
@@ -53,7 +54,7 @@ function CreateEntity() {
 
       <section className='mt-5'>
         {selectedEntity === MasterDataEntities.SUPPLIERS && (
-          <CreateSupplierForm />
+          <SupplierForm mode='create' />
         )}
       </section>
     </div>

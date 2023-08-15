@@ -51,14 +51,23 @@ export const createSupplierFormSchema = z.object({
 
 export type createSupplierFormSchema = z.infer<typeof createSupplierFormSchema>;
 
-type SupplierFormProps = {
-  mode: 'update' | 'create' | 'view';
-  data?: Supplier;
+type UpdateFormProps = {
+  mode: 'update' | 'view';
+  toggleMode: () => void;
+  data: Supplier;
 };
 
-function SupplierForm({ mode, data }: SupplierFormProps) {
+type CreateFormProps = {
+  mode: 'create';
+  toggleMode?: never;
+  data?: never;
+};
+
+type SupplierFormProps = UpdateFormProps | CreateFormProps;
+
+function SupplierForm({ mode, toggleMode, data }: SupplierFormProps) {
   const { auth } = useAuthContext();
-  const { id } = useParams();
+  const { _id } = useParams();
 
   const queryClient = useQueryClient();
 
@@ -98,7 +107,7 @@ function SupplierForm({ mode, data }: SupplierFormProps) {
   };
 
   const updateSupplier = async (values: createSupplierFormSchema) => {
-    const response = await axios.patch(`/api/suppliers/${id}`, values, {
+    const response = await axios.patch(`/api/suppliers/${_id}`, values, {
       headers: { Authorization: `Bearer ${auth.accessToken}` },
     });
 
