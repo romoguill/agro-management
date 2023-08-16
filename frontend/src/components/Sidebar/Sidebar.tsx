@@ -27,7 +27,7 @@ function Sidebar({ isSidebarVisible, setIsSidebarVisible }: Props) {
   return (
     <aside
       ref={sideBarRef}
-      className={`fixed top-0 left-0 flex flex-col w-[300px] h-screen bg-gray-800 text-white
+      className={`fixed top-0 left-0 z-[9999] flex flex-col w-[300px] h-screen bg-gray-800 text-white
               grow-0 shrink-0 xl:static xl:translate-x-0 transition-transform ease-in-out duration-300 ${
                 isSidebarVisible ? 'translate-x-0' : '-translate-x-full'
               }`}
