@@ -1,9 +1,16 @@
-import { z } from 'zod';
-import { objectIdValidator } from '../utils/idValidator';
 import mongoose from 'mongoose';
+import { z } from 'zod';
+
+export const PRODUCT_CATEGORIES = [
+  'Seeds',
+  'Fertilizers',
+  'Herbicides',
+  'Labor',
+  'Pesticides',
+] as const;
 
 export const ProductCategories = z.array(
-  z.enum(['Seeds', 'Fertilizers', 'Herbicides', 'Labor', 'Pesticides'], {
+  z.enum(PRODUCT_CATEGORIES, {
     invalid_type_error: 'Invalid category',
   }),
   { required_error: 'Category must be an array' }
@@ -16,9 +23,7 @@ export const Product = z.object({
   description: z.string().optional(),
   category: ProductCategories,
   status: z.enum(['Active', 'Inactive']),
-  suppliers: z.string().refine((val) => mongoose.isValidObjectId(val), {
-    message: 'Id is not valid',
-  }),
+  suppliers: z.array(z.instanceof(mongoose.Schema.Types.ObjectId)).nonempty(),
 });
 
 export type Product = z.infer<typeof Product>;
