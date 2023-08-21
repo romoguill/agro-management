@@ -6,6 +6,7 @@ import pinoHttp from 'pino-http';
 import { logger } from './utils/logger';
 
 import supplierRouter from './routes/MasterData/supplier.route';
+import productRouter from './routes/MasterData/product.route';
 import authRouter from './routes/auth.route';
 import userRouter from './routes/user.route';
 
@@ -29,6 +30,7 @@ app.get('/healthcheck', (req: Request, res: Response) => {
 app.use('/api/users', userRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/suppliers', supplierRouter);
+app.use('/api/products', productRouter);
 
 // DEFAULT ROUTE
 app.use((req, res, next) => next(createHttpError(404, 'Endpoint not found')));
