@@ -1,23 +1,23 @@
 import ProductModel from '../../models/MasterData/product.model';
 import { Product } from '../../schemas/product.schema';
 
-export const createSupplier = (newSupplier: Product) => {
-  return ProductModel.create(newSupplier);
+export const createProduct = (newProduct: Product) => {
+  return ProductModel.create(newProduct);
 };
 
-export const getAllSuppliers = () => {
+export const getAllProducts = () => {
   return ProductModel.find({}).lean().exec();
 };
 
-export const getSupplierByName = (name: string) => {
+export const getProductByName = (name: string) => {
   return ProductModel.findOne({ name }).lean().exec();
 };
 
-export const getSupplierById = (id: string) => {
+export const getProductById = (id: string) => {
   return ProductModel.findById(id).lean().exec();
 };
 
-export const updateSupplier = (id: string, fields: Partial<Product>) => {
+export const updateProduct = (id: string, fields: Partial<Product>) => {
   return ProductModel.findByIdAndUpdate(id, fields, {
     returnDocument: 'after',
     runValidators: true,
@@ -26,6 +26,6 @@ export const updateSupplier = (id: string, fields: Partial<Product>) => {
     .exec();
 };
 
-export const deleteSupplier = (id: string) => {
+export const deleteProduct = (id: string) => {
   return ProductModel.findByIdAndRemove(id).lean().exec();
 };
