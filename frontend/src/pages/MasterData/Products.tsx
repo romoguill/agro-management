@@ -1,9 +1,5 @@
 import useAuthContext from '@/hooks/useAuthContext';
-import {
-  MasterDataEntities,
-  ProductWithId,
-  SupplierWithId,
-} from '@/ts/interfaces';
+import { MasterDataEntities, ProductWithId } from '@/ts/interfaces';
 import { useQuery } from '@tanstack/react-query';
 import axios, { AxiosError } from 'axios';
 import { SpinnerCircularFixed } from 'spinners-react';
