@@ -24,7 +24,9 @@ export const Product = z.object({
   description: z.string().optional(),
   category: ProductCategories,
   status: z.enum(['Active', 'Inactive']),
-  suppliers: z.array(z.instanceof(mongoose.Schema.Types.ObjectId)).nonempty(),
+  suppliers: z
+    .array(z.string(), { required_error: 'Supplier array is required' })
+    .nonempty({ message: "Array of suppliers cant't be empty" }),
 });
 
 export type Product = z.infer<typeof Product>;
