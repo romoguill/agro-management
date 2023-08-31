@@ -84,6 +84,12 @@ function Suppliers() {
           isCheckable={true}
         />
       )}
+
+      {!isError && data?.length === 0 && (
+        <p className='font-semibold text-slate-700 text-center my-2'>
+          No items to display. Try adding a new one.
+        </p>
+      )}
     </div>
   );
 }

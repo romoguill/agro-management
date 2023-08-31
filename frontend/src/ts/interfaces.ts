@@ -40,3 +40,15 @@ export type Supplier = {
 export type SupplierWithId = Supplier & {
   _id: string;
 };
+
+export type Product = {
+  name: string;
+  category: SupplierCategories[];
+  description: string;
+  status: EntityStatus;
+  suppliers: string[];
+};
+
+export type ProductWithId = Product & {
+  _id: string;
+};
