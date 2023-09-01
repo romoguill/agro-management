@@ -1,7 +1,5 @@
-import useAuthContext from '@/hooks/useAuthContext';
+import { useProducts } from '@/apis/products.api';
 import { MasterDataEntities, ProductWithId } from '@/ts/interfaces';
-import { useQuery } from '@tanstack/react-query';
-import axios, { AxiosError } from 'axios';
 import { SpinnerCircularFixed } from 'spinners-react';
 import BreadCrumb from '../../components/BreadCrumb';
 import TableActions from '../../components/TableData/TableActions';
@@ -34,19 +32,7 @@ const columns: TableColumn<ProductWithId>[] = [
 ];
 
 function Products() {
-  const { auth } = useAuthContext();
-
-  const getProducts = async () => {
-    const response = await axios.get('/api/products', {
-      headers: { Authorization: `Bearer ${auth.accessToken}` },
-    });
-    return response.data;
-  };
-
-  const { data, isLoading, isError } = useQuery<ProductWithId[], AxiosError>({
-    queryKey: ['products'],
-    queryFn: getProducts,
-  });
+  const { data, isLoading, isError } = useProducts();
 
   return (
     <div>
