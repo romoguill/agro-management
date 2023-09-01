@@ -32,7 +32,9 @@ import { SpinnerCircularFixed } from 'spinners-react';
 import { z } from 'zod';
 import { Checkbox } from '../ui/checkbox';
 import { useParams } from 'react-router-dom';
-import AsyncSelect from 'react-select/async';
+import ReactSelect from 'react-select';
+import { useSuppliers } from '@/apis/suppliers.api';
+import { useMemo } from 'react';
 
 export const createProductFormSchema = z.object({
   name: z
@@ -42,9 +44,11 @@ export const createProductFormSchema = z.object({
   status: z.nativeEnum(EntityStatus, {
     required_error: 'Status is required',
   }),
-  category: z.array(z.nativeEnum(SupplierCategories), {
-    required_error: 'Category must be an array',
-  }),
+  category: z
+    .array(z.nativeEnum(SupplierCategories), {
+      required_error: 'Category must be an array',
+    })
+    .nonempty({ message: "Array of category cant't be empty" }),
   suppliers: z
     .array(z.string(), { required_error: 'Supplier array is required' })
     .nonempty({ message: "Array of suppliers cant't be empty" }),
@@ -72,8 +76,14 @@ function ProductForm({ mode, toggleMode, data }: ProductFormProps) {
 
   const queryClient = useQueryClient();
 
-  const cachedData = queryClient.getQueriesData(['suppliers']);
-  console.log(cachedData);
+  const { data: suppliers, isLoading, isError } = useSuppliers();
+
+  const categoryOptions = useMemo(() => {
+    return suppliers?.map((supplier) => ({
+      value: supplier._id,
+      label: supplier.name,
+    }));
+  }, [suppliers]);
 
   const form = useForm<createProductFormSchema>({
     resolver: zodResolver(createProductFormSchema),
@@ -153,6 +163,7 @@ function ProductForm({ mode, toggleMode, data }: ProductFormProps) {
   });
 
   const onSubmit = async (values: createProductFormSchema) => {
+    console.log(values);
     if (mode === 'create') createMutation.mutate(values);
     if (mode === 'update') updateMutation.mutate(values);
   };
@@ -162,6 +173,8 @@ function ProductForm({ mode, toggleMode, data }: ProductFormProps) {
       {form.formState.errors.root.message}
     </p>
   );
+
+  console.log(form.getValues('suppliers'));
 
   return (
     <Form {...form}>
@@ -289,38 +302,18 @@ function ProductForm({ mode, toggleMode, data }: ProductFormProps) {
         <FormField
           control={form.control}
           name='suppliers'
-          render={() => (
+          render={({ field: { onChange, value } }) => (
             <FormItem>
               <FormLabel>Category</FormLabel>
-              <FormDescription className='!mt-0'>
-                Select at least one of the following categories
-              </FormDescription>
-              <div className='flex flex-col md:grid grid-cols-2 gap-2'>
-                {Object.values(SupplierCategories)
-                  .sort()
-                  .map((item) => (
-                    <FormField
-                      key={item}
-                      control={form.control}
-                      name='category'
-                      render={({ field }) => {
-                        return (
-                          <FormItem
-                            key={item}
-                            className='flex flex-row items-start space-x-3 space-y-0'
-                          >
-                            <FormControl>
-                              <AsyncSelect />
-                            </FormControl>
-                            <FormLabel className='leading-none text-slate-700'>
-                              {item}
-                            </FormLabel>
-                          </FormItem>
-                        );
-                      }}
-                    />
-                  ))}
-              </div>
+              <FormControl>
+                <ReactSelect
+                  isMulti
+                  className=''
+                  options={categoryOptions}
+                  onChange={(val) => onChange(val.map((c) => c.value))}
+                  // value={categoryOptions?.find((c) => c.value === value)}
+                />
+              </FormControl>
               <FormMessage className='text-xs text-right pr-1' />
             </FormItem>
           )}
