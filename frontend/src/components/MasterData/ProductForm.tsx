@@ -35,6 +35,8 @@ import { useParams } from 'react-router-dom';
 import ReactSelect from 'react-select';
 import { useSuppliers } from '@/apis/suppliers.api';
 import { useMemo } from 'react';
+import colors from 'tailwindcss/colors';
+import twConfig from 'tailwindcss/defaultConfig';
 
 export const createProductFormSchema = z.object({
   name: z
@@ -164,8 +166,8 @@ function ProductForm({ mode, toggleMode, data }: ProductFormProps) {
 
   const onSubmit = async (values: createProductFormSchema) => {
     console.log(values);
-    if (mode === 'create') createMutation.mutate(values);
-    if (mode === 'update') updateMutation.mutate(values);
+    // if (mode === 'create') createMutation.mutate(values);
+    // if (mode === 'update') updateMutation.mutate(values);
   };
 
   const submitErrorMessage = form.formState.errors.root && (
@@ -302,7 +304,7 @@ function ProductForm({ mode, toggleMode, data }: ProductFormProps) {
         <FormField
           control={form.control}
           name='suppliers'
-          render={({ field: { onChange, value } }) => (
+          render={({ field: { onChange } }) => (
             <FormItem>
               <FormLabel>Category</FormLabel>
               <FormControl>
@@ -311,7 +313,21 @@ function ProductForm({ mode, toggleMode, data }: ProductFormProps) {
                   className=''
                   options={categoryOptions}
                   onChange={(val) => onChange(val.map((c) => c.value))}
-                  // value={categoryOptions?.find((c) => c.value === value)}
+                  styles={{
+                    control: (baseStyles, state) => ({
+                      ...baseStyles,
+                      '&:hover': { borderColor: 'inherit' },
+                      borderColor: state.isFocused
+                        ? 'border-slate-300'
+                        : 'border-slate-300',
+                      boxShadow: state.isFocused
+                        ? 'border-slate-300'
+                        : 'border-slate-300',
+                    }),
+                  }}
+                  classNames={{
+                    control: (state) => 'multi-select',
+                  }}
                 />
               </FormControl>
               <FormMessage className='text-xs text-right pr-1' />
