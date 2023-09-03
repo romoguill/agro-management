@@ -1,5 +1,6 @@
-import { useSupplier } from '@/apis/suppliers.api';
+import { useProduct } from '@/apis/products.api';
 import BreadCrumb from '@/components/BreadCrumb';
+import ProductForm from '@/components/MasterData/ProductForm';
 import SupplierForm from '@/components/MasterData/SupplierForm';
 import { Button } from '@/components/ui/button';
 import { useCallback, useState } from 'react';
@@ -7,7 +8,7 @@ import { MdModeEditOutline, MdOutlineEditOff } from 'react-icons/md';
 import { useParams } from 'react-router-dom';
 import { SpinnerCircularFixed } from 'spinners-react';
 
-function SupplierDetail() {
+function ProductDetail() {
   const [mode, setMode] = useState<'view' | 'update'>('view');
 
   const toggleMode = useCallback(
@@ -17,7 +18,7 @@ function SupplierDetail() {
 
   const { _id } = useParams();
 
-  const { data, isLoading, isError } = useSupplier(_id);
+  const { data, isLoading, isError } = useProduct(_id);
 
   return (
     <div>
@@ -66,11 +67,11 @@ function SupplierDetail() {
         )}
 
         {!isError && data && (
-          <SupplierForm mode={mode} data={data} toggleMode={toggleMode} />
+          <ProductForm mode={mode} data={data} toggleMode={toggleMode} />
         )}
       </section>
     </div>
   );
 }
 
-export default SupplierDetail;
+export default ProductDetail;

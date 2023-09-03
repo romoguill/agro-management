@@ -22,6 +22,7 @@ import EditEntity from './pages/MasterData/SupplierDetail';
 import Suppliers from './pages/MasterData/Suppliers';
 import Auth from './pages/UserCredentials/Authenticate';
 import SupplierDetail from './pages/MasterData/SupplierDetail';
+import ProductDetail from './pages/MasterData/ProductDetail';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -44,7 +45,11 @@ const router = createBrowserRouter(
               <Route path=':_id' element={<SupplierDetail />} />
             </Route>
 
-            <Route path='products' element={<Products />} />
+            <Route path='products'>
+              <Route index element={<Products />} />
+              <Route path=':_id' element={<ProductDetail />} />
+            </Route>
+
             <Route path='currencies' element={<Currencies />} />
             <Route path='plots' element={<FarmPlots />} />
             <Route path='crops' element={<Agriculture />} />

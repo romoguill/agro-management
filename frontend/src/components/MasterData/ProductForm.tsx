@@ -80,12 +80,19 @@ function ProductForm({ mode, toggleMode, data }: ProductFormProps) {
 
   const { data: suppliers, isLoading, isError } = useSuppliers();
 
-  const categoryOptions = useMemo(() => {
+  const supplierOptions = useMemo(() => {
     return suppliers?.map((supplier) => ({
       value: supplier._id,
       label: supplier.name,
     }));
   }, [suppliers]);
+
+  // Used to create the options object that need react-select to display value prop
+  const parseSuppliersIntoOptions = (suppliersIds: string[]) => {
+    return suppliersIds?.map((id) => {
+      return supplierOptions?.find((option) => option.value === id);
+    });
+  };
 
   const form = useForm<createProductFormSchema>({
     resolver: zodResolver(createProductFormSchema),
@@ -175,8 +182,6 @@ function ProductForm({ mode, toggleMode, data }: ProductFormProps) {
       {form.formState.errors.root.message}
     </p>
   );
-
-  console.log(form.getValues('suppliers'));
 
   return (
     <Form {...form}>
@@ -300,19 +305,22 @@ function ProductForm({ mode, toggleMode, data }: ProductFormProps) {
             </FormItem>
           )}
         />
-
+        {/* () => supplierOptions?.find((c) => c.value === value[0]) */}
         <FormField
           control={form.control}
           name='suppliers'
-          render={({ field: { onChange } }) => (
+          render={({ field: { onChange, value } }) => (
             <FormItem>
-              <FormLabel>Category</FormLabel>
+              <FormLabel>Suppliers</FormLabel>
               <FormControl>
                 <ReactSelect
                   isMulti
-                  className=''
-                  options={categoryOptions}
-                  onChange={(val) => onChange(val.map((c) => c.value))}
+                  isDisabled={mode === 'view'}
+                  options={supplierOptions}
+                  value={parseSuppliersIntoOptions(value)}
+                  onChange={(selectedOptions) =>
+                    onChange(selectedOptions.map((option) => option?.value))
+                  }
                   styles={{
                     control: (baseStyles, state) => ({
                       ...baseStyles,
