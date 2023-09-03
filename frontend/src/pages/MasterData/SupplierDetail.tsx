@@ -1,3 +1,4 @@
+import { useSupplier } from '@/apis/suppliers.api';
 import BreadCrumb from '@/components/BreadCrumb';
 import SupplierForm from '@/components/MasterData/SupplierForm';
 import CreateSupplierForm from '@/components/MasterData/SupplierForm';
@@ -20,30 +21,8 @@ function SupplierDetail() {
   );
 
   const { _id } = useParams();
-  const { auth } = useAuthContext();
 
-  const queryClient = useQueryClient();
-
-  const getSupplierById = async (id: string | undefined) => {
-    const response = await axios.get(`/api/suppliers/${id}`, {
-      headers: { Authorization: `Bearer ${auth.accessToken}` },
-    });
-    return response.data;
-  };
-
-  const { data, error, isLoading, isError } = useQuery<
-    SupplierWithId,
-    AxiosError
-  >({
-    queryKey: ['suppliers', _id],
-    queryFn: () => getSupplierById(_id),
-    initialData: () =>
-      queryClient
-        .getQueryData<SupplierWithId[]>(['suppliers'])
-        ?.find((supplier) => supplier._id === _id),
-    initialDataUpdatedAt: () =>
-      queryClient.getQueryState(['suppliers'])?.dataUpdatedAt,
-  });
+  const { data, isLoading, isError } = useSupplier(_id);
 
   return (
     <div>
