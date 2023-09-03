@@ -1,3 +1,4 @@
+import { createSupplierFormSchema } from '@/components/MasterData/SupplierForm';
 import useAuthContext from '@/hooks/useAuthContext';
 import { SupplierWithId } from '@/ts/interfaces';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
@@ -40,3 +41,26 @@ export function useSupplier(id: string | undefined) {
       queryClient.getQueryState(['suppliers', auth.accessToken])?.dataUpdatedAt,
   });
 }
+
+export const createSupplier = async (
+  values: createSupplierFormSchema,
+  authToken: string
+) => {
+  const response = await axios.post('/api/suppliers', values, {
+    headers: { Authorization: `Bearer ${authToken}` },
+  });
+
+  return response.data;
+};
+
+export const updateSupplier = async (
+  values: createSupplierFormSchema,
+  id: string | undefined,
+  authToken: string
+) => {
+  const response = await axios.patch(`/api/suppliers/${id}`, values, {
+    headers: { Authorization: `Bearer ${authToken}` },
+  });
+
+  return response.data;
+};

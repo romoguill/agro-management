@@ -1,6 +1,7 @@
+import { createProductFormSchema } from '@/components/MasterData/ProductForm';
 import useAuthContext from '@/hooks/useAuthContext';
 import { ProductWithId } from '@/ts/interfaces';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import axios, { AxiosError } from 'axios';
 
 const getProducts = async (authToken: string) => {
@@ -40,3 +41,26 @@ export function useProduct(id: string | undefined) {
       queryClient.getQueryState(['products', auth.accessToken])?.dataUpdatedAt,
   });
 }
+
+export const createProduct = async (
+  values: createProductFormSchema,
+  authToken: string
+) => {
+  const response = await axios.post('/api/products', values, {
+    headers: { Authorization: `Bearer ${authToken}` },
+  });
+
+  return response.data;
+};
+
+export const updateProduct = async (
+  values: createProductFormSchema,
+  id: string | undefined,
+  authToken: string
+) => {
+  const response = await axios.patch(`/api/products/${id}`, values, {
+    headers: { Authorization: `Bearer ${authToken}` },
+  });
+
+  return response.data;
+};

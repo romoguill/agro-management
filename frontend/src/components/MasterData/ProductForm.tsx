@@ -1,3 +1,5 @@
+import { createProduct, updateProduct } from '@/apis/products.api';
+import { useSuppliers } from '@/apis/suppliers.api';
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -11,32 +13,24 @@ import {
 import { Input } from '@/components/ui/input';
 import {
   Select,
-  SelectTrigger,
-  SelectValue,
   SelectContent,
   SelectItem,
+  SelectTrigger,
+  SelectValue,
 } from '@/components/ui/select';
 import useAuthContext from '@/hooks/useAuthContext';
-import {
-  EntityStatus,
-  Product,
-  Supplier,
-  SupplierCategories,
-} from '@/ts/interfaces';
+import { EntityStatus, Product, SupplierCategories } from '@/ts/interfaces';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import axios, { AxiosError } from 'axios';
+import { AxiosError } from 'axios';
+import { useMemo } from 'react';
 import { useForm } from 'react-hook-form';
+import { useParams } from 'react-router-dom';
+import ReactSelect from 'react-select';
 import { toast } from 'react-toastify';
 import { SpinnerCircularFixed } from 'spinners-react';
 import { z } from 'zod';
 import { Checkbox } from '../ui/checkbox';
-import { useParams } from 'react-router-dom';
-import ReactSelect from 'react-select';
-import { useSuppliers } from '@/apis/suppliers.api';
-import { useMemo } from 'react';
-import colors from 'tailwindcss/colors';
-import twConfig from 'tailwindcss/defaultConfig';
 
 export const createProductFormSchema = z.object({
   name: z
@@ -118,22 +112,6 @@ function ProductForm({ mode, toggleMode, data }: ProductFormProps) {
       theme: 'dark',
     });
 
-  const addProduct = async (values: createProductFormSchema) => {
-    const response = await axios.post('/api/products', values, {
-      headers: { Authorization: `Bearer ${auth.accessToken}` },
-    });
-
-    return response.data;
-  };
-
-  const updateProduct = async (values: createProductFormSchema) => {
-    const response = await axios.patch(`/api/products/${_id}`, values, {
-      headers: { Authorization: `Bearer ${auth.accessToken}` },
-    });
-
-    return response.data;
-  };
-
   const errorHandler = (error: unknown) => {
     if (error instanceof AxiosError) {
       form.setError('root', {
@@ -144,8 +122,13 @@ function ProductForm({ mode, toggleMode, data }: ProductFormProps) {
     }
   };
 
-  const createMutation = useMutation({
-    mutationFn: addProduct,
+  const createMutation = useMutation<
+    createProductFormSchema,
+    unknown,
+    createProductFormSchema,
+    unknown
+  >({
+    mutationFn: (values) => createProduct(values, auth.accessToken || ''),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['products'] });
 
@@ -157,8 +140,13 @@ function ProductForm({ mode, toggleMode, data }: ProductFormProps) {
     onError: errorHandler,
   });
 
-  const updateMutation = useMutation({
-    mutationFn: updateProduct,
+  const updateMutation = useMutation<
+    createProductFormSchema,
+    unknown,
+    createProductFormSchema,
+    unknown
+  >({
+    mutationFn: (values) => updateProduct(values, _id, auth.accessToken || ''),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['products'] });
 
@@ -172,9 +160,8 @@ function ProductForm({ mode, toggleMode, data }: ProductFormProps) {
   });
 
   const onSubmit = async (values: createProductFormSchema) => {
-    console.log(values);
-    // if (mode === 'create') createMutation.mutate(values);
-    // if (mode === 'update') updateMutation.mutate(values);
+    if (mode === 'create') createMutation.mutate(values);
+    if (mode === 'update') updateMutation.mutate(values);
   };
 
   const submitErrorMessage = form.formState.errors.root && (

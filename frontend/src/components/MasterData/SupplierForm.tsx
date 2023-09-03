@@ -1,3 +1,4 @@
+import { createSupplier, updateSupplier } from '@/apis/suppliers.api';
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -11,22 +12,22 @@ import {
 import { Input } from '@/components/ui/input';
 import {
   Select,
-  SelectTrigger,
-  SelectValue,
   SelectContent,
   SelectItem,
+  SelectTrigger,
+  SelectValue,
 } from '@/components/ui/select';
 import useAuthContext from '@/hooks/useAuthContext';
 import { EntityStatus, Supplier, SupplierCategories } from '@/ts/interfaces';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import axios, { AxiosError } from 'axios';
+import { AxiosError } from 'axios';
 import { useForm } from 'react-hook-form';
+import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { SpinnerCircularFixed } from 'spinners-react';
 import { z } from 'zod';
 import { Checkbox } from '../ui/checkbox';
-import { useParams } from 'react-router-dom';
 
 export const createSupplierFormSchema = z.object({
   name: z
@@ -98,22 +99,6 @@ function SupplierForm({ mode, toggleMode, data }: SupplierFormProps) {
       theme: 'dark',
     });
 
-  const addSupplier = async (values: createSupplierFormSchema) => {
-    const response = await axios.post('/api/suppliers', values, {
-      headers: { Authorization: `Bearer ${auth.accessToken}` },
-    });
-
-    return response.data;
-  };
-
-  const updateSupplier = async (values: createSupplierFormSchema) => {
-    const response = await axios.patch(`/api/suppliers/${_id}`, values, {
-      headers: { Authorization: `Bearer ${auth.accessToken}` },
-    });
-
-    return response.data;
-  };
-
   const errorHandler = (error: unknown) => {
     if (error instanceof AxiosError) {
       form.setError('root', {
@@ -124,8 +109,13 @@ function SupplierForm({ mode, toggleMode, data }: SupplierFormProps) {
     }
   };
 
-  const createMutation = useMutation({
-    mutationFn: addSupplier,
+  const createMutation = useMutation<
+    createSupplierFormSchema,
+    unknown,
+    createSupplierFormSchema,
+    unknown
+  >({
+    mutationFn: (values) => createSupplier(values, auth.accessToken || ''),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['suppliers'] });
 
@@ -137,8 +127,13 @@ function SupplierForm({ mode, toggleMode, data }: SupplierFormProps) {
     onError: errorHandler,
   });
 
-  const updateMutation = useMutation({
-    mutationFn: updateSupplier,
+  const updateMutation = useMutation<
+    createSupplierFormSchema,
+    unknown,
+    createSupplierFormSchema,
+    unknown
+  >({
+    mutationFn: (values) => updateSupplier(values, _id, auth.accessToken || ''),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['suppliers'] });
 
