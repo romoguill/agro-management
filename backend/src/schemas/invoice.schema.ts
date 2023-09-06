@@ -12,7 +12,7 @@ export const Invoice = z.object({
   dueOnDate: z.date(),
   currency: Currency,
   total: z.number(),
-  products: z.array(z.custom<mongoose.Types.ObjectId>()).nonempty(),
+  detail: z.array(z.custom<mongoose.Schema>()).nonempty(),
 });
 
 export type Invoice = z.infer<typeof Invoice>;

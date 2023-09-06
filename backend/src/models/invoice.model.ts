@@ -1,5 +1,7 @@
 import mongoose from 'mongoose';
 import { Currency, Invoice } from '../schemas/invoice.schema';
+import { InvoiceDetail } from '../schemas/invoiceDetail.schema';
+import { invoiceDetailSchema } from './invoiceDetail.model';
 
 const invoiceSchema = new mongoose.Schema<Invoice>({
   number: {
@@ -28,8 +30,8 @@ const invoiceSchema = new mongoose.Schema<Invoice>({
     type: Number,
     required: true,
   },
-  products: {
-    type: Date,
+  detail: {
+    type: [invoiceDetailSchema],
     required: true,
   },
 });
