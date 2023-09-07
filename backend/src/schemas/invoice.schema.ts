@@ -7,6 +7,7 @@ export type Currency = z.infer<typeof Currency>;
 
 export const Invoice = z.object({
   number: z.string(),
+  campaing: z.custom<mongoose.Types.ObjectId>(),
   supplier: z.custom<mongoose.Types.ObjectId>(),
   issueDate: z.date(),
   dueOnDate: z.date(),

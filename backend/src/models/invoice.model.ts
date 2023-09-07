@@ -1,12 +1,15 @@
 import mongoose from 'mongoose';
 import { Currency, Invoice } from '../schemas/invoice.schema';
-import { InvoiceDetail } from '../schemas/invoiceDetail.schema';
 import { invoiceDetailSchema } from './invoiceDetail.model';
 
 const invoiceSchema = new mongoose.Schema<Invoice>({
   number: {
     type: String,
     required: true,
+  },
+  campaing: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Campaign',
   },
   supplier: {
     type: mongoose.Schema.Types.ObjectId,
