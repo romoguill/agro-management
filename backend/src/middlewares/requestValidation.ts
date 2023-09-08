@@ -4,14 +4,17 @@ import { AnyZodObject } from 'zod';
 export function validate(validationSchema: AnyZodObject) {
   return function (req: Request, res: Response, next: NextFunction) {
     try {
-      validationSchema.parse({
+      const data = validationSchema.parse({
         body: req.body,
         query: req.query,
         params: req.params,
       });
 
+      console.log(data);
+
       next();
     } catch (error) {
+      console.log(error);
       next(error);
     }
   };

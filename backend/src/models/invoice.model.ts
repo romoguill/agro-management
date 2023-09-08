@@ -7,7 +7,7 @@ const invoiceSchema = new mongoose.Schema<Invoice>({
     type: String,
     required: true,
   },
-  campaing: {
+  campaign: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Campaign',
   },

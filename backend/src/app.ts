@@ -9,6 +9,7 @@ import supplierRouter from './routes/MasterData/supplier.route';
 import productRouter from './routes/MasterData/product.route';
 import authRouter from './routes/auth.route';
 import userRouter from './routes/user.route';
+import invoiceRouter from './routes/invoice.route';
 
 import { errorHandler } from './middlewares/errorHandler';
 
@@ -31,6 +32,7 @@ app.use('/api/users', userRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/suppliers', supplierRouter);
 app.use('/api/products', productRouter);
+app.use('/api/invoices', invoiceRouter);
 
 // DEFAULT ROUTE
 app.use((req, res, next) => next(createHttpError(404, 'Endpoint not found')));

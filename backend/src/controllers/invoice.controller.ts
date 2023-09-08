@@ -17,6 +17,7 @@ export const createInvoice = async (
     const invoice = await InvoiceService.createInvoice(req.body);
     res.status(201).json(invoice);
   } catch (error) {
+    console.log(error);
     next(error);
   }
 };

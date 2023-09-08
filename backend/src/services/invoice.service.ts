@@ -1,3 +1,4 @@
+import { FilterQuery } from 'mongoose';
 import InvoiceModel from '../models/invoice.model';
 import { Invoice } from '../schemas/invoice.schema';
 
@@ -5,8 +6,10 @@ export const createInvoice = (newInvoice: Invoice) => {
   return InvoiceModel.create(newInvoice);
 };
 
-export const getAllInvoices = () => {
-  return InvoiceModel.find({}).lean().exec();
+export const getAllInvoices = (filter?: FilterQuery<Invoice>) => {
+  return InvoiceModel.find({ ...filter })
+    .lean()
+    .exec();
 };
 
 export const getInvoiceById = (id: string) => {
