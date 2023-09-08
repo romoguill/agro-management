@@ -12,7 +12,6 @@ export const Campaign = z.object({
   finish: z
     .date({ invalid_type_error: 'Finish field must be a date' })
     .optional(),
-  // owner: z.string({ required_error: 'Owner is required' }),
   owner: z.custom<mongoose.Types.ObjectId>(),
   invoices: z.array(z.custom<mongoose.Types.ObjectId>()).optional(),
 });
