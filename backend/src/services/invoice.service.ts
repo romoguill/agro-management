@@ -7,9 +7,17 @@ export const createInvoice = (newInvoice: Invoice) => {
 };
 
 export const getAllInvoices = (filter?: FilterQuery<Invoice>) => {
-  return InvoiceModel.find({ ...filter })
-    .lean()
-    .exec();
+  return (
+    InvoiceModel.find({ ...filter })
+      // .populate({
+      //   path: 'detail',
+      //   populate: {
+      //     path: 'product',
+      //   },
+      // })
+      .lean()
+      .exec()
+  );
 };
 
 export const getInvoiceById = (id: string) => {
